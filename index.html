@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
+        /* SİSTEM KÖK DEĞİŞKENLERİ */
         :root {
             --hot-pink: #ff007f;
             --deep-magenta: #b30059;
@@ -18,6 +19,9 @@
             --text-glow: #ffb6e6;
         }
 
+        /* GENEL SIFIRLAMA VE YAPI */
+        * { box-sizing: border-box; }
+        
         body {
             font-family: 'Rajdhani', sans-serif;
             background-color: var(--void-bg);
@@ -32,7 +36,7 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow-x: hidden; /* Sağa sola kaymayı engeller */
             padding-top: 40px; 
             padding-bottom: 50px;
         }
@@ -43,14 +47,10 @@
             background: rgba(5, 0, 10, 0.95);
             border-bottom: 1px solid var(--deep-magenta);
             display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 30px; box-sizing: border-box;
+            padding: 10px 30px; 
             font-family: 'Orbitron', sans-serif; font-size: 0.85rem;
             color: var(--cyber-cyan); z-index: 1000; letter-spacing: 2px;
             box-shadow: 0 0 20px rgba(179, 0, 89, 0.4); backdrop-filter: blur(5px);
-        }
-
-        @media (max-width: 768px) {
-            .system-hud { flex-direction: column; gap: 5px; font-size: 0.7rem; padding: 10px; }
         }
 
         .hud-location { color: var(--hot-pink); text-shadow: 0 0 10px var(--hot-pink); display: flex; align-items: center; gap: 10px; font-weight: 700; }
@@ -65,7 +65,7 @@
             pointer-events: none; z-index: 10;
         }
 
-        header { padding: 60px 20px 40px; text-align: center; position: relative; }
+        header { padding: 60px 20px 40px; text-align: center; position: relative; width: 100%; }
 
         .logo {
             font-family: 'Orbitron', sans-serif; font-size: 4rem; font-weight: 900;
@@ -77,11 +77,11 @@
 
         .subtitle { font-family: 'Orbitron', sans-serif; color: var(--cyber-cyan); letter-spacing: 4px; text-transform: uppercase; font-size: 1.1rem; opacity: 0.8; }
 
-        .container { max-width: 1100px; width: 90%; padding: 20px; z-index: 2; display: grid; grid-template-columns: 1fr; gap: 40px; }
+        .container { max-width: 1100px; width: 95%; padding: 20px 0; z-index: 2; display: grid; grid-template-columns: 1fr; gap: 30px; }
 
         /* --- BİLEŞEN: ANA DEĞER KARTI --- */
         .value-card {
-            background: var(--panel-dark); border-radius: 10px; padding: 50px; text-align: center;
+            background: var(--panel-dark); border-radius: 10px; padding: 50px 20px; text-align: center;
             border: 2px solid transparent;
             background-image: linear-gradient(var(--panel-dark), var(--panel-dark)), linear-gradient(45deg, var(--hot-pink), var(--electric-purple), var(--cyber-cyan));
             background-origin: border-box; background-clip: content-box, border-box;
@@ -92,20 +92,21 @@
             font-family: 'Orbitron', sans-serif; font-size: 6rem; font-weight: 900; color: #fff;
             text-shadow: 0 0 10px var(--hot-pink), 0 0 20px var(--hot-pink), 0 0 40px var(--electric-purple), 0 0 80px var(--deep-magenta);
             animation: heartbeat 1.5s ease-in-out infinite both; margin: 20px 0;
+            word-wrap: break-word; /* Mobilde taşmayı önler */
         }
         @keyframes heartbeat { 0% { transform: scale(1); opacity: 1; } 15% { transform: scale(1.05); opacity: 1; } 30% { transform: scale(1); opacity: 1; } 45% { transform: scale(1.08); opacity: 1; } 60% { transform: scale(1); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
         .status-badge { display: inline-block; padding: 8px 25px; background: linear-gradient(90deg, var(--deep-magenta), var(--electric-purple)); border: 1px solid var(--hot-pink); font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 2px; font-size: 0.9rem; box-shadow: 0 0 15px var(--hot-pink); }
 
         /* --- BİLEŞEN: İSTATİSTİK --- */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 30px; }
-        .stat-item { background: rgba(15, 5, 15, 0.8); padding: 30px 20px; border-radius: 5px; text-align: center; border: 1px solid rgba(255, 0, 127, 0.3); transition: all 0.3s ease; backdrop-filter: blur(5px); }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .stat-item { background: rgba(15, 5, 15, 0.8); padding: 25px 15px; border-radius: 5px; text-align: center; border: 1px solid rgba(255, 0, 127, 0.3); transition: all 0.3s ease; backdrop-filter: blur(5px); }
         .stat-item:hover { border-color: var(--cyber-cyan); box-shadow: 0 0 25px rgba(0, 243, 255, 0.4); transform: translateY(-5px); }
-        .stat-item i { color: var(--hot-pink); margin-bottom: 20px; filter: drop-shadow(0 0 8px var(--hot-pink)); transition: all 0.3s; }
+        .stat-item i { color: var(--hot-pink); margin-bottom: 15px; filter: drop-shadow(0 0 8px var(--hot-pink)); transition: all 0.3s; }
         .stat-item:hover i { color: var(--cyber-cyan); filter: drop-shadow(0 0 8px var(--cyber-cyan)); }
-        .stat-item h4 { font-family: 'Orbitron', sans-serif; margin: 10px 0; color: var(--text-glow); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 1px; }
+        .stat-item h4 { font-family: 'Orbitron', sans-serif; margin: 10px 0; color: var(--text-glow); text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
         .stat-item p { font-size: 2rem; font-weight: 700; margin: 0; color: #fff; }
 
-        /* --- YENİ BİLEŞEN: ÖN KAYIT TERMİNALİ (Lust Protocol) --- */
+        /* --- YENİ BİLEŞEN: ÖN KAYIT TERMİNALİ --- */
         .registration-terminal {
             background: rgba(10, 0, 10, 0.9);
             border: 1px solid var(--electric-purple);
@@ -115,165 +116,92 @@
             position: relative;
             box-shadow: 0 0 40px rgba(123, 0, 255, 0.2);
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.5fr 1fr;
             gap: 40px;
             overflow: hidden;
         }
 
-        @media (max-width: 850px) {
-            .registration-terminal { grid-template-columns: 1fr; }
-        }
-
         .terminal-header {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--hot-pink);
-            font-size: 1.8rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px var(--deep-magenta);
+            font-family: 'Orbitron', sans-serif; color: var(--hot-pink); font-size: 1.8rem;
+            text-transform: uppercase; letter-spacing: 3px; margin-bottom: 10px; text-shadow: 0 0 10px var(--deep-magenta);
         }
 
-        .terminal-desc {
-            color: var(--text-glow);
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-            line-height: 1.5;
-            opacity: 0.8;
-        }
+        .terminal-desc { color: var(--text-glow); font-size: 1.1rem; margin-bottom: 30px; line-height: 1.5; opacity: 0.8; }
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-group label { display: block; font-family: 'Orbitron', sans-serif; color: var(--cyber-cyan); margin-bottom: 8px; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; }
+        .cyber-input { width: 100%; background: rgba(20, 0, 20, 0.5); border: 1px solid rgba(123, 0, 255, 0.5); color: #fff; padding: 15px; font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; outline: none; transition: all 0.3s; }
+        .cyber-input:focus { border-color: var(--hot-pink); box-shadow: 0 0 15px rgba(255, 0, 127, 0.4), inset 0 0 10px rgba(255, 0, 127, 0.2); background: rgba(40, 0, 30, 0.5); }
+        .cyber-button { width: 100%; background: transparent; color: var(--hot-pink); border: 2px solid var(--hot-pink); padding: 15px; font-family: 'Orbitron', sans-serif; font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; cursor: pointer; transition: all 0.3s; position: relative; overflow: hidden; }
+        .cyber-button:hover { background: var(--hot-pink); color: #fff; box-shadow: 0 0 30px var(--hot-pink); text-shadow: 0 0 10px #fff; }
 
-        .input-group {
-            margin-bottom: 25px;
-            position: relative;
-        }
-
-        .input-group label {
-            display: block;
-            font-family: 'Orbitron', sans-serif;
-            color: var(--cyber-cyan);
-            margin-bottom: 8px;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .cyber-input {
-            width: 100%;
-            background: rgba(20, 0, 20, 0.5);
-            border: 1px solid rgba(123, 0, 255, 0.5);
-            color: #fff;
-            padding: 15px;
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 1.2rem;
-            outline: none;
-            transition: all 0.3s;
-            box-sizing: border-box;
-        }
-
-        .cyber-input:focus {
-            border-color: var(--hot-pink);
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.4), inset 0 0 10px rgba(255, 0, 127, 0.2);
-            background: rgba(40, 0, 30, 0.5);
-        }
-
-        .cyber-button {
-            width: 100%;
-            background: transparent;
-            color: var(--hot-pink);
-            border: 2px solid var(--hot-pink);
-            padding: 15px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cyber-button:hover {
-            background: var(--hot-pink);
-            color: #fff;
-            box-shadow: 0 0 30px var(--hot-pink);
-            text-shadow: 0 0 10px #fff;
-        }
-
-        /* Ağ Düğümleri (Kayıt Listesi) */
-        .connected-nodes {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px dashed var(--deep-magenta);
-            padding: 20px;
-            border-radius: 5px;
-        }
-
-        .nodes-header {
-            font-family: 'Orbitron', sans-serif;
-            color: var(--electric-purple);
-            font-size: 1.2rem;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            border-bottom: 1px solid rgba(123, 0, 255, 0.3);
-            padding-bottom: 10px;
-        }
-
-        .node-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            max-height: 250px;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: var(--hot-pink) transparent;
-        }
-        
+        /* Ağ Düğümleri */
+        .connected-nodes { background: rgba(0, 0, 0, 0.6); border: 1px dashed var(--deep-magenta); padding: 20px; border-radius: 5px; }
+        .nodes-header { font-family: 'Orbitron', sans-serif; color: var(--electric-purple); font-size: 1.1rem; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid rgba(123, 0, 255, 0.3); padding-bottom: 10px; }
+        .node-list { list-style: none; padding: 0; margin: 0; max-height: 250px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--hot-pink) transparent; }
         .node-list::-webkit-scrollbar { width: 4px; }
         .node-list::-webkit-scrollbar-thumb { background: var(--hot-pink); }
+        .node-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid rgba(255, 0, 127, 0.1); animation: slideIn 0.5s ease-out; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .node-status { width: 8px; height: 8px; background: var(--cyber-cyan); border-radius: 50%; margin-right: 15px; box-shadow: 0 0 10px var(--cyber-cyan); animation: blink 2s infinite; }
+        .node-name { color: #fff; font-weight: 600; font-size: 1rem; letter-spacing: 1px; }
+        .node-time { margin-left: auto; font-size: 0.8rem; color: var(--hot-pink); opacity: 0.7; }
 
-        .node-item {
-            display: flex;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 0, 127, 0.1);
-            animation: slideIn 0.5s ease-out;
+        /* --- BİLEŞEN: YOL HARİTASI --- */
+        .roadmap { background: var(--panel-dark); padding: 40px; border-radius: 10px; border: 1px solid var(--deep-magenta); position: relative; }
+        .roadmap h2 { font-family: 'Orbitron', sans-serif; color: var(--hot-pink); text-transform: uppercase; margin-bottom: 40px; text-shadow: 0 0 15px var(--deep-magenta); font-size: 1.8rem; }
+        .roadmap-item { border-left: 3px solid rgba(123, 0, 255, 0.3); padding-left: 30px; margin-bottom: 40px; position: relative; }
+        .roadmap-item::before { content: ''; position: absolute; left: -10px; top: 5px; width: 14px; height: 14px; background: var(--void-bg); border: 3px solid var(--electric-purple); border-radius: 50%; }
+        .roadmap-item.active { border-left-color: var(--hot-pink); filter: drop-shadow(0 0 10px var(--deep-magenta)); }
+        .roadmap-item.active::before { background: var(--hot-pink); border-color: var(--cyber-cyan); box-shadow: 0 0 20px var(--hot-pink), 0 0 40px var(--electric-purple); }
+        .roadmap-item strong { font-family: 'Orbitron', sans-serif; font-size: 1.2rem; display: block; margin-bottom: 10px; color: var(--cyber-cyan); }
+        .roadmap-item.active strong { color: var(--hot-pink); animation: textGlitch 2s infinite alternate-reverse; }
+        @keyframes textGlitch { 0% { text-shadow: 2px 0 0 var(--electric-purple), -2px 0 0 var(--cyber-cyan); } 100% { text-shadow: -2px 0 0 var(--electric-purple), 2px 0 0 var(--cyber-cyan); } }
+
+        /* =========================================
+           MOBİL UYUM (RESPONSIVE) PROTOKOLLERİ
+           ========================================= */
+        
+        /* Tabletler ve Büyük Telefonlar İçin */
+        @media (max-width: 850px) {
+            .registration-terminal { grid-template-columns: 1fr; padding: 30px 20px; gap: 20px;}
+            .logo { font-size: 3rem; letter-spacing: 4px; }
+            .price { font-size: 4.5rem; }
+            .roadmap { padding: 30px 20px; }
         }
 
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
+        /* Küçük Telefonlar (Mobil) İçin */
+        @media (max-width: 480px) {
+            .system-hud { flex-direction: column; gap: 5px; font-size: 0.7rem; padding: 10px; text-align: center;}
+            body { padding-top: 70px; } /* HUD çift satır olunca alttan boşluk ver */
+            header { padding: 30px 10px 20px; }
+            .logo { font-size: 2.2rem; letter-spacing: 2px; }
+            .subtitle { font-size: 0.9rem; letter-spacing: 2px;}
+            
+            .value-card { padding: 30px 15px; }
+            .value-card h3 { font-size: 1rem; }
+            .price { font-size: 3.5rem; }
+            
+            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+            .stat-item { padding: 15px 10px; }
+            .stat-item h4 { font-size: 0.7rem; }
+            .stat-item p { font-size: 1.5rem; }
+            
+            .terminal-header { font-size: 1.5rem; }
+            .terminal-desc { font-size: 0.95rem; }
+            .cyber-button { font-size: 1rem; letter-spacing: 1px; padding: 12px; }
+            .cyber-input { font-size: 1rem; padding: 12px; }
+            
+            .roadmap h2 { font-size: 1.4rem; }
+            .roadmap-item strong { font-size: 1rem; }
+            .roadmap-item p { font-size: 0.9rem; }
         }
-
-        .node-status {
-            width: 8px; height: 8px;
-            background: var(--cyber-cyan);
-            border-radius: 50%;
-            margin-right: 15px;
-            box-shadow: 0 0 10px var(--cyber-cyan);
-            animation: blink 2s infinite;
-        }
-
-        .node-name {
-            color: #fff;
-            font-weight: 600;
-            font-size: 1.1rem;
-            letter-spacing: 1px;
-        }
-
-        .node-time {
-            margin-left: auto;
-            font-size: 0.8rem;
-            color: var(--hot-pink);
-            opacity: 0.7;
-        }
-
     </style>
 </head>
 <body>
 
     <div class="system-hud">
         <div class="hud-item">
-            <i class="fas fa-shield-alt"></i> SİSTEM: UPLINK GÜVENLİ (AES-256)
+            <i class="fas fa-shield-alt"></i> SİSTEM: UPLINK GÜVENLİ
         </div>
         <div class="hud-location">
             <i class="fas fa-crosshairs"></i> AKTİF DÜĞÜM: GAZİANTEP // TR
@@ -301,22 +229,22 @@
         <div class="stats-grid">
             <div class="stat-item">
                 <i class="fas fa-fire-flame-curved fa-2x"></i>
-                <h4>Potansiyel Tutku (Kitle)</h4>
-                <p id="userCount">342</p>
+                <h4>Tutku (Kitle)</h4>
+                <p id="userCount">0</p>
             </div>
             <div class="stat-item">
                 <i class="fas fa-microchip fa-2x"></i>
-                <h4>Sistem İnşası</h4>
+                <h4>İnşa Durumu</h4>
                 <p>%5</p>
             </div>
             <div class="stat-item">
                 <i class="fas fa-satellite-dish fa-2x"></i>
                 <h4>Ağ Durumu</h4>
-                <p style="color: var(--cyber-cyan);">Çevrimiçi</p>
+                <p style="color: var(--cyber-cyan);">Aktif</p>
             </div>
              <div class="stat-item">
                 <i class="fas fa-heart-pulse fa-2x"></i>
-                <h4>Tahmini Etkileşim Arzusu</h4>
+                <h4>Etkileşim</h4>
                 <p>Kritik</p>
             </div>
         </div>
@@ -346,32 +274,35 @@
             <div class="connected-nodes">
                 <div class="nodes-header">Son Sızanlar (Canlı Ağ)</div>
                 <ul class="node-list" id="nodeList">
-                    <li class="node-item">
-                        <div class="node-status"></div>
-                        <span class="node-name">V_Lust</span>
-                        <span class="node-time">Az önce</span>
-                    </li>
-                    <li class="node-item">
-                        <div class="node-status" style="background: var(--hot-pink); box-shadow: 0 0 10px var(--hot-pink);"></div>
-                        <span class="node-name">CyberFox_XX</span>
-                        <span class="node-time">2 dk önce</span>
-                    </li>
-                    <li class="node-item">
-                        <div class="node-status"></div>
-                        <span class="node-name">NeonDemon</span>
-                        <span class="node-time">15 dk önce</span>
+                    <li class="node-item" style="justify-content: center; opacity: 0.5;">
+                        <span>Firebase Bağlantısı Bekleniyor...</span>
                     </li>
                 </ul>
             </div>
         </div>
 
+        <div class="roadmap">
+            <h2>Yükseliş Protokolü</h2>
+            <div class="roadmap-item active">
+                <strong>FAZ 1: Başlangıç Ateşi (Ignition)</strong>
+                <p>Kimlik inşası, alan adı entegrasyonu ve vizyonun belirlenmesi. (Sistem şu an burada)</p>
+            </div>
+            <div class="roadmap-item" style="opacity: 0.6;">
+                <strong>FAZ 2: MVP (Cazibe Motoru)</strong>
+                <p>Temel video akış algoritmasının ve bağımlılık yaratan arayüzün kodlanması.</p>
+            </div>
+            <div class="roadmap-item" style="opacity: 0.4;">
+                <strong>FAZ 3: Kapalı Beta (İlk Temas)</strong>
+                <p>Seçilmiş kullanıcılarla sınırları zorlayan ilk test sürüşü.</p>
+            </div>
+        </div>
+
     </div>
 
-<script type="module">
+    <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
-        // Siber Kasa Şifreleri
         const firebaseConfig = {
             apiKey: "AIzaSyAbm2ySNK2jeIvZKRPHkUfgD1kEv17reG0",
             authDomain: "hotdragons.firebaseapp.com",
@@ -384,26 +315,20 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // ==========================================
-        // SİSTEM PROTOKOLÜ 1: CANLI VERİ DİNLEME (HUD AKIŞI)
-        // ==========================================
-        
-        // Veritabanındaki 'preRegistrations' koleksiyonunu zamana göre sıralı dinle (Son 10 kayıt)
+        // Canlı Veri Dinleme
         const q = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"), limit(10));
         
         onSnapshot(q, (snapshot) => {
             const nodeList = document.getElementById('nodeList');
-            // Listeyi önce tamamen temizle (Çünkü Firebase canlı yayın yapıyor)
             nodeList.innerHTML = ''; 
             
-            let count = 0; // Gerçek kullanıcı sayısını saymak için
+            let count = 0; 
             
             snapshot.forEach((doc) => {
                 count++;
                 const data = doc.data();
                 const rumuz = data.alias || "Gizli_Düğüm";
                 
-                // Zamanı hesapla (Eğer daha yeni kaydedildiyse timestamp undefined olabilir)
                 let timeString = "Az önce";
                 if(data.timestamp) {
                     const now = new Date();
@@ -413,11 +338,9 @@
                     else if(diffMins >= 60) timeString = `${Math.floor(diffMins/60)} sa önce`;
                 }
 
-                // Listeye yeni eleman oluştur
                 const newItem = document.createElement('li');
                 newItem.className = 'node-item';
                 
-                // İlk/en yeni elemana neon efekti ver
                 const isLatest = (count === 1) ? 'style="background: var(--hot-pink); box-shadow: 0 0 10px var(--hot-pink);"' : '';
 
                 newItem.innerHTML = `
@@ -426,24 +349,18 @@
                     <span class="node-time">${timeString}</span>
                 `;
                 
-                nodeList.appendChild(newItem); // Listeye ekle
+                nodeList.appendChild(newItem); 
             });
 
-            // Sayacı veritabanındaki (çekilen) gerçek sayıya göre güncelle
-            // Not: Gerçek devasa projelerde 'count' fonksiyonları ayrı çalıştırılır, şimdilik böyle
             if(count > 0) {
-                 document.getElementById('userCount').innerText = count * 14; // Biraz abartı katalım (Simülasyon)
+                 document.getElementById('userCount').innerText = count * 14; 
             }
         });
 
-
-        // ==========================================
-        // SİSTEM PROTOKOLÜ 2: VERİ GÖNDERME (KAYIT FORMU)
-        // ==========================================
+        // Veri Gönderme (Kayıt Formu)
         document.getElementById('preRegForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Verileri Formdan Çek
             const alias = document.getElementById('aliasInput').value;
             const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
@@ -455,7 +372,6 @@
             btn.style.color = "#fff";
 
             try {
-                // Kasaya Yaz (Şifre dahil) - NOT: Güvenlik için şifreler normalde hashlenir!
                 await addDoc(collection(db, "preRegistrations"), {
                     alias: alias,
                     email: email,
@@ -463,13 +379,11 @@
                     timestamp: serverTimestamp()
                 });
 
-                // Başarı Geri Bildirimi
                 btn.innerText = "KİLİT AÇILDI // ARZU KAYDEDİLDİ";
                 btn.style.background = "var(--cyber-cyan)";
                 btn.style.borderColor = "var(--cyber-cyan)";
                 btn.style.color = "#000";
                 
-                // Formu Temizle (Listeye otomatik eklenecek çünkü yukarıda onSnapshot var!)
                 document.getElementById('aliasInput').value = '';
                 document.getElementById('emailInput').value = '';
                 document.getElementById('passwordInput').value = '';
