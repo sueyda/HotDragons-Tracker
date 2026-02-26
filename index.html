@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOTDRAGONS // NEON LUST PROTOCOL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            /* Daha seksi, daha agresif neon palet */
+            --hot-pink: #ff007f;
+            --deep-magenta: #b30059;
+            --electric-purple: #7b00ff;
+            --cyber-cyan: #00f3ff;
+            --void-bg: #05000a;
+            --panel-dark: rgba(20, 0, 20, 0.85);
+            --text-glow: #ffb6e6;
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--void-bg);
+            /* Dumanlı, gürültülü ve ızgaralı karmaşık arka plan */
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(123, 0, 255, 0.1), transparent 60%),
+                linear-gradient(0deg, rgba(255, 0, 127, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
+            color: var(--text-glow);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Tarama çizgisi efekti */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px, transparent 1px, transparent 2px);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        header {
+            padding: 60px 20px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            background: linear-gradient(to right, var(--hot-pink), var(--electric-purple), var(--cyber-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px var(--deep-magenta));
+            animation: textGlitch 3s infinite alternate;
+        }
+
+        .subtitle {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyber-cyan);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 90%;
+            padding: 20px;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+
+        /* --- BİLEŞEN: ANA DEĞER KARTI (Heartbeat Efektli) --- */
+        .value-card {
+            background: var(--panel-dark);
+            border-radius: 10px;
+            padding: 50px;
+            text-align: center;
+            /* Çift renkli neon sınır */
+            border: 2px solid transparent;
+            background-image: linear-gradient(var(--panel-dark), var(--panel-dark)), 
+                              linear-gradient(45deg, var(--hot-pink), var(--electric-purple), var(--cyber-cyan));
+            background-origin: border-box;
+            background-clip: content-box, border-box;
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.3), inset 0 0 20px rgba(123, 0, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--hot-pink);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 0;
+            opacity: 0.9;
+        }
+
+        /* Atan Nabız / Kalp Atışı Efekti */
+        .price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 6rem;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 
+                0 0 10px var(--hot-pink),
+                0 0 20px var(--hot-pink),
+                0 0 40px var(--electric-purple),
+                0 0 80px var(--deep-magenta);
+            animation: heartbeat 1.5s ease-in-out infinite both;
+            margin: 20px 0;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); opacity: 1; }
+            15% { transform: scale(1.05); opacity: 1; }
+            30% { transform: scale(1); opacity: 1; }
+            45% { transform: scale(1.08); opacity: 1; }
+            60% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 8px 25px;
+            background: linear-gradient(90deg, var(--deep-magenta), var(--electric-purple));
+            border: 1px solid var(--hot-pink);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px var(--hot-pink);
+        }
+
+        /* --- BİLEŞEN: İSTATİSTİK IZGARASI (4'lü Genişletilmiş) --- */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 30px;
+        }
+
+        .stat-item {
+            background: rgba(15, 5, 15, 0.8);
+            padding: 30px 20px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            position: relative;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .stat-item:hover {
+            border-color: var(--cyber-cyan);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .stat-item i {
+            color: var(--hot-pink);
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 8px var(--hot-pink));
+            transition: all 0.3s;
+        }
+        .stat-item:hover i { color: var(--cyber-cyan); filter: drop-shadow(0 0 8px var(--cyber-cyan)); }
+
+        .stat-item h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 10px 0;
+            color: var(--text-glow);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .stat-item p {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0;
+            color: #fff;
+        }
+
+        /* --- YENİ BİLEŞEN: CANLI ISI HARİTASI (Simülasyon) --- */
+        .dashboard-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 768px) { .dashboard-row { grid-template-columns: 1fr; } }
+
+        .panel-box {
+            background: var(--panel-dark);
+            border: 1px solid var(--electric-purple);
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .panel-header {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--hot-pink);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .heatmap-visual {
+            height: 250px;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 0, 127, 0.4) 0%, transparent 30%),
+                        radial-gradient(circle at 70% 60%, rgba(123, 0, 255, 0.4) 0%, transparent 40%),
+                        rgba(0,0,0,0.5);
+            border: 1px dashed var(--electric-purple);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Radar tarama efekti */
+        .heatmap-visual::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent 0%, rgba(0, 243, 255, 0.1) 50%, transparent 100%);
+            animation: radarSweep 4s infinite linear;
+        }
+        @keyframes radarSweep { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+
+        .blip {
+            position: absolute;
+            width: 10px; height: 10px;
+            background: var(--hot-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--hot-pink);
+            animation: blipPulse 2s infinite;
+        }
+        .blip-1 { top: 30%; left: 30%; animation-delay: 0.5s; }
+        .blip-2 { top: 60%; left: 70%; animation-delay: 1s; }
+        .blip-3 { top: 80%; left: 40%; animation-delay: 1.5s; }
+        @keyframes blipPulse { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.5); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
+
+        /* --- YENİ BİLEŞEN: SON KIVILCIMLAR (Aktivite Akışı) --- */
+        .activity-feed {
+            max-height: 250px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--hot-pink) var(--panel-dark);
+        }
+        .activity-feed::-webkit-scrollbar { width: 5px; }
+        .activity-feed::-webkit-scrollbar-thumb { background: var(--hot-pink); }
+
+        .feed-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(123, 0, 255, 0.3);
+            font-size: 0.9rem;
+        }
+        .feed-item:last-child { border-bottom: none; }
+        .feed-icon {
+            color: var(--cyber-cyan);
+            margin-right: 15px;
+        }
+        .feed-user { color: var(--hot-pink); font-weight: 700; margin-right: 5px; }
+        .feed-time { margin-left: auto; font-size: 0.8rem; opacity: 0.6; }
+
+        /* --- BİLEŞEN: YOL HARİTASI (Revize Edilmiş) --- */
+        .roadmap {
+            background: var(--panel-dark);
+            padding: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--deep-magenta);
+            position: relative;
+        }
+
+        .roadmap h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--hot-pink);
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px var(--deep-magenta);
+        }
+
+        .roadmap-item {
+            border-left: 3px solid rgba(123, 0, 255, 0.3);
+            padding-left: 30px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .roadmap-item::before {
+            content: '';
+            position: absolute; left: -10px; top: 5px;
+            width: 14px; height: 14px;
+            background: var(--void-bg);
+            border: 3px solid var(--electric-purple);
+            border-radius: 50%;
+        }
+
+        /* Aktif aşama - Plazma yanığı efekti */
+        .roadmap-item.active {
+            border-left-color: var(--hot-pink);
+            filter: drop-shadow(0 0 10px var(--deep-magenta));
+        }
+
+        .roadmap-item.active::before {
+            background: var(--hot-pink);
+            border-color: var(--cyber-cyan);
+            box-shadow: 0 0 20px var(--hot-pink), 0 0 40px var(--electric-purple);
+        }
+
+        .roadmap-item strong {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            display: block; margin-bottom: 10px;
+            color: var(--cyber-cyan);
+        }
+        
+        .roadmap-item.active strong {
+            color: var(--hot-pink);
+            animation: textGlitch 2s infinite alternate-reverse;
+        }
+        
+        @keyframes textGlitch {
+            0% { text-shadow: 2px 0 0 var(--electric-purple), -2px 0 0 var(--cyber-cyan); }
+            100% { text-shadow: -2px 0 0 var(--electric-purple), 2px 0 0 var(--cyber-cyan); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">HotDragons</div>
+        <div class="subtitle">Dijital Arzunun Yeni Arayüzü</div>
+    </header>
+
+    <div class="container">
+        <div class="value-card">
+            <h3>Güncel Cazibe Değeri (Valuation)</h3>
+            <div class="price">$12.50</div>
+            <div>
+                <span class="status-badge">Aşama: Arzu Çekirdeği (Seed)</span>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <i class="fas fa-fire-flame-curved fa-2x"></i>
+                <h4>Potansiyel Tutku (Kitle)</h4>
+                <p>0</p>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-microchip fa-2x"></i>
+                <h4>Sistem İnşası</h4>
+                <p>%5</p>
+            </div>
+            <div class="stat-item">
+                <i class="fas fa-satellite-dish fa-2x"></i>
+                <h4>Ağ Durumu</h4>
+                <p style="color: var(--cyber-cyan);">Çevrimiçi</p>
+            </div>
+             <div class="stat-item">
+                <i class="fas fa-heart-pulse fa-2x"></i>
+                <h4>Tahmini Etkileşim Arzusu</h4>
+                <p>Yüksek</p>
+            </div>
+        </div>
+
+        <div class="dashboard-row">
+            <div class="panel-box">
+                <div class="panel-header">
+                    <span>Canlı Arzu Haritası (Global Heatmap)</span>
+                    <i class="fas fa-globe-americas" style="color: var(--cyber-cyan);"></i>
+                </div>
+                <div class="heatmap-visual">
+                    <div class="blip blip-1"></div>
+                    <div class="blip blip-2"></div>
+                    <div class="blip blip-3"></div>
+                </div>
+                <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.7;">*Simüle edilmiş veri. Küresel etkileşim noktaları taranıyor.</p>
+            </div>
+
+            <div class="panel-box">
+                <div class="panel-header">
+                    <span>Son Kıvılcımlar (Canlı Akış)</span>
+                    <i class="fas fa-bolt" style="color: var(--hot-pink);"></i>
+                </div>
+                <div class="activity-feed">
+                    <div class="feed-item">
+                        <i class="fas fa-user-plus feed-icon"></i>
+                        <div><span class="feed-user">Neon_Grl</span> bekleme listesine katıldı.</div>
+                        <div class="feed-time">2dk önce</div>
+                    </div>
+                    <div class="feed-item">
+                        <i class="fas fa-code feed-icon" style="color: var(--electric-purple)"></i>
+                        <div>Sistem çekirdeği güncellendi. v0.1.2</div>
+                        <div class="feed-time">15dk önce</div>
+                    </div>
+                    <div class="feed-item">
+                        <i class="fas fa-fire feed-icon"></i>
+                        <div>Yeni değerleme tetiklendi.</div>
+                        <div class="feed-time">1s önce</div>
+                    </div>
+                    <div class="feed-item">
+                        <i class="fas fa-user-secret feed-icon"></i>
+                        <div><span class="feed-user">Cyber_X</span> bekleme listesine katıldı.</div>
+                        <div class="feed-time">45dk önce</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="roadmap">
+            <h2>Yükseliş Protokolü</h2>
+            <div class="roadmap-item active">
+                <strong>FAZ 1: Başlangıç Ateşi (Ignition)</strong>
+                <p>Kimlik inşası, alan adı entegrasyonu ve vizyonun belirlenmesi. (Sistem şu an burada)</p>
+            </div>
+            <div class="roadmap-item" style="opacity: 0.6;">
+                <strong>FAZ 2: MVP (Cazibe Motoru)</strong>
+                <p>Temel video akış algoritmasının ve bağımlılık yaratan arayüzün kodlanması.</p>
+            </div>
+            <div class="roadmap-item" style="opacity: 0.4;">
+                <strong>FAZ 3: Kapalı Beta (İlk Temas)</strong>
+                <p>Seçilmiş kullanıcılarla sınırları zorlayan ilk test sürüşü.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
