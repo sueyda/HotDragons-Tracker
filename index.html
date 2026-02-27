@@ -8,15 +8,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* SİSTEM KÖK DEĞİŞKENLERİ - Seksüel Red-Light Paleti */
+        /* SİSTEM KÖK DEĞİŞKENLERİ */
         :root {
             --hot-pink: #ff007f;
             --blood-red: #ff003c;
             --deep-magenta: #7a003c;
             --electric-purple: #7b00ff;
             --cyber-cyan: #00f3ff;
-            --void-bg: #030005; /* Daha derin, kırmızımsı siyah */
-            --panel-dark: rgba(15, 0, 10, 0.65); /* Buğulu cam için şeffaflaştırıldı */
+            --void-bg: #030005; 
+            --panel-dark: rgba(15, 0, 10, 0.65); 
             --text-glow: #ffb6e6;
         }
 
@@ -25,7 +25,6 @@
         body {
             font-family: 'Rajdhani', sans-serif;
             background-color: var(--void-bg);
-            /* Karanlık oda hissi veren buğulu kırmızı-mor arka plan */
             background-image: 
                 radial-gradient(circle at 50% 30%, rgba(255, 0, 60, 0.15), transparent 60%),
                 radial-gradient(circle at 80% 80%, rgba(123, 0, 255, 0.1), transparent 50%),
@@ -43,7 +42,6 @@
             padding-bottom: 50px;
         }
 
-        /* Ağ Çizgileri - Jartiyer dokusu gibi ince ve baştan çıkarıcı */
         body::after {
             content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: repeating-linear-gradient(0deg, rgba(255,0,60,0.03) 0px, rgba(255,0,60,0.03) 1px, transparent 1px, transparent 3px);
@@ -117,7 +115,7 @@
         .stat-item h4 { font-family: 'Orbitron', sans-serif; margin: 10px 0; color: #fff; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 2px; opacity: 0.7; }
         .stat-item p { font-size: 2.5rem; font-weight: 700; margin: 0; color: var(--hot-pink); text-shadow: 0 0 10px var(--hot-pink); }
 
-        /* --- YENİ BİLEŞEN: ÖN KAYIT TERMİNALİ --- */
+        /* --- BİLEŞEN: TERMİNAL --- */
         .registration-terminal {
             background: var(--panel-dark);
             border: 1px solid rgba(255, 0, 127, 0.2);
@@ -164,23 +162,72 @@
         }
         .cyber-button:hover { transform: scale(1.02); box-shadow: 0 15px 30px rgba(255, 0, 60, 0.6); filter: brightness(1.2); }
 
-        /* Ağ Düğümleri (Gözetleyenler) */
+        /* YENİ BİLEŞEN: PROFİL (KONTROL PANELİ) EKRANI */
+        #profileDashboard {
+            display: none; /* Form varsa bu gizli başlar */
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .profile-avatar {
+            width: 100px; height: 100px;
+            background: rgba(255, 0, 60, 0.1);
+            border: 2px solid var(--blood-red);
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 3rem; color: var(--hot-pink);
+            margin: 0 auto 20px;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.5);
+        }
+
+        #profileAliasDisplay {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff; font-size: 2.2rem;
+            text-shadow: 0 0 15px var(--hot-pink);
+            margin: 0 0 5px;
+            letter-spacing: 2px;
+        }
+
+        #profileEmailDisplay {
+            color: #aaa; font-size: 1.1rem; margin-bottom: 25px;
+        }
+
+        .profile-badge {
+            display: inline-block; padding: 8px 20px;
+            background: var(--blood-red); color: #fff;
+            font-family: 'Orbitron', sans-serif; font-size: 0.8rem; letter-spacing: 3px;
+            border-radius: 3px; margin-bottom: 30px;
+            box-shadow: 0 0 15px var(--blood-red);
+        }
+
+        .profile-stats-mini {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 30px;
+        }
+        .mini-stat {
+            background: rgba(0,0,0,0.5); border: 1px solid rgba(255,0,127,0.3); padding: 15px; border-radius: 5px;
+        }
+        .mini-stat span { display: block; font-family: 'Orbitron', sans-serif; color: var(--cyber-cyan); font-size: 1.5rem; font-weight: bold; }
+        .mini-stat label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+        .btn-logout {
+            background: transparent; border: 1px solid var(--blood-red); color: var(--blood-red); box-shadow: none;
+        }
+        .btn-logout:hover { background: rgba(255, 0, 60, 0.1); border-color: var(--hot-pink); color: var(--hot-pink); }
+
+
+        /* Ağ Düğümleri */
         .connected-nodes { 
             background: rgba(0, 0, 0, 0.8); 
             border-left: 1px solid rgba(255, 0, 127, 0.2); 
             padding: 40px 30px; 
             display: flex; flex-direction: column; height: 100%; 
         }
-        
         .nodes-header { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(255, 0, 127, 0.3); padding-bottom: 15px; display: flex; align-items: center; justify-content: space-between;}
-        
         .node-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--blood-red) transparent; }
         .node-list::-webkit-scrollbar { width: 4px; }
         .node-list::-webkit-scrollbar-thumb { background: var(--blood-red); }
         .node-item { display: flex; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); animation: slideIn 0.5s ease-out; }
         @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-        
-        /* Çevrimiçi nokta pembe/kırmızı yanıp sönüyor */
         .node-status { width: 8px; height: 8px; background: var(--hot-pink); border-radius: 50%; margin-right: 15px; box-shadow: 0 0 10px var(--hot-pink); animation: blink 2s infinite; }
         .node-name { color: #ddd; font-weight: 600; font-size: 1.05rem; letter-spacing: 1px; }
         .node-time { margin-left: auto; font-size: 0.8rem; color: var(--blood-red); opacity: 0.8; font-family: 'Orbitron', sans-serif;}
@@ -283,27 +330,53 @@
 
         <div class="registration-terminal">
             <div class="form-section">
-                <div class="terminal-header">Karanlık Odaya <span>GİR.</span></div>
-                <div class="terminal-desc">Akış henüz gizli tutuluyor. Fantezi kimliğini tanımla ve yeraltı kuyruğunda yerini al. Sonsuz kaydırma algoritması açıldığında, ilk senin ekranın yanacak.</div>
                 
-                <form id="preRegForm">
-                    <div class="input-group">
-                        <label>Siber Kimlik (Rumuz)</label>
-                        <i class="fas fa-user-secret"></i>
-                        <input type="text" id="aliasInput" class="cyber-input" placeholder="Örn: Sinner_99" required autocomplete="off">
+                <div id="formContainer">
+                    <div class="terminal-header">Karanlık Odaya <span>GİR.</span></div>
+                    <div class="terminal-desc">Akış henüz gizli tutuluyor. Fantezi kimliğini tanımla ve yeraltı kuyruğunda yerini al. Sonsuz kaydırma algoritması açıldığında, ilk senin ekranın yanacak.</div>
+                    
+                    <form id="preRegForm">
+                        <div class="input-group">
+                            <label>Siber Kimlik (Rumuz)</label>
+                            <i class="fas fa-user-secret"></i>
+                            <input type="text" id="aliasInput" class="cyber-input" placeholder="Örn: Sinner_99" required autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label>Özel Davetiye Kanalı (E-Mail)</label>
+                            <i class="fas fa-envelope"></i>
+                            <input type="email" id="emailInput" class="cyber-input" placeholder="gizli@proton.me" required autocomplete="off">
+                        </div>
+                        <div class="input-group">
+                            <label>Ağ Kilidi (Şifre)</label>
+                            <i class="fas fa-lock"></i>
+                            <input type="password" id="passwordInput" class="cyber-input" placeholder="••••••••••••" required autocomplete="off">
+                        </div>
+                        <button type="submit" class="cyber-button">TUTKUYU BAŞLAT</button>
+                    </form>
+                </div>
+
+                <div id="profileDashboard">
+                    <div class="profile-avatar">
+                        <i class="fas fa-user-ninja"></i>
                     </div>
-                    <div class="input-group">
-                        <label>Özel Davetiye Kanalı (E-Mail)</label>
-                        <i class="fas fa-envelope"></i>
-                        <input type="email" id="emailInput" class="cyber-input" placeholder="gizli@proton.me" required autocomplete="off">
+                    <h2 id="profileAliasDisplay">GİZLİ_KİMLİK</h2>
+                    <div class="profile-badge">VIP GÖZETLEYEN</div>
+                    <p id="profileEmailDisplay">veri.yok@sistem.net</p>
+                    
+                    <div class="profile-stats-mini">
+                        <div class="mini-stat">
+                            <span>0</span>
+                            <label>Jeton (Kredi)</label>
+                        </div>
+                        <div class="mini-stat">
+                            <span style="color: var(--hot-pink);">Açık</span>
+                            <label>Beta Erişimi</label>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label>Ağ Kilidi (Şifre)</label>
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="passwordInput" class="cyber-input" placeholder="••••••••••••" required autocomplete="off">
-                    </div>
-                    <button type="submit" class="cyber-button">TUTKUYU BAŞLAT</button>
-                </form>
+
+                    <button id="logoutBtn" class="cyber-button btn-logout">AĞDAN KOP (ÇIKIŞ YAP)</button>
+                </div>
+
             </div>
 
             <div class="connected-nodes">
@@ -338,8 +411,9 @@
     </div>
 
     <script type="module">
+        // Firebase ve Firestore modüllerini içe aktarıyoruz ('where' ve 'getDocs' eklendi)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, where, getDocs } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAbm2ySNK2jeIvZKRPHkUfgD1kEv17reG0",
@@ -353,12 +427,55 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // ====================================================
+        // YENİ: SİSTEM HAFIZASI & PROFİL OLUŞTURMA ALGORİTMASI
+        // ====================================================
+        window.onload = async function() {
+            const savedAlias = localStorage.getItem("hotdragons_alias");
+            
+            // Eğer Local Storage'da (Tarayıcı Hafızası) kimlik varsa:
+            if(savedAlias) {
+                // 1. Kayıt formunu gizle ve Profil ekranını göster
+                document.getElementById("formContainer").style.display = "none";
+                document.getElementById("profileDashboard").style.display = "block";
+                
+                // 2. Rumuzu ekrana bas
+                document.getElementById("profileAliasDisplay").innerText = savedAlias.toUpperCase();
+
+                // 3. (Gelişmiş) Kullanıcının E-Postasını Doğrudan Firebase'den Çek!
+                try {
+                    const userQuery = query(collection(db, "preRegistrations"), where("alias", "==", savedAlias));
+                    const querySnapshot = await getDocs(userQuery);
+                    
+                    if (!querySnapshot.empty) {
+                        // Eğer veritabanında bu siber kimliği bulursa, e-postasını alıp profile yazdır
+                        const userData = querySnapshot.docs[0].data();
+                        document.getElementById("profileEmailDisplay").innerText = userData.email;
+                    }
+                } catch(error) {
+                    console.error("Profil verileri çekilemedi: ", error);
+                }
+            }
+        };
+
+        // YENİ: AĞDAN KOP (ÇIKIŞ YAP) FONKSİYONU
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            // Hafızayı sil
+            localStorage.removeItem("hotdragons_alias");
+            // Sayfayı yenile (Form tekrar görünür olacak)
+            window.location.reload();
+        });
+
+
+        // ====================================================
+        // MEVCUT SİSTEMLER: Canlı Liste, Form Kaydı, Lokasyon vb.
+        // ====================================================
+
+        // Canlı Sızanlar Listesi
         const q = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"), limit(15));
-        
         onSnapshot(q, (snapshot) => {
             const nodeList = document.getElementById('nodeList');
             nodeList.innerHTML = ''; 
-            
             let count = 0; 
             
             snapshot.forEach((doc) => {
@@ -377,7 +494,6 @@
 
                 const newItem = document.createElement('li');
                 newItem.className = 'node-item';
-                
                 const isLatest = (count === 1) ? 'style="background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);"' : '';
 
                 newItem.innerHTML = `
@@ -385,15 +501,13 @@
                     <span class="node-name">${rumuz}</span>
                     <span class="node-time">${timeString}</span>
                 `;
-                
                 nodeList.appendChild(newItem); 
             });
 
-            if(count > 0) {
-                 document.getElementById('userCount').innerText = count * 14; 
-            }
+            if(count > 0) document.getElementById('userCount').innerText = count * 14; 
         });
 
+        // Forma Veri Girildiğinde Çalışacak İşlemler
         document.getElementById('preRegForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -407,6 +521,7 @@
             btn.innerText = "KİLİT KIRILIYOR...";
             
             try {
+                // 1. Veritabanına kaydet
                 await addDoc(collection(db, "preRegistrations"), {
                     alias: alias,
                     email: email,
@@ -414,13 +529,17 @@
                     timestamp: serverTimestamp()
                 });
 
+                // 2. Kullanıcıyı "Giriş Yapmış" olarak hafızaya al
+                localStorage.setItem("hotdragons_alias", alias);
+
                 btn.innerText = "İÇERDESİN // ONAYLANDI";
                 btn.style.background = "#fff";
                 btn.style.color = "#000";
                 
-                document.getElementById('aliasInput').value = '';
-                document.getElementById('emailInput').value = '';
-                document.getElementById('passwordInput').value = '';
+                // 3. 1.5 Saniye Sonra Sayfayı Yenile ki Profil Ekranı Açılsın
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
 
             } catch (error) {
                 console.error("Sistem Hatası: ", error);
@@ -428,16 +547,17 @@
                 btn.style.background = "transparent";
                 btn.style.border = "2px solid red";
                 btn.style.color = "red";
+                
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                    btn.style.background = "linear-gradient(45deg, var(--deep-magenta), var(--blood-red))";
+                    btn.style.border = "none";
+                    btn.style.color = "#fff";
+                }, 3000);
             }
-            
-            setTimeout(() => {
-                btn.innerText = originalText;
-                btn.style.background = "linear-gradient(45deg, var(--deep-magenta), var(--blood-red))";
-                btn.style.border = "none";
-                btn.style.color = "#fff";
-            }, 3000);
         });
 
+        // Lokasyon Gözlemcisi
         async function fetchLocation() {
             try {
                 const response = await fetch('https://ipapi.co/json/');
@@ -452,6 +572,7 @@
             }
         }
 
+        // Ping Hesaplayıcı
         function calculatePing() {
             setTimeout(() => {
                 const performanceEntry = performance.getEntriesByType("navigation")[0];
