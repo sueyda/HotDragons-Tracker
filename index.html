@@ -122,12 +122,21 @@
         .close-btn { position: absolute; top: 15px; right: 25px; color: var(--hot-pink); font-size: 2rem; cursor: pointer; transition: 0.3s;}
         .close-btn:hover { color: #fff; text-shadow: 0 0 10px #fff;}
 
-        /* PROFİL EKRANLARI */
+        /* PROFİL EKRANLARI VE BANNER SİSTEMİ */
         #profileDashboard, #profileEditScreen, #publicProfileScreen { display: none; text-align: center; animation: slideIn 0.5s ease-out; }
         
-        .profile-avatar { width: 100px; height: 100px; background: rgba(255, 0, 60, 0.1); border: 2px solid var(--blood-red); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; color: var(--hot-pink); margin: 0 auto 20px; box-shadow: 0 0 20px rgba(255, 0, 60, 0.5); overflow: hidden; }
+        .profile-container-inner { background: rgba(0,0,0,0.4); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 25px; padding-bottom: 20px;}
+        
+        /* BANNER */
+        .profile-banner { width: 100%; height: 120px; border-radius: 10px 10px 0 0; background: linear-gradient(45deg, rgba(0,0,0,0.8) 10%, var(--blood-red) 100%); background-size: cover; background-position: center; border-bottom: 2px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; transition: all 0.5s; }
+        .profile-banner::after { content: ''; position: absolute; top:0; left:0; width: 100%; height: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
+        
+        /* AVATAR */
+        .profile-avatar { width: 110px; height: 110px; background: var(--void-bg); border: 3px solid var(--blood-red); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; color: var(--hot-pink); margin: -55px auto 15px; position: relative; z-index: 2; box-shadow: 0 0 25px rgba(255, 0, 60, 0.6); overflow: hidden; transition: all 0.5s;}
         .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-public { border-color: var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 20px rgba(0, 243, 255, 0.5); background: rgba(0, 243, 255, 0.1); } 
+        .avatar-public { border-color: var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 25px rgba(0, 243, 255, 0.6); } 
+
+        .profile-details-wrapper { padding: 0 20px; }
 
         /* DOSYA YÜKLEME STİLLERİ */
         .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; margin-top: 5px; }
@@ -138,8 +147,14 @@
         .profile-alias { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 2.2rem; text-shadow: 0 0 15px var(--hot-pink); margin: 0 0 5px; letter-spacing: 2px; }
         #profileEmailDisplay { color: #aaa; font-size: 1.1rem; margin-bottom: 10px; }
         
+        .join-date-display { font-size: 0.85rem; color: #888; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; margin-bottom: 15px; display: block; }
+        .join-date-display i { color: var(--cyber-cyan); margin-right: 5px; }
+
         .profile-bio { background: rgba(255,0,60,0.05); padding: 15px; border-left: 3px solid var(--hot-pink); border-radius: 0 5px 5px 0; margin-bottom: 20px; font-style: italic; color: #ccc; text-align: left; position: relative;}
         .profile-bio::before { content: '"'; font-size: 3rem; color: rgba(255,0,127,0.2); position: absolute; top: -10px; right: 10px; font-family: 'Orbitron', sans-serif;}
+
+        .social-link-display { display: inline-block; margin-bottom: 20px; color: var(--cyber-cyan); text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; border: 1px solid rgba(0, 243, 255, 0.3); padding: 8px 15px; border-radius: 50px; transition: all 0.3s; background: rgba(0,0,0,0.5); }
+        .social-link-display:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--cyber-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); color: #fff; }
 
         .profile-tags { margin-bottom: 30px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .p-tag { background: var(--blood-red); color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 2px; padding: 5px 15px; border-radius: 3px; box-shadow: 0 0 10px var(--blood-red); }
@@ -198,7 +213,8 @@
             .cyber-button { font-size: 1rem; padding: 15px; }
             .cyber-input, .cyber-select, .cyber-textarea { font-size: 1.1rem; padding: 12px 12px 12px 40px; }
             .profile-alias { font-size: 1.8rem; }
-            .profile-avatar { width: 80px; height: 80px; font-size: 2.5rem; }
+            .profile-avatar { width: 90px; height: 90px; font-size: 2.5rem; margin-top: -45px;}
+            .profile-banner { height: 90px; }
         }
     </style>
 </head>
@@ -280,21 +296,32 @@
                 </div>
 
                 <div id="profileDashboard">
-                    <div class="profile-avatar"><i class="fas fa-user-ninja"></i></div>
-                    <h2 class="profile-alias" id="profileAliasDisplay">GİZLİ_KİMLİK</h2>
-                    <p id="profileEmailDisplay">veri.yok@sistem.net</p>
-                    
-                    <div class="profile-tags">
-                        <span class="p-tag">VIP GÖZETLEYEN</span>
-                        <span class="p-tag dark" id="profileGenderDisplay">Beden: Gizli</span>
-                        <span class="p-tag dark" id="profileAgeDisplay">Yaş: Gizli</span>
-                    </div>
+                    <div class="profile-container-inner">
+                        <div class="profile-banner" id="myBanner"></div>
+                        <div class="profile-avatar" id="myAvatar"><i class="fas fa-user-ninja"></i></div>
+                        
+                        <div class="profile-details-wrapper">
+                            <h2 class="profile-alias" id="profileAliasDisplay">GİZLİ_KİMLİK</h2>
+                            <p id="profileEmailDisplay">veri.yok@sistem.net</p>
+                            <span class="join-date-display" id="myJoinDate"><i class="fas fa-link"></i> Sisteme Giriş: Aranıyor...</span>
+                            
+                            <a href="#" target="_blank" class="social-link-display" id="mySocialLink" style="display:none;">
+                                <i class="fas fa-globe"></i> Bağlantıya Git
+                            </a>
+                            
+                            <div class="profile-tags">
+                                <span class="p-tag">VIP GÖZETLEYEN</span>
+                                <span class="p-tag dark" id="profileGenderDisplay">Beden: Gizli</span>
+                                <span class="p-tag dark" id="profileAgeDisplay">Yaş: Gizli</span>
+                            </div>
 
-                    <div class="profile-bio" id="profileBioDisplay">"Fantezi özeti henüz girilmedi..."</div>
-                    
-                    <div class="profile-stats-mini">
-                        <div class="mini-stat"><span>0</span><label>Jeton (Kredi)</label></div>
-                        <div class="mini-stat"><span style="color: var(--hot-pink);">Açık</span><label>Beta Erişimi</label></div>
+                            <div class="profile-bio" id="profileBioDisplay">"Fantezi özeti henüz girilmedi..."</div>
+                            
+                            <div class="profile-stats-mini">
+                                <div class="mini-stat"><span>0</span><label>Jeton (Kredi)</label></div>
+                                <div class="mini-stat"><span style="color: var(--hot-pink);">Açık</span><label>Beta Erişimi</label></div>
+                            </div>
+                        </div>
                     </div>
 
                     <button id="showEditFormBtn" class="cyber-button" style="margin-bottom: 15px;"><i class="fas fa-pen"></i> KİMLİĞİ DÜZENLE</button>
@@ -303,7 +330,7 @@
 
                 <div id="profileEditScreen">
                     <div class="terminal-header">KİMLİK <span>SENKRONİZASYONU</span></div>
-                    <div class="terminal-desc">Yeraltı ağındaki fantezi avatarını kişiselleştir. Bu veriler sadece seçilmiş algoritmalarda kullanılır.</div>
+                    <div class="terminal-desc">Yeraltı ağındaki fantezi avatarını ve temasını kişiselleştir.</div>
                     
                     <form id="editProfileForm">
                         <div class="input-group">
@@ -313,6 +340,25 @@
                                 <input type="file" id="editAvatar" accept="image/png, image/jpeg, image/gif, image/webp">
                             </div>
                             <input type="hidden" id="editAvatarBase64">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Tema Rengi (Banner & Parlama)</label>
+                            <i class="fas fa-palette"></i>
+                            <select id="editThemeColor" class="cyber-select">
+                                <option value="#ff003c">Neon Kırmızı (Varsayılan)</option>
+                                <option value="#00f3ff">Siber Mavi</option>
+                                <option value="#00ff88">Toksik Yeşil</option>
+                                <option value="#7b00ff">Elektrik Mor</option>
+                                <option value="#ff007f">Sıcak Pembe</option>
+                                <option value="#ffaa00">Dijital Altın</option>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Ağ Bağlantısı (Web/Sosyal Medya Linki)</label>
+                            <i class="fas fa-link"></i>
+                            <input type="url" id="editSocialLink" class="cyber-input" placeholder="https://instagram.com/..." autocomplete="off">
                         </div>
 
                         <div class="input-group">
@@ -344,17 +390,28 @@
                         <button id="backFromPublicBtn" class="cyber-button outline small"><i class="fas fa-arrow-left"></i> AĞA GERİ DÖN</button>
                     </div>
                     
-                    <div class="profile-avatar avatar-public"><i class="fas fa-eye"></i></div>
-                    <h2 class="profile-alias" id="publicAliasDisplay" style="color: var(--cyber-cyan); text-shadow: 0 0 15px var(--cyber-cyan);">SORGULANIYOR...</h2>
-                    
-                    <div class="profile-tags" style="margin-top: 15px;">
-                        <span class="p-tag" style="background: var(--cyber-cyan); box-shadow: 0 0 10px var(--cyber-cyan);">ONAYLI ÜYE</span>
-                        <span class="p-tag dark" id="publicGenderDisplay" style="border-color: var(--hot-pink); color: var(--hot-pink);">Beden: ?</span>
-                        <span class="p-tag dark" id="publicAgeDisplay" style="border-color: var(--hot-pink); color: var(--hot-pink);">Yaş: ?</span>
-                    </div>
+                    <div class="profile-container-inner">
+                        <div class="profile-banner" id="publicBanner"></div>
+                        <div class="profile-avatar avatar-public" id="publicAvatar"><i class="fas fa-eye"></i></div>
+                        
+                        <div class="profile-details-wrapper">
+                            <h2 class="profile-alias" id="publicAliasDisplay" style="color: var(--cyber-cyan); text-shadow: 0 0 15px var(--cyber-cyan);">SORGULANIYOR...</h2>
+                            <span class="join-date-display" id="publicJoinDate"><i class="fas fa-link"></i> Sisteme Giriş: Aranıyor...</span>
+                            
+                            <a href="#" target="_blank" class="social-link-display" id="publicSocialLink" style="display:none;">
+                                <i class="fas fa-globe"></i> Ağ Bağlantısı
+                            </a>
+                            
+                            <div class="profile-tags" style="margin-top: 15px;">
+                                <span class="p-tag" style="background: var(--cyber-cyan); box-shadow: 0 0 10px var(--cyber-cyan);">ONAYLI ÜYE</span>
+                                <span class="p-tag dark" id="publicGenderDisplay" style="border-color: var(--hot-pink); color: var(--hot-pink);">Beden: ?</span>
+                                <span class="p-tag dark" id="publicAgeDisplay" style="border-color: var(--hot-pink); color: var(--hot-pink);">Yaş: ?</span>
+                            </div>
 
-                    <div class="profile-bio" id="publicBioDisplay" style="border-left-color: var(--cyber-cyan); color: #fff;">
-                        "Veriler çekiliyor..."
+                            <div class="profile-bio" id="publicBioDisplay" style="border-left-color: var(--cyber-cyan); color: #fff;">
+                                "Veriler çekiliyor..."
+                            </div>
+                        </div>
                     </div>
                     
                     <button class="cyber-button" style="background: transparent; border: 2px solid var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 15px rgba(0,243,255,0.3);"><i class="fas fa-fire"></i> FANTEZİ AĞINA EKLE (TAKİP ET)</button>
@@ -417,10 +474,9 @@
         document.getElementById('editAvatar').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if(file) {
-                // Firestore limitlerine takılmamak için güvenlik kontrolü (Max 500KB)
                 if(file.size > 500 * 1024) {
                     alert("Sistem Reddi: Görsel çok büyük. Maksimum 500KB yükleyebilirsin.");
-                    this.value = ''; // Input'u temizle
+                    this.value = ''; 
                     return;
                 }
                 
@@ -435,6 +491,13 @@
             }
         });
 
+        // YARDIMCI FONKSİYON: Tarih Formatlama
+        function formatTimestamp(timestampObj) {
+            if(!timestampObj) return "Bilinmiyor";
+            const date = timestampObj.toDate();
+            return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
         async function viewPublicProfile(targetAlias) {
             formContainer.style.display = "none";
             profileDashboard.style.display = "none";
@@ -445,7 +508,17 @@
             document.getElementById("publicBioDisplay").innerText = "Ağda iz aranıyor...";
             document.getElementById("publicGenderDisplay").innerText = "Beden: Gizli";
             document.getElementById("publicAgeDisplay").innerText = "Yaş: Gizli";
-            document.querySelector('#publicProfileScreen .profile-avatar').innerHTML = '<i class="fas fa-eye"></i>';
+            document.getElementById("publicJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: Aranıyor...`;
+            document.getElementById("publicSocialLink").style.display = "none";
+            
+            const publicAvatar = document.getElementById("publicAvatar");
+            const publicBanner = document.getElementById("publicBanner");
+            publicAvatar.innerHTML = '<i class="fas fa-eye"></i>';
+
+            // Temizleme işlemi (Önceki profilden kalan renkler silinsin)
+            publicBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, var(--blood-red) 100%)`;
+            publicAvatar.style.borderColor = "var(--cyber-cyan)";
+            publicAvatar.style.boxShadow = "0 0 25px rgba(0, 243, 255, 0.6)";
 
             try {
                 const targetQuery = query(collection(db, "preRegistrations"), where("alias", "==", targetAlias));
@@ -466,9 +539,27 @@
                         document.getElementById("publicAgeDisplay").innerText = `Yaş: ${Math.abs(ageDate.getUTCFullYear() - 1970)}`;
                     }
 
-                    // Eğer avatar verisi varsa onu ekrana bas
+                    // Sisteme Giriş Tarihi
+                    document.getElementById("publicJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(data.timestamp)}`;
+
+                    // Sosyal Link
+                    if(data.socialLink) {
+                        const sLink = document.getElementById("publicSocialLink");
+                        sLink.style.display = "inline-block";
+                        sLink.href = data.socialLink;
+                    }
+
+                    // Tema Rengi Uygulama
+                    const themeColor = data.themeColor || "#ff003c";
+                    publicBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                    publicAvatar.style.borderColor = themeColor;
+                    publicAvatar.style.boxShadow = `0 0 25px ${themeColor}80`; // %50 saydamlık ekliyoruz parlamaya
+                    document.getElementById("publicAliasDisplay").style.color = themeColor;
+                    document.getElementById("publicAliasDisplay").style.textShadow = `0 0 15px ${themeColor}`;
+
+                    // Avatar
                     if(data.avatar) {
-                        document.querySelector('#publicProfileScreen .profile-avatar').innerHTML = `<img src="${data.avatar}" alt="${data.alias}">`;
+                        publicAvatar.innerHTML = `<img src="${data.avatar}" alt="${data.alias}">`;
                     }
                 } else {
                     document.getElementById("publicAliasDisplay").innerText = "HAYALET (BULUNAMADI)";
@@ -485,7 +576,7 @@
             }
         });
 
-        const qList = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"), limit(15));
+        const qList = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"));
         onSnapshot(qList, (snapshot) => {
             const nodeList = document.getElementById('nodeList');
             nodeList.innerHTML = ''; let count = 0; 
@@ -519,27 +610,56 @@
                 formContainer.style.display = "none";
                 profileDashboard.style.display = "block";
                 document.getElementById("profileAliasDisplay").innerText = savedAlias.toUpperCase();
+                
                 try {
                     const userQuery = query(collection(db, "preRegistrations"), where("alias", "==", savedAlias));
                     const querySnapshot = await getDocs(userQuery);
+                    
                     if (!querySnapshot.empty) {
                         const userData = querySnapshot.docs[0].data();
                         document.getElementById("profileEmailDisplay").innerText = userData.email;
-                        if(userData.bio) document.getElementById("profileBioDisplay").innerText = `"${userData.bio}"`;
-                        if(userData.gender) document.getElementById("profileGenderDisplay").innerText = `Beden: ${userData.gender}`;
+                        
+                        if(userData.bio) {
+                            document.getElementById("profileBioDisplay").innerText = `"${userData.bio}"`;
+                            document.getElementById('editBio').value = userData.bio;
+                        }
+                        if(userData.gender) {
+                            document.getElementById("profileGenderDisplay").innerText = `Beden: ${userData.gender}`;
+                            document.getElementById('editGender').value = userData.gender;
+                        }
                         if(userData.dob) {
                             const birthDate = new Date(userData.dob);
                             const ageDate = new Date(Date.now() - birthDate.getTime());
                             document.getElementById("profileAgeDisplay").innerText = `Yaş: ${Math.abs(ageDate.getUTCFullYear() - 1970)}`;
                             document.getElementById('editDob').value = userData.dob;
                         }
-                        if(userData.bio) document.getElementById('editBio').value = userData.bio;
-                        if(userData.gender) document.getElementById('editGender').value = userData.gender;
+
+                        // Sisteme Giriş Tarihi
+                        document.getElementById("myJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(userData.timestamp)}`;
+
+                        // Sosyal Medya Linki İşlemleri
+                        if(userData.socialLink) {
+                            const mySocialLink = document.getElementById("mySocialLink");
+                            mySocialLink.style.display = "inline-block";
+                            mySocialLink.href = userData.socialLink;
+                            document.getElementById('editSocialLink').value = userData.socialLink;
+                        }
+
+                        // Tema Rengi İşlemleri (Kendi Profilim)
+                        const themeColor = userData.themeColor || "#ff003c";
+                        document.getElementById('editThemeColor').value = themeColor;
                         
-                        // Kullanıcının avatarı varsa yükle
+                        const myBanner = document.getElementById("myBanner");
+                        const myAvatar = document.getElementById("myAvatar");
+                        
+                        myBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                        myAvatar.style.borderColor = themeColor;
+                        myAvatar.style.boxShadow = `0 0 25px ${themeColor}80`;
+                        
+                        // Avatar İşlemleri
                         if(userData.avatar) {
-                            document.querySelector('#profileDashboard .profile-avatar').innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
-                            document.getElementById('editAvatarBase64').value = userData.avatar; // Formda da kalsın
+                            myAvatar.innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
+                            document.getElementById('editAvatarBase64').value = userData.avatar;
                         }
                     }
                 } catch(error) { console.error("Profil çekilemedi: ", error); }
@@ -564,19 +684,61 @@
             } catch (error) { console.error(error); }
         });
 
+        // ÇAKIŞMA KONTROLÜ EKLENMİŞ KAYIT FORMU
         document.getElementById('preRegForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const alias = document.getElementById('aliasInput').value; const email = document.getElementById('emailInput').value; const password = document.getElementById('passwordInput').value;
-            const btn = this.querySelector('.cyber-button'); const originalText = btn.innerText; btn.innerText = "KİLİT KIRILIYOR...";
+            const alias = document.getElementById('aliasInput').value; 
+            const email = document.getElementById('emailInput').value; 
+            const password = document.getElementById('passwordInput').value;
+            
+            const btn = this.querySelector('.cyber-button'); 
+            const originalText = btn.innerText; 
+            btn.innerText = "SİSTEM KONTROLÜ...";
+
             try {
-                const docRef = await addDoc(collection(db, "preRegistrations"), {
-                    alias: alias, email: email, password: password, gender: "Gizli", bio: "", dob: "", avatar: "", timestamp: serverTimestamp()
+                const allUsersSnap = await getDocs(collection(db, "preRegistrations"));
+                let isDuplicate = false;
+                let errorMessage = "GİRİŞ REDDEDİLDİ";
+
+                const checkAlias = alias.toLowerCase().replace(/\s+/g, '');
+                const checkEmail = email.toLowerCase();
+
+                allUsersSnap.forEach(doc => {
+                    const data = doc.data();
+                    const currentAlias = (data.alias || "").toLowerCase().replace(/\s+/g, '');
+                    const currentEmail = (data.email || "").toLowerCase();
+
+                    if (currentAlias === checkAlias) {
+                        isDuplicate = true;
+                        errorMessage = "BU RUMUZ KULLANIMDA";
+                    }
+                    if (currentEmail === checkEmail) {
+                        isDuplicate = true;
+                        errorMessage = "BU E-MAİL ZATEN KAYITLI";
+                    }
                 });
+
+                if (isDuplicate) {
+                    btn.innerText = errorMessage; 
+                    btn.style.background = "transparent"; 
+                    btn.style.border = "2px solid red"; 
+                    btn.style.color = "red";
+                    setTimeout(() => { btn.innerText = originalText; btn.style = ""; }, 3000);
+                    return; 
+                }
+
+                btn.innerText = "KİLİT KIRILIYOR...";
+                // YENİ ÖZELLİKLERLE (themeColor, socialLink) KAYIT
+                const docRef = await addDoc(collection(db, "preRegistrations"), {
+                    alias: alias, email: email, password: password, gender: "Gizli", bio: "", dob: "", avatar: "", 
+                    themeColor: "#ff003c", socialLink: "", timestamp: serverTimestamp()
+                });
+                
                 localStorage.setItem("hotdragons_alias", alias); localStorage.setItem("hotdragons_doc_id", docRef.id);
                 btn.innerText = "İÇERDESİN // ONAYLANDI"; btn.style.background = "#fff"; btn.style.color = "#000";
                 setTimeout(() => window.location.reload(), 1500);
             } catch (error) {
-                btn.innerText = "GİRİŞ REDDEDİLDİ"; btn.style.background = "transparent"; btn.style.border = "2px solid red"; btn.style.color = "red";
+                btn.innerText = "BAĞLANTI HATASI"; btn.style.background = "transparent"; btn.style.border = "2px solid red"; btn.style.color = "red";
                 setTimeout(() => { btn.innerText = originalText; btn.style = ""; }, 3000);
             }
         });
@@ -585,7 +747,7 @@
         document.getElementById('cancelEditBtn').addEventListener('click', () => { profileEditScreen.style.display = "none"; profileDashboard.style.display = "block"; });
         document.getElementById('logoutBtn').addEventListener('click', function() { localStorage.clear(); window.location.reload(); });
         
-        // KAYDETME İŞLEMİ (Avatar ile birlikte)
+        // KAYDETME İŞLEMİ (YENİ ÖZELLİKLER İLE)
         document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('saveEditBtn'); btn.innerText = "SİSTEME İŞLENİYOR...";
@@ -594,7 +756,9 @@
                     bio: document.getElementById('editBio').value, 
                     gender: document.getElementById('editGender').value, 
                     dob: document.getElementById('editDob').value,
-                    avatar: document.getElementById('editAvatarBase64').value // Fotoğrafı Firestore'a kaydediyoruz
+                    themeColor: document.getElementById('editThemeColor').value,
+                    socialLink: document.getElementById('editSocialLink').value,
+                    avatar: document.getElementById('editAvatarBase64').value 
                 });
                 btn.innerText = "KİMLİK GÜNCELLENDİ"; btn.style.background = "#00ff88"; btn.style.color = "#000";
                 setTimeout(() => window.location.reload(), 1000);
