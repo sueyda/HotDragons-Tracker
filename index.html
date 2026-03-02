@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOTDRAGONS // XXX PROTOCOL</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -193,6 +195,112 @@
         .roadmap-item strong { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; display: block; margin-bottom: 8px; color: var(--hot-pink); letter-spacing: 1px;}
         .roadmap-item p { color: #aaa; font-size: 1.05rem; line-height: 1.5; margin:0;}
 
+        /* --- BİLEŞEN: SİBER AKIŞ (VERTICAL FEED) --- */
+        #feedScreen { 
+            display: none; 
+            width: 100vw; 
+            height: 100vh; 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            background: var(--void-bg); 
+            z-index: 3000; 
+        }
+        
+        .feed-container { 
+            width: 100%; 
+            height: 100%; 
+            overflow-y: scroll; 
+            scroll-snap-type: y mandatory; 
+            scrollbar-width: none; 
+        }
+        
+        .feed-container::-webkit-scrollbar { display: none; }
+        
+        .feed-item { 
+            width: 100%; 
+            height: 100vh; 
+            scroll-snap-align: start; 
+            position: relative; 
+            background: radial-gradient(circle at center, rgba(20, 0, 10, 1) 0%, var(--void-bg) 100%);
+            border-bottom: 2px solid var(--blood-red); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            overflow: hidden;
+        }
+
+        .feed-item::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 243, 255, 0.05) 3px, rgba(0, 243, 255, 0.05) 4px);
+            pointer-events: none;
+        }
+
+        .feed-actions { 
+            position: absolute; 
+            right: 15px; 
+            bottom: 120px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 25px; 
+            z-index: 10; 
+        }
+        
+        .action-btn { 
+            background: rgba(10, 0, 5, 0.8); 
+            border: 1px solid var(--hot-pink); 
+            color: #fff; 
+            width: 55px; 
+            height: 55px; 
+            border-radius: 50%; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            font-size: 1.4rem; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3); 
+            backdrop-filter: blur(5px);
+        }
+        
+        .action-btn:hover { 
+            background: var(--blood-red); 
+            border-color: #fff;
+            transform: scale(1.1); 
+            box-shadow: 0 0 25px var(--blood-red); 
+            text-shadow: 0 0 5px #fff;
+        }
+        
+        .action-btn span { font-size: 0.7rem; font-family: 'Rajdhani'; margin-top: 3px; font-weight: bold;}
+
+        .feed-info { 
+            position: absolute; 
+            left: 15px; 
+            bottom: 40px; 
+            z-index: 10; 
+            text-align: left; 
+            background: rgba(0, 0, 0, 0.6); 
+            padding: 15px 20px; 
+            border-radius: 10px; 
+            border-left: 3px solid var(--cyber-cyan); 
+            backdrop-filter: blur(10px);
+            max-width: 75%;
+        }
+        
+        .feed-alias { font-family: 'Orbitron'; color: var(--cyber-cyan); font-size: 1.3rem; margin-bottom: 5px; text-shadow: 0 0 10px var(--cyber-cyan);}
+        .feed-desc { color: #ddd; font-size: 1.05rem; line-height: 1.4;}
+        .feed-tags { margin-top: 8px; font-size: 0.85rem; color: var(--hot-pink); font-family: 'Orbitron'; letter-spacing: 1px;}
+
+        .close-feed-btn { 
+            position: absolute; top: 25px; left: 25px; z-index: 20; 
+            background: rgba(0,0,0,0.5); border: 1px solid var(--blood-red); 
+            color: var(--blood-red); font-size: 1.5rem; width: 45px; height: 45px; 
+            border-radius: 50%; cursor: pointer; transition: 0.3s;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .close-feed-btn:hover { background: var(--blood-red); color: #fff; box-shadow: 0 0 20px var(--blood-red);}
+
         /* MOBİL UYUM */
         @media (max-width: 850px) {
             .registration-terminal { grid-template-columns: 1fr; }
@@ -215,6 +323,9 @@
             .profile-alias { font-size: 1.8rem; }
             .profile-avatar { width: 90px; height: 90px; font-size: 2.5rem; margin-top: -45px;}
             .profile-banner { height: 90px; }
+            .feed-info { bottom: 20px; left: 10px; padding: 10px; }
+            .feed-actions { right: 10px; bottom: 100px; gap: 15px;}
+            .action-btn { width: 45px; height: 45px; font-size: 1.1rem;}
         }
     </style>
 </head>
@@ -323,6 +434,10 @@
                             </div>
                         </div>
                     </div>
+
+                    <button id="enterFeedBtn" class="cyber-button" style="margin-bottom: 15px; background: linear-gradient(45deg, var(--cyber-cyan), #0055ff); text-shadow: 0 0 5px #fff;">
+                        <i class="fas fa-satellite-dish"></i> SİBER AKIŞA BAĞLAN
+                    </button>
 
                     <button id="showEditFormBtn" class="cyber-button" style="margin-bottom: 15px;"><i class="fas fa-pen"></i> KİMLİĞİ DÜZENLE</button>
                     <button id="logoutBtn" class="cyber-button outline">AĞDAN KOP (ÇIKIŞ YAP)</button>
@@ -444,6 +559,44 @@
 
     </div>
 
+    <div id="feedScreen">
+        <button class="close-feed-btn" id="closeFeedBtn"><i class="fas fa-times"></i></button>
+        
+        <div class="feed-container" id="feedContainer">
+            <div class="feed-item">
+                <div style="font-family: 'Orbitron'; color: #333; font-size: 2rem; text-align: center; padding: 20px;">[ MEDYA VERİSİ YÜKLENİYOR ]</div>
+                
+                <div class="feed-actions">
+                    <div class="action-btn"><i class="fas fa-fire"></i><span>12.4K</span></div>
+                    <div class="action-btn"><i class="fas fa-comment-dots"></i><span>842</span></div>
+                    <div class="action-btn"><i class="fas fa-share-nodes"></i><span>Paylaş</span></div>
+                </div>
+                
+                <div class="feed-info">
+                    <div class="feed-alias">@Neon_Ghost</div>
+                    <div class="feed-desc">Sınırları zorlayan yeni bir simülasyon testi. Ağa bağlı kalın. 🔌✨</div>
+                    <div class="feed-tags">#cyber #glitch #VIP</div>
+                </div>
+            </div>
+
+            <div class="feed-item" style="background: radial-gradient(circle at center, rgba(20, 0, 30, 1) 0%, var(--void-bg) 100%);">
+                <div style="font-family: 'Orbitron'; color: #333; font-size: 2rem; text-align: center; padding: 20px;">[ VİDEO_002.mp4 ]</div>
+                
+                <div class="feed-actions">
+                    <div class="action-btn"><i class="fas fa-fire"></i><span>45.1K</span></div>
+                    <div class="action-btn"><i class="fas fa-comment-dots"></i><span>3.2K</span></div>
+                    <div class="action-btn"><i class="fas fa-share-nodes"></i><span>Paylaş</span></div>
+                </div>
+                
+                <div class="feed-info">
+                    <div class="feed-alias">@Cyber_Kitsune</div>
+                    <div class="feed-desc">Yeraltı bağlantıları aktif. Kimler uyanık? 🦊🔴</div>
+                    <div class="feed-tags">#nightcity #redlight #protocol</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
@@ -469,6 +622,25 @@
         
         topLoginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
         document.getElementById('closeModalBtn').addEventListener('click', () => loginModal.style.display = 'none');
+
+        // YENİ AKIŞ ARAYÜZÜ JS KONTROLLERİ
+        const enterFeedBtn = document.getElementById('enterFeedBtn');
+        const feedScreen = document.getElementById('feedScreen');
+        const closeFeedBtn = document.getElementById('closeFeedBtn');
+
+        if(enterFeedBtn) {
+            enterFeedBtn.addEventListener('click', () => {
+                feedScreen.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Akış açıldığında arka plan kaymasını engeller
+            });
+        }
+
+        if(closeFeedBtn) {
+            closeFeedBtn.addEventListener('click', () => {
+                feedScreen.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Akış kapanınca arka plan kaymasını geri açar
+            });
+        }
 
         // FOTOĞRAF YÜKLEME VE BASE64 ÇEVİRİCİ
         document.getElementById('editAvatar').addEventListener('change', function(e) {
@@ -515,7 +687,7 @@
             const publicBanner = document.getElementById("publicBanner");
             publicAvatar.innerHTML = '<i class="fas fa-eye"></i>';
 
-            // Temizleme işlemi (Önceki profilden kalan renkler silinsin)
+            // Temizleme işlemi
             publicBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, var(--blood-red) 100%)`;
             publicAvatar.style.borderColor = "var(--cyber-cyan)";
             publicAvatar.style.boxShadow = "0 0 25px rgba(0, 243, 255, 0.6)";
@@ -539,25 +711,21 @@
                         document.getElementById("publicAgeDisplay").innerText = `Yaş: ${Math.abs(ageDate.getUTCFullYear() - 1970)}`;
                     }
 
-                    // Sisteme Giriş Tarihi
                     document.getElementById("publicJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(data.timestamp)}`;
 
-                    // Sosyal Link
                     if(data.socialLink) {
                         const sLink = document.getElementById("publicSocialLink");
                         sLink.style.display = "inline-block";
                         sLink.href = data.socialLink;
                     }
 
-                    // Tema Rengi Uygulama
                     const themeColor = data.themeColor || "#ff003c";
                     publicBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
                     publicAvatar.style.borderColor = themeColor;
-                    publicAvatar.style.boxShadow = `0 0 25px ${themeColor}80`; // %50 saydamlık ekliyoruz parlamaya
+                    publicAvatar.style.boxShadow = `0 0 25px ${themeColor}80`;
                     document.getElementById("publicAliasDisplay").style.color = themeColor;
                     document.getElementById("publicAliasDisplay").style.textShadow = `0 0 15px ${themeColor}`;
 
-                    // Avatar
                     if(data.avatar) {
                         publicAvatar.innerHTML = `<img src="${data.avatar}" alt="${data.alias}">`;
                     }
@@ -634,10 +802,8 @@
                             document.getElementById('editDob').value = userData.dob;
                         }
 
-                        // Sisteme Giriş Tarihi
                         document.getElementById("myJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(userData.timestamp)}`;
 
-                        // Sosyal Medya Linki İşlemleri
                         if(userData.socialLink) {
                             const mySocialLink = document.getElementById("mySocialLink");
                             mySocialLink.style.display = "inline-block";
@@ -645,7 +811,6 @@
                             document.getElementById('editSocialLink').value = userData.socialLink;
                         }
 
-                        // Tema Rengi İşlemleri (Kendi Profilim)
                         const themeColor = userData.themeColor || "#ff003c";
                         document.getElementById('editThemeColor').value = themeColor;
                         
@@ -656,7 +821,6 @@
                         myAvatar.style.borderColor = themeColor;
                         myAvatar.style.boxShadow = `0 0 25px ${themeColor}80`;
                         
-                        // Avatar İşlemleri
                         if(userData.avatar) {
                             myAvatar.innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
                             document.getElementById('editAvatarBase64').value = userData.avatar;
@@ -684,7 +848,6 @@
             } catch (error) { console.error(error); }
         });
 
-        // ÇAKIŞMA KONTROLÜ EKLENMİŞ KAYIT FORMU
         document.getElementById('preRegForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const alias = document.getElementById('aliasInput').value; 
@@ -728,7 +891,6 @@
                 }
 
                 btn.innerText = "KİLİT KIRILIYOR...";
-                // YENİ ÖZELLİKLERLE (themeColor, socialLink) KAYIT
                 const docRef = await addDoc(collection(db, "preRegistrations"), {
                     alias: alias, email: email, password: password, gender: "Gizli", bio: "", dob: "", avatar: "", 
                     themeColor: "#ff003c", socialLink: "", timestamp: serverTimestamp()
@@ -747,7 +909,6 @@
         document.getElementById('cancelEditBtn').addEventListener('click', () => { profileEditScreen.style.display = "none"; profileDashboard.style.display = "block"; });
         document.getElementById('logoutBtn').addEventListener('click', function() { localStorage.clear(); window.location.reload(); });
         
-        // KAYDETME İŞLEMİ (YENİ ÖZELLİKLER İLE)
         document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const btn = document.getElementById('saveEditBtn'); btn.innerText = "SİSTEME İŞLENİYOR...";
