@@ -9,15 +9,15 @@
 <h4 align="center">KISA FORMAT. <span style="color:#ff003c;">SINIRSIZ TATMİN.</span></h4>
 
 <p align="center">
-  <a href="#proje-hakkında">Proje Hakkında</a> •
-  <a href="#siber-altyapı">Siber Altyapı</a> •
-  <a href="#kırmızı-işık-protokolü-yol-haritası">Yol Haritası</a> •
+  <a href="#proje-hakkinda">Proje Hakkında</a> •
+  <a href="#siber-altyapi">Siber Altyapı</a> •
+  <a href="#yol-haritasi">Yol Haritası</a> •
   <a href="https://hotdragons.com">Ağa Bağlan (Canlı)</a>
 </p>
 
 ---
 
-## 🔴 PROJE HAKKINDA
+## <a id="proje-hakkinda"></a>🔴 PROJE HAKKINDA
 
 **HOTDRAGONS**, dijital yeraltı dünyasında sınırların kalktığı, algoritma destekli tutkunun ve yeni nesil devasa bir topluluğun merkez üssüdür. Geleneksel ve sansürcü sosyal ağların aksine, tamamen özgür, **"TikTok x Cyberpunk"** dinamiklerini birleştiren dikey akış (infinite scroll) tabanlı bir VIP etkileşim ağıdır.
 
@@ -25,7 +25,7 @@
 
 > **Uyarı:** Bu proje karanlık mod, yüksek kontrastlı neon renkler (Neon Kırmızı, Siber Mavi) ve siberpunk arayüz prensipleri kullanılarak geliştirilmiştir. 🔞
 
-## 🔌 SİBER ALTYAPI (Tech Stack)
+## <a id="siber-altyapi"></a>🔌 SİBER ALTYAPI (Tech Stack)
 
 Ağ performansı ve kesintisiz veri akışı için aşağıdaki teknolojiler kullanılmıştır:
 
@@ -42,7 +42,7 @@ Ağ performansı ve kesintisiz veri akışı için aşağıdaki teknolojiler kul
 - **[X] Profil Senkronizasyonu:** Tema rengi (Parlama), biyoloji (Cinsiyet/Yaş) ve sosyal bağlantıların kişiselleştirilmesi.
 - **[X] Canlı Gözetleyenler:** Ağa yeni sızan kullanıcıların gerçek zamanlı listelenmesi (Firestore `onSnapshot`).
 
-## 🗺️ KIRMIZI IŞIK PROTOKOLÜ (Yol Haritası)
+## <a id="yol-haritasi"></a>🗺️ KIRMIZI IŞIK PROTOKOLÜ (Yol Haritası)
 
 - **[🟢] FAZ 1: Gizli Tohum (Aktif)**
   - Kullanıcı kimliklerinin inşası, veritabanı şifrelemesi ve yeraltı ağının (UI/UX) kurulması. Domain kilitlendi.
