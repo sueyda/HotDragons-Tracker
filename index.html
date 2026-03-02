@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HOTDRAGONS // XXX PROTOCOL</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <style>
         /* SİSTEM KÖK DEĞİŞKENLERİ */
         :root {
@@ -17,17 +20,19 @@
             --deep-magenta: #7a003c;
             --electric-purple: #7b00ff;
             --cyber-cyan: #00f3ff;
-            --void-bg: #030005; 
-            --panel-dark: rgba(15, 0, 10, 0.65); 
+            --void-bg: #030005;
+            --panel-dark: rgba(15, 0, 10, 0.65);
             --text-glow: #ffb6e6;
         }
 
-        * { box-sizing: border-box; }
-        
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Rajdhani', sans-serif;
             background-color: var(--void-bg);
-            background-image: 
+            background-image:
                 radial-gradient(circle at 50% 30%, rgba(255, 0, 60, 0.15), transparent 60%),
                 radial-gradient(circle at 80% 80%, rgba(123, 0, 255, 0.1), transparent 50%),
                 linear-gradient(0deg, rgba(255, 0, 127, 0.03) 1px, transparent 1px),
@@ -39,301 +44,1318 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden; 
-            padding-top: 40px; 
+            overflow-x: hidden;
+            padding-top: 40px;
             padding-bottom: 50px;
         }
 
         body::after {
-            content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-            background: repeating-linear-gradient(0deg, rgba(255,0,60,0.03) 0px, rgba(255,0,60,0.03) 1px, transparent 1px, transparent 3px);
-            pointer-events: none; z-index: 10;
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: repeating-linear-gradient(0deg, rgba(255, 0, 60, 0.03) 0px, rgba(255, 0, 60, 0.03) 1px, transparent 1px, transparent 3px);
+            pointer-events: none;
+            z-index: 10;
         }
 
         /* --- SİSTEM HUD --- */
         .system-hud {
-            position: fixed; top: 0; left: 0; width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
             background: rgba(5, 0, 10, 0.85);
             border-bottom: 1px solid var(--blood-red);
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 10px 30px; 
-            font-family: 'Orbitron', sans-serif; font-size: 0.85rem;
-            color: var(--hot-pink); z-index: 1000; letter-spacing: 2px;
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4); backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 30px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--hot-pink);
+            z-index: 1000;
+            letter-spacing: 2px;
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
+            backdrop-filter: blur(10px);
         }
-        .hud-location { color: #fff; text-shadow: 0 0 10px var(--cyber-cyan); display: flex; align-items: center; gap: 10px; font-weight: 700; }
-        .hud-location i { animation: targetBlink 2s infinite; color: var(--blood-red); }
-        @keyframes targetBlink { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(1.3); } }
-        .hud-item { display: flex; align-items: center; gap: 8px; }
+
+        .hud-location {
+            color: #fff;
+            text-shadow: 0 0 10px var(--cyber-cyan);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+        }
+
+        .hud-location i {
+            animation: targetBlink 2s infinite;
+            color: var(--blood-red);
+        }
+
+        @keyframes targetBlink {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.3;
+                transform: scale(1.3);
+            }
+        }
+
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- SİSTEM BİLDİRİMİ (HUD ALERT) --- */
+        .hud-alert {
+            display: none;
+            color: var(--void-bg);
+            background: var(--blood-red);
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-weight: 900;
+            font-size: 0.75rem;
+            margin-left: 10px;
+            animation: pulseAlert 1s infinite alternate;
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--blood-red);
+        }
+
+        @keyframes pulseAlert {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.1);
+                opacity: 1;
+                box-shadow: 0 0 20px var(--blood-red);
+            }
+        }
 
         .top-login-btn {
-            position: absolute; top: 60px; right: 30px; background: rgba(255, 0, 60, 0.1);
-            border: 1px solid var(--blood-red); color: #fff; padding: 10px 20px;
-            font-family: 'Orbitron', sans-serif; font-size: 0.85rem; letter-spacing: 2px;
-            cursor: pointer; border-radius: 3px; z-index: 100; transition: all 0.3s;
+            position: absolute;
+            top: 60px;
+            right: 30px;
+            background: rgba(255, 0, 60, 0.1);
+            border: 1px solid var(--blood-red);
+            color: #fff;
+            padding: 10px 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            border-radius: 3px;
+            z-index: 100;
+            transition: all 0.3s;
             box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
         }
-        .top-login-btn:hover { background: var(--blood-red); box-shadow: 0 0 20px var(--blood-red); text-shadow: 0 0 5px #fff;}
 
-        header { padding: 80px 20px 40px; text-align: center; position: relative; width: 100%; z-index: 2; }
-        .logo { font-family: 'Orbitron', sans-serif; font-size: 4.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 8px; background: linear-gradient(to bottom, #fff, var(--hot-pink), var(--blood-red)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 25px var(--blood-red)); animation: textGlitch 4s infinite alternate; }
-        .subtitle { font-family: 'Orbitron', sans-serif; color: #fff; letter-spacing: 6px; text-transform: uppercase; font-size: 1.2rem; margin-top: 10px; text-shadow: 0 0 10px var(--hot-pink); }
-        .subtitle span { color: var(--blood-red); }
+        .top-login-btn:hover {
+            background: var(--blood-red);
+            box-shadow: 0 0 20px var(--blood-red);
+            text-shadow: 0 0 5px #fff;
+        }
 
-        .container { max-width: 1100px; width: 95%; padding: 20px 0; z-index: 2; display: grid; grid-template-columns: 1fr; gap: 30px; }
+        header {
+            padding: 80px 20px 40px;
+            text-align: center;
+            position: relative;
+            width: 100%;
+            z-index: 2;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            background: linear-gradient(to bottom, #fff, var(--hot-pink), var(--blood-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 25px var(--blood-red));
+            animation: textGlitch 2.5s infinite alternate;
+            position: relative;
+        }
+
+        /* LOGO GLITCH EFEKTİ */
+        @keyframes textGlitch {
+            0% {
+                text-shadow: 2px 0 var(--cyber-cyan), -2px 0 var(--blood-red);
+            }
+
+            5% {
+                text-shadow: -2px 0 var(--cyber-cyan), 2px 0 var(--blood-red);
+            }
+
+            10% {
+                text-shadow: 2px 0 var(--cyber-cyan), -2px 0 var(--blood-red);
+            }
+
+            15% {
+                text-shadow: none;
+            }
+
+            100% {
+                text-shadow: none;
+            }
+        }
+
+        .subtitle {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            text-shadow: 0 0 10px var(--hot-pink);
+        }
+
+        .subtitle span {
+            color: var(--blood-red);
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 95%;
+            padding: 20px 0;
+            z-index: 2;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
 
         /* --- BİLEŞEN: ANA DEĞER KARTI --- */
-        .value-card { background: var(--panel-dark); border-radius: 15px; padding: 40px 20px; text-align: center; border: 1px solid rgba(255, 0, 60, 0.3); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 0, 127, 0.1); position: relative; overflow: hidden; }
-        .value-card h3 { font-family: 'Orbitron', sans-serif; color: #fff; text-transform: uppercase; letter-spacing: 4px; margin-top: 0; font-size: 1.1rem; opacity: 0.8;}
-        .price { font-family: 'Orbitron', sans-serif; font-size: 5rem; font-weight: 900; color: transparent; -webkit-text-stroke: 2px var(--hot-pink); text-shadow: 0 0 20px rgba(255, 0, 127, 0.8); animation: throb 2s ease-in-out infinite both; margin: 15px 0; }
-        @keyframes throb { 0% { transform: scale(1); text-shadow: 0 0 20px rgba(255,0,127,0.5); } 50% { transform: scale(1.05); text-shadow: 0 0 40px var(--blood-red), 0 0 80px var(--hot-pink); } 100% { transform: scale(1); text-shadow: 0 0 20px rgba(255,0,127,0.5); } }
-        .status-badge { display: inline-block; padding: 10px 30px; background: rgba(255, 0, 60, 0.1); border: 1px solid var(--blood-red); font-family: 'Orbitron', sans-serif; text-transform: uppercase; letter-spacing: 3px; font-size: 0.9rem; color: var(--hot-pink); box-shadow: 0 0 20px rgba(255, 0, 60, 0.4); border-radius: 50px; }
+        .value-card {
+            background: var(--panel-dark);
+            border-radius: 15px;
+            padding: 40px 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 0, 60, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 0, 127, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .value-card h3 {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-top: 0;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .price {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            font-weight: 900;
+            color: transparent;
+            -webkit-text-stroke: 2px var(--hot-pink);
+            text-shadow: 0 0 20px rgba(255, 0, 127, 0.8);
+            animation: throb 2s ease-in-out infinite both;
+            margin: 15px 0;
+        }
+
+        @keyframes throb {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+            }
+
+            50% {
+                transform: scale(1.05);
+                text-shadow: 0 0 40px var(--blood-red), 0 0 80px var(--hot-pink);
+            }
+
+            100% {
+                transform: scale(1);
+                text-shadow: 0 0 20px rgba(255, 0, 127, 0.5);
+            }
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 10px 30px;
+            background: rgba(255, 0, 60, 0.1);
+            border: 1px solid var(--blood-red);
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 0.9rem;
+            color: var(--hot-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
+            border-radius: 50px;
+        }
 
         /* --- BİLEŞEN: İSTATİSTİK --- */
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .stat-item { background: rgba(10, 0, 5, 0.7); padding: 30px 15px; border-radius: 10px; text-align: center; border-bottom: 2px solid var(--deep-magenta); transition: all 0.3s ease; backdrop-filter: blur(10px); }
-        .stat-item:hover { border-color: var(--hot-pink); background: rgba(20, 0, 10, 0.9); transform: translateY(-5px); }
-        .stat-item i { color: var(--blood-red); margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--blood-red)); font-size: 2.5rem; }
-        .stat-item h4 { font-family: 'Orbitron', sans-serif; margin: 10px 0; color: #fff; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 2px; opacity: 0.7; }
-        .stat-item p { font-size: 2.5rem; font-weight: 700; margin: 0; color: var(--hot-pink); text-shadow: 0 0 10px var(--hot-pink); }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            background: rgba(10, 0, 5, 0.7);
+            padding: 30px 15px;
+            border-radius: 10px;
+            text-align: center;
+            border-bottom: 2px solid var(--deep-magenta);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-item:hover {
+            border-color: var(--hot-pink);
+            background: rgba(20, 0, 10, 0.9);
+            transform: translateY(-5px);
+        }
+
+        .stat-item i {
+            color: var(--blood-red);
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px var(--blood-red));
+            font-size: 2.5rem;
+        }
+
+        .stat-item h4 {
+            font-family: 'Orbitron', sans-serif;
+            margin: 10px 0;
+            color: #fff;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        .stat-item p {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: var(--hot-pink);
+            text-shadow: 0 0 10px var(--hot-pink);
+        }
 
         /* --- BİLEŞEN: TERMİNAL & FORMLAR --- */
-        .registration-terminal { background: var(--panel-dark); border: 1px solid rgba(255, 0, 127, 0.2); border-top: 3px solid var(--blood-red); padding: 0; border-radius: 15px; position: relative; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 0, 60, 0.1); display: grid; grid-template-columns: 1.5fr 1fr; overflow: hidden; align-items: stretch; backdrop-filter: blur(20px); }
-        .form-section { padding: 40px; position: relative; }
-        .terminal-header { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 2rem; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 5px; text-shadow: 0 0 15px var(--blood-red); }
-        .terminal-header span { color: var(--blood-red); }
-        .terminal-desc { color: #aaa; font-size: 1.05rem; margin-bottom: 35px; line-height: 1.6; }
-        .input-group { margin-bottom: 25px; position: relative; }
-        .input-group label { display: block; font-family: 'Orbitron', sans-serif; color: var(--hot-pink); margin-bottom: 10px; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; }
-        .input-group i { position: absolute; left: 15px; top: 43px; color: var(--deep-magenta); font-size: 1.2rem; }
-        .cyber-input, .cyber-select, .cyber-textarea { width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid rgba(255, 0, 127, 0.3); color: #fff; padding: 15px 15px 15px 45px; font-family: 'Rajdhani', sans-serif; font-size: 1.2rem; outline: none; transition: all 0.3s; border-radius: 5px; box-sizing: border-box;}
-        .cyber-textarea { padding-left: 15px; resize: vertical; } 
-        .cyber-input:focus, .cyber-select:focus, .cyber-textarea:focus { border-color: var(--blood-red); box-shadow: 0 0 20px rgba(255, 0, 60, 0.4); background: rgba(20, 0, 5, 0.8); }
-        .cyber-select option { background-color: var(--void-bg); color: var(--hot-pink); }
-        
-        .cyber-button { width: 100%; background: linear-gradient(45deg, var(--deep-magenta), var(--blood-red)); color: #fff; border: none; padding: 18px; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; cursor: pointer; transition: all 0.3s; border-radius: 5px; box-shadow: 0 10px 20px rgba(255, 0, 60, 0.4); margin-top: 10px; }
-        .cyber-button:hover { transform: scale(1.02); box-shadow: 0 15px 30px rgba(255, 0, 60, 0.6); filter: brightness(1.2); }
-        .cyber-button.outline { background: transparent; border: 1px solid var(--hot-pink); color: var(--hot-pink); box-shadow: none; }
-        .cyber-button.outline:hover { background: rgba(255,0,127,0.1); color: #fff; }
-        .cyber-button.small { padding: 10px 15px; font-size: 0.9rem; letter-spacing: 2px; width: auto; display: inline-block;}
+        .registration-terminal {
+            background: var(--panel-dark);
+            border: 1px solid rgba(255, 0, 127, 0.2);
+            border-top: 3px solid var(--blood-red);
+            padding: 0;
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(255, 0, 60, 0.1);
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            overflow: hidden;
+            align-items: stretch;
+            backdrop-filter: blur(20px);
+        }
+
+        .form-section {
+            padding: 40px;
+            position: relative;
+        }
+
+        .terminal-header {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+            text-shadow: 0 0 15px var(--blood-red);
+        }
+
+        .terminal-header span {
+            color: var(--blood-red);
+        }
+
+        .terminal-desc {
+            color: #aaa;
+            font-size: 1.05rem;
+            margin-bottom: 35px;
+            line-height: 1.6;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--hot-pink);
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 43px;
+            color: var(--deep-magenta);
+            font-size: 1.2rem;
+        }
+
+        .cyber-input,
+        .cyber-select,
+        .cyber-textarea {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            color: #fff;
+            padding: 15px 15px 15px 45px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.2rem;
+            outline: none;
+            transition: all 0.3s;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .cyber-textarea {
+            padding-left: 15px;
+            resize: vertical;
+        }
+
+        .cyber-input:focus,
+        .cyber-select:focus,
+        .cyber-textarea:focus {
+            border-color: var(--blood-red);
+            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
+            background: rgba(20, 0, 5, 0.8);
+        }
+
+        .cyber-select option {
+            background-color: var(--void-bg);
+            color: var(--hot-pink);
+        }
+
+        .cyber-button {
+            width: 100%;
+            background: linear-gradient(45deg, var(--deep-magenta), var(--blood-red));
+            color: #fff;
+            border: none;
+            padding: 18px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 5px;
+            box-shadow: 0 10px 20px rgba(255, 0, 60, 0.4);
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* CYBER-BUTTON GLITCH HOVER EFEKTİ */
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: skewX(-20deg);
+            transition: 0.5s;
+        }
+
+        .cyber-button:hover::before {
+            left: 150%;
+        }
+
+        .cyber-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 30px rgba(255, 0, 60, 0.6);
+            filter: brightness(1.2);
+            /* animation: buttonGlitch 0.2s cubic-bezier(.25, .46, .45, .94) both infinite; -- Rahatsız edici titreme kaldırıldı */
+        }
+
+        /* 
+        Rahatsız edici animasyon silindi, CSS kalıntıları kaldırıldı.
+        @keyframes buttonGlitch { ... }  
+        */
+
+        .cyber-button.outline {
+            background: transparent;
+            border: 1px solid var(--hot-pink);
+            color: var(--hot-pink);
+            box-shadow: none;
+        }
+
+        .cyber-button.outline:hover {
+            background: rgba(255, 0, 127, 0.1);
+            color: #fff;
+        }
+
+        .cyber-button.small {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            width: auto;
+            display: inline-block;
+        }
 
         /* GİRİŞ YAP MODALI */
-        .login-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.85); z-index: 2000; backdrop-filter: blur(15px); justify-content: center; align-items: center; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .modal-content { background: rgba(15, 0, 10, 0.95); border: 2px solid var(--blood-red); padding: 40px; border-radius: 10px; width: 90%; max-width: 450px; position: relative; box-shadow: 0 0 50px rgba(255, 0, 60, 0.5); text-align: left; }
-        .close-btn { position: absolute; top: 15px; right: 25px; color: var(--hot-pink); font-size: 2rem; cursor: pointer; transition: 0.3s;}
-        .close-btn:hover { color: #fff; text-shadow: 0 0 10px #fff;}
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            backdrop-filter: blur(15px);
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: rgba(15, 0, 10, 0.95);
+            border: 2px solid var(--blood-red);
+            padding: 40px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 450px;
+            position: relative;
+            box-shadow: 0 0 50px rgba(255, 0, 60, 0.5);
+            text-align: left;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: var(--hot-pink);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-btn:hover {
+            color: #fff;
+            text-shadow: 0 0 10px #fff;
+        }
 
         /* PROFİL EKRANLARI VE BANNER SİSTEMİ */
-        #profileDashboard, #profileEditScreen, #publicProfileScreen { display: none; text-align: center; animation: slideIn 0.5s ease-out; }
-        
-        .profile-container-inner { background: rgba(0,0,0,0.4); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05); margin-bottom: 25px; padding-bottom: 20px;}
-        
-        /* BANNER */
-        .profile-banner { width: 100%; height: 120px; border-radius: 10px 10px 0 0; background: linear-gradient(45deg, rgba(0,0,0,0.8) 10%, var(--blood-red) 100%); background-size: cover; background-position: center; border-bottom: 2px solid rgba(255,255,255,0.1); position: relative; overflow: hidden; transition: all 0.5s; }
-        .profile-banner::after { content: ''; position: absolute; top:0; left:0; width: 100%; height: 100%; background: linear-gradient(transparent, rgba(0,0,0,0.9)); }
-        
-        /* AVATAR */
-        .profile-avatar { width: 110px; height: 110px; background: var(--void-bg); border: 3px solid var(--blood-red); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 3rem; color: var(--hot-pink); margin: -55px auto 15px; position: relative; z-index: 2; box-shadow: 0 0 25px rgba(255, 0, 60, 0.6); overflow: hidden; transition: all 0.5s;}
-        .profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-public { border-color: var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 25px rgba(0, 243, 255, 0.6); } 
+        #profileDashboard,
+        #profileEditScreen,
+        #publicProfileScreen {
+            display: none;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
 
-        .profile-details-wrapper { padding: 0 20px; }
+        .profile-container-inner {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+        }
+
+        /* BANNER */
+        .profile-banner {
+            width: 100%;
+            height: 120px;
+            border-radius: 10px 10px 0 0;
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.8) 10%, var(--blood-red) 100%);
+            background-size: cover;
+            background-position: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s;
+        }
+
+        .profile-banner::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+        }
+
+        /* AVATAR */
+        .profile-avatar {
+            width: 110px;
+            height: 110px;
+            background: var(--void-bg);
+            border: 3px solid var(--blood-red);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3rem;
+            color: var(--hot-pink);
+            margin: -55px auto 15px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 25px rgba(255, 0, 60, 0.6);
+            overflow: hidden;
+            transition: all 0.5s;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-public {
+            border-color: var(--cyber-cyan);
+            color: var(--cyber-cyan);
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.6);
+        }
+
+        .profile-details-wrapper {
+            padding: 0 20px;
+        }
 
         /* DOSYA YÜKLEME STİLLERİ */
-        .file-input-wrapper { position: relative; overflow: hidden; display: inline-block; width: 100%; margin-top: 5px; }
-        .file-input-wrapper input[type=file] { font-size: 100px; position: absolute; left: 0; top: 0; opacity: 0; cursor: pointer; height: 100%; width: 100%; }
-        .file-input-btn { background: rgba(0, 0, 0, 0.5); border: 1px dashed var(--hot-pink); color: var(--hot-pink); padding: 15px; text-align: center; border-radius: 5px; cursor: pointer; transition: all 0.3s; font-family: 'Orbitron', sans-serif; letter-spacing: 2px;}
-        .file-input-wrapper:hover .file-input-btn { background: rgba(255, 0, 127, 0.1); border-color: var(--blood-red); color: #fff;}
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+            margin-top: 5px;
+        }
 
-        .profile-alias { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 2.2rem; text-shadow: 0 0 15px var(--hot-pink); margin: 0 0 5px; letter-spacing: 2px; }
-        #profileEmailDisplay { color: #aaa; font-size: 1.1rem; margin-bottom: 10px; }
-        
-        .join-date-display { font-size: 0.85rem; color: #888; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; margin-bottom: 15px; display: block; }
-        .join-date-display i { color: var(--cyber-cyan); margin-right: 5px; }
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            height: 100%;
+            width: 100%;
+        }
 
-        .profile-bio { background: rgba(255,0,60,0.05); padding: 15px; border-left: 3px solid var(--hot-pink); border-radius: 0 5px 5px 0; margin-bottom: 20px; font-style: italic; color: #ccc; text-align: left; position: relative;}
-        .profile-bio::before { content: '"'; font-size: 3rem; color: rgba(255,0,127,0.2); position: absolute; top: -10px; right: 10px; font-family: 'Orbitron', sans-serif;}
+        .file-input-btn {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px dashed var(--hot-pink);
+            color: var(--hot-pink);
+            padding: 15px;
+            text-align: center;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+        }
 
-        .social-link-display { display: inline-block; margin-bottom: 20px; color: var(--cyber-cyan); text-decoration: none; font-family: 'Orbitron', sans-serif; font-size: 0.9rem; border: 1px solid rgba(0, 243, 255, 0.3); padding: 8px 15px; border-radius: 50px; transition: all 0.3s; background: rgba(0,0,0,0.5); }
-        .social-link-display:hover { background: rgba(0, 243, 255, 0.1); border-color: var(--cyber-cyan); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4); color: #fff; }
+        .file-input-wrapper:hover .file-input-btn {
+            background: rgba(255, 0, 127, 0.1);
+            border-color: var(--blood-red);
+            color: #fff;
+        }
 
-        .profile-tags { margin-bottom: 30px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .p-tag { background: var(--blood-red); color: #fff; font-family: 'Orbitron', sans-serif; font-size: 0.75rem; letter-spacing: 2px; padding: 5px 15px; border-radius: 3px; box-shadow: 0 0 10px var(--blood-red); }
-        .p-tag.dark { background: transparent; border: 1px solid var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: none; }
+        .profile-alias {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            font-size: 2.2rem;
+            text-shadow: 0 0 15px var(--hot-pink);
+            margin: 0 0 5px;
+            letter-spacing: 2px;
+        }
 
-        .profile-stats-mini { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
-        .mini-stat { background: rgba(0,0,0,0.5); border: 1px solid rgba(255,0,127,0.3); padding: 15px; border-radius: 5px; }
-        .mini-stat span { display: block; font-family: 'Orbitron', sans-serif; color: var(--cyber-cyan); font-size: 1.5rem; font-weight: bold; }
-        .mini-stat label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        #profileEmailDisplay {
+            color: #aaa;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
 
-        .btn-logout { background: transparent; border: 1px solid var(--blood-red); color: var(--blood-red); box-shadow: none; }
-        .btn-logout:hover { background: rgba(255, 0, 60, 0.1); border-color: var(--hot-pink); color: var(--hot-pink); }
+        .join-date-display {
+            font-size: 0.85rem;
+            color: #888;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .join-date-display i {
+            color: var(--cyber-cyan);
+            margin-right: 5px;
+        }
+
+        .profile-bio {
+            background: rgba(255, 0, 60, 0.05);
+            padding: 15px;
+            border-left: 3px solid var(--hot-pink);
+            border-radius: 0 5px 5px 0;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #ccc;
+            text-align: left;
+            position: relative;
+        }
+
+        .profile-bio::before {
+            content: '"';
+            font-size: 3rem;
+            color: rgba(255, 0, 127, 0.2);
+            position: absolute;
+            top: -10px;
+            right: 10px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .social-link-display {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--cyber-cyan);
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 8px 15px;
+            border-radius: 50px;
+            transition: all 0.3s;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .social-link-display:hover {
+            background: rgba(0, 243, 255, 0.1);
+            border-color: var(--cyber-cyan);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
+            color: #fff;
+        }
+
+        .profile-tags {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .p-tag {
+            background: var(--blood-red);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            padding: 5px 15px;
+            border-radius: 3px;
+            box-shadow: 0 0 10px var(--blood-red);
+        }
+
+        .p-tag.dark {
+            background: transparent;
+            border: 1px solid var(--cyber-cyan);
+            color: var(--cyber-cyan);
+            box-shadow: none;
+        }
+
+        .profile-stats-mini {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .mini-stat {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 0, 127, 0.3);
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .mini-stat span {
+            display: block;
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyber-cyan);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .mini-stat label {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-logout {
+            background: transparent;
+            border: 1px solid var(--blood-red);
+            color: var(--blood-red);
+            box-shadow: none;
+        }
+
+        .btn-logout:hover {
+            background: rgba(255, 0, 60, 0.1);
+            border-color: var(--hot-pink);
+            color: var(--hot-pink);
+        }
 
         /* Ağ Düğümleri (Canlı Liste) */
-        .connected-nodes { background: rgba(0, 0, 0, 0.8); border-left: 1px solid rgba(255, 0, 127, 0.2); padding: 40px 30px; display: flex; flex-direction: column; height: 100%; }
-        .nodes-header { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 1.1rem; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid rgba(255, 0, 127, 0.3); padding-bottom: 15px; display: flex; align-items: center; justify-content: space-between;}
-        .node-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--blood-red) transparent; }
-        .node-list::-webkit-scrollbar { width: 4px; }
-        .node-list::-webkit-scrollbar-thumb { background: var(--blood-red); }
-        
-        .node-item { display: flex; align-items: center; padding: 12px 10px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); animation: slideIn 0.5s ease-out; cursor: pointer; transition: 0.2s; border-radius: 5px;}
-        .node-item:hover { background: rgba(255,0,127,0.1); transform: translateX(5px); } 
-        
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
-        .node-status { width: 8px; height: 8px; background: var(--hot-pink); border-radius: 50%; margin-right: 15px; box-shadow: 0 0 10px var(--hot-pink); animation: blink 2s infinite; flex-shrink: 0;}
-        .node-name { color: #ddd; font-weight: 600; font-size: 1.05rem; letter-spacing: 1px; }
-        .node-time { margin-left: auto; font-size: 0.8rem; color: var(--blood-red); opacity: 0.8; font-family: 'Orbitron', sans-serif;}
+        .connected-nodes {
+            background: rgba(0, 0, 0, 0.8);
+            border-left: 1px solid rgba(255, 0, 127, 0.2);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .nodes-header {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(255, 0, 127, 0.3);
+            padding-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .node-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--blood-red) transparent;
+        }
+
+        .node-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .node-list::-webkit-scrollbar-thumb {
+            background: var(--blood-red);
+        }
+
+        .node-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            animation: slideIn 0.5s ease-out;
+            cursor: pointer;
+            transition: 0.2s;
+            border-radius: 5px;
+        }
+
+        .node-item:hover {
+            background: rgba(255, 0, 127, 0.1);
+            transform: translateX(5px);
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .node-status {
+            width: 8px;
+            height: 8px;
+            background: var(--hot-pink);
+            border-radius: 50%;
+            margin-right: 15px;
+            box-shadow: 0 0 10px var(--hot-pink);
+            animation: blink 2s infinite;
+            flex-shrink: 0;
+        }
+
+        .node-name {
+            color: #ddd;
+            font-weight: 600;
+            font-size: 1.05rem;
+            letter-spacing: 1px;
+        }
+
+        .node-time {
+            margin-left: auto;
+            font-size: 0.8rem;
+            color: var(--blood-red);
+            opacity: 0.8;
+            font-family: 'Orbitron', sans-serif;
+        }
 
         /* --- BİLEŞEN: YOL HARİTASI --- */
-        .roadmap { background: transparent; padding: 20px 0; position: relative; margin-top: 20px;}
-        .roadmap h2 { font-family: 'Orbitron', sans-serif; color: #fff; text-transform: uppercase; margin-bottom: 40px; font-size: 2rem; letter-spacing: 4px; border-left: 4px solid var(--blood-red); padding-left: 15px;}
-        .roadmap-item { border-left: 2px solid rgba(255, 0, 127, 0.2); padding-left: 30px; margin-bottom: 40px; position: relative; margin-left: 15px;}
-        .roadmap-item::before { content: ''; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; background: var(--void-bg); border: 2px solid var(--deep-magenta); border-radius: 50%; }
-        .roadmap-item.active { border-left-color: var(--hot-pink); }
-        .roadmap-item.active::before { background: var(--blood-red); border-color: var(--hot-pink); box-shadow: 0 0 15px var(--blood-red); }
-        .roadmap-item strong { font-family: 'Orbitron', sans-serif; font-size: 1.3rem; display: block; margin-bottom: 8px; color: var(--hot-pink); letter-spacing: 1px;}
-        .roadmap-item p { color: #aaa; font-size: 1.05rem; line-height: 1.5; margin:0;}
+        .roadmap {
+            background: transparent;
+            padding: 20px 0;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        .roadmap h2 {
+            font-family: 'Orbitron', sans-serif;
+            color: #fff;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            font-size: 2rem;
+            letter-spacing: 4px;
+            border-left: 4px solid var(--blood-red);
+            padding-left: 15px;
+        }
+
+        .roadmap-item {
+            border-left: 2px solid rgba(255, 0, 127, 0.2);
+            padding-left: 30px;
+            margin-bottom: 40px;
+            position: relative;
+            margin-left: 15px;
+        }
+
+        .roadmap-item::before {
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: var(--void-bg);
+            border: 2px solid var(--deep-magenta);
+            border-radius: 50%;
+        }
+
+        .roadmap-item.active {
+            border-left-color: var(--hot-pink);
+        }
+
+        .roadmap-item.active::before {
+            background: var(--blood-red);
+            border-color: var(--hot-pink);
+            box-shadow: 0 0 15px var(--blood-red);
+        }
+
+        .roadmap-item strong {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            display: block;
+            margin-bottom: 8px;
+            color: var(--hot-pink);
+            letter-spacing: 1px;
+        }
+
+        .roadmap-item p {
+            color: #aaa;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            margin: 0;
+        }
 
         /* --- BİLEŞEN: SİBER AKIŞ (VERTICAL FEED) --- */
-        #feedScreen { 
-            display: none; 
-            width: 100vw; 
-            height: 100vh; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            background: var(--void-bg); 
-            z-index: 3000; 
+        #feedScreen {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background: var(--void-bg);
+            z-index: 3000;
         }
-        
-        .feed-container { 
-            width: 100%; 
-            height: 100%; 
-            overflow-y: scroll; 
-            scroll-snap-type: y mandatory; 
-            scrollbar-width: none; 
+
+        .feed-container {
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scrollbar-width: none;
         }
-        
-        .feed-container::-webkit-scrollbar { display: none; }
-        
-        .feed-item { 
-            width: 100%; 
-            height: 100vh; 
-            scroll-snap-align: start; 
-            position: relative; 
+
+        .feed-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .feed-item {
+            width: 100%;
+            height: 100vh;
+            scroll-snap-align: start;
+            position: relative;
             background: radial-gradient(circle at center, rgba(20, 0, 10, 1) 0%, var(--void-bg) 100%);
-            border-bottom: 2px solid var(--blood-red); 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+            border-bottom: 2px solid var(--blood-red);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
         }
 
         .feed-item::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 243, 255, 0.05) 3px, rgba(0, 243, 255, 0.05) 4px);
             pointer-events: none;
         }
 
-        .feed-actions { 
-            position: absolute; 
-            right: 15px; 
-            bottom: 120px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 25px; 
-            z-index: 10; 
-        }
-        
-        .action-btn { 
-            background: rgba(10, 0, 5, 0.8); 
-            border: 1px solid var(--hot-pink); 
-            color: #fff; 
-            width: 55px; 
-            height: 55px; 
-            border-radius: 50%; 
-            display: flex; 
+        .feed-actions {
+            position: absolute;
+            right: 15px;
+            bottom: 120px;
+            display: flex;
             flex-direction: column;
-            justify-content: center; 
-            align-items: center; 
-            font-size: 1.4rem; 
-            cursor: pointer; 
-            transition: 0.3s; 
-            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3); 
+            gap: 25px;
+            z-index: 10;
+        }
+
+        .action-btn {
+            background: rgba(10, 0, 5, 0.8);
+            border: 1px solid var(--hot-pink);
+            color: #fff;
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.4rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.3);
             backdrop-filter: blur(5px);
         }
-        
-        .action-btn:hover { 
-            background: var(--blood-red); 
+
+        .action-btn:hover {
+            background: var(--blood-red);
             border-color: #fff;
-            transform: scale(1.1); 
-            box-shadow: 0 0 25px var(--blood-red); 
+            transform: scale(1.1);
+            box-shadow: 0 0 25px var(--blood-red);
             text-shadow: 0 0 5px #fff;
         }
-        
-        .action-btn span { font-size: 0.7rem; font-family: 'Rajdhani'; margin-top: 3px; font-weight: bold;}
 
-        .feed-info { 
-            position: absolute; 
-            left: 15px; 
-            bottom: 40px; 
-            z-index: 10; 
-            text-align: left; 
-            background: rgba(0, 0, 0, 0.6); 
-            padding: 15px 20px; 
-            border-radius: 10px; 
-            border-left: 3px solid var(--cyber-cyan); 
+        .action-btn span {
+            font-size: 0.7rem;
+            font-family: 'Rajdhani';
+            margin-top: 3px;
+            font-weight: bold;
+        }
+
+        .feed-info {
+            position: absolute;
+            left: 15px;
+            bottom: 40px;
+            z-index: 10;
+            text-align: left;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 3px solid var(--cyber-cyan);
             backdrop-filter: blur(10px);
             max-width: 75%;
         }
-        
-        .feed-alias { font-family: 'Orbitron'; color: var(--cyber-cyan); font-size: 1.3rem; margin-bottom: 5px; text-shadow: 0 0 10px var(--cyber-cyan);}
-        .feed-desc { color: #ddd; font-size: 1.05rem; line-height: 1.4;}
-        .feed-tags { margin-top: 8px; font-size: 0.85rem; color: var(--hot-pink); font-family: 'Orbitron'; letter-spacing: 1px;}
 
-        .close-feed-btn { 
-            position: absolute; top: 25px; left: 25px; z-index: 20; 
-            background: rgba(0,0,0,0.5); border: 1px solid var(--blood-red); 
-            color: var(--blood-red); font-size: 1.5rem; width: 45px; height: 45px; 
-            border-radius: 50%; cursor: pointer; transition: 0.3s;
-            display: flex; justify-content: center; align-items: center;
+        .feed-alias {
+            font-family: 'Orbitron';
+            color: var(--cyber-cyan);
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px var(--cyber-cyan);
         }
-        .close-feed-btn:hover { background: var(--blood-red); color: #fff; box-shadow: 0 0 20px var(--blood-red);}
+
+        .feed-desc {
+            color: #ddd;
+            font-size: 1.05rem;
+            line-height: 1.4;
+        }
+
+        .feed-tags {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--hot-pink);
+            font-family: 'Orbitron';
+            letter-spacing: 1px;
+        }
+
+        .close-feed-btn {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--blood-red);
+            color: var(--blood-red);
+            font-size: 1.5rem;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .close-feed-btn:hover {
+            background: var(--blood-red);
+            color: #fff;
+            box-shadow: 0 0 20px var(--blood-red);
+        }
 
         /* MOBİL UYUM */
         @media (max-width: 850px) {
-            .registration-terminal { grid-template-columns: 1fr; }
-            .connected-nodes { height: 350px; border-left: none; border-top: 1px solid rgba(255,0,127,0.2); padding: 30px 20px;}
-            .logo { font-size: 3.5rem; } .price { font-size: 4rem; }
+            .registration-terminal {
+                grid-template-columns: 1fr;
+            }
+
+            .connected-nodes {
+                height: 350px;
+                border-left: none;
+                border-top: 1px solid rgba(255, 0, 127, 0.2);
+                padding: 30px 20px;
+            }
+
+            .logo {
+                font-size: 3.5rem;
+            }
+
+            .price {
+                font-size: 4rem;
+            }
         }
 
         @media (max-width: 480px) {
-            .system-hud { flex-direction: column; gap: 5px; font-size: 0.7rem; padding: 10px; text-align: center;}
-            .top-login-btn { top: 80px; right: 15px; padding: 8px 12px; font-size: 0.7rem;}
-            body { padding-top: 70px; } 
-            header { padding: 40px 10px 20px; }
-            .logo { font-size: 2.5rem; } .price { font-size: 3rem; }
-            .stats-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-            .stat-item { padding: 15px 10px; } .stat-item p { font-size: 1.8rem; }
-            .form-section { padding: 30px 20px; }
-            .terminal-header { font-size: 1.5rem; }
-            .cyber-button { font-size: 1rem; padding: 15px; }
-            .cyber-input, .cyber-select, .cyber-textarea { font-size: 1.1rem; padding: 12px 12px 12px 40px; }
-            .profile-alias { font-size: 1.8rem; }
-            .profile-avatar { width: 90px; height: 90px; font-size: 2.5rem; margin-top: -45px;}
-            .profile-banner { height: 90px; }
-            .feed-info { bottom: 20px; left: 10px; padding: 10px; }
-            .feed-actions { right: 10px; bottom: 100px; gap: 15px;}
-            .action-btn { width: 45px; height: 45px; font-size: 1.1rem;}
+            .system-hud {
+                flex-direction: column;
+                gap: 5px;
+                font-size: 0.7rem;
+                padding: 10px;
+                text-align: center;
+            }
+
+            .top-login-btn {
+                top: 80px;
+                right: 15px;
+                padding: 8px 12px;
+                font-size: 0.7rem;
+            }
+
+            body {
+                padding-top: 70px;
+            }
+
+            header {
+                padding: 40px 10px 20px;
+            }
+
+            .logo {
+                font-size: 2.5rem;
+            }
+
+            .price {
+                font-size: 3rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .stat-item {
+                padding: 15px 10px;
+            }
+
+            .stat-item p {
+                font-size: 1.8rem;
+            }
+
+            .form-section {
+                padding: 30px 20px;
+            }
+
+            .terminal-header {
+                font-size: 1.5rem;
+            }
+
+            .cyber-button {
+                font-size: 1rem;
+                padding: 15px;
+            }
+
+            .cyber-input,
+            .cyber-select,
+            .cyber-textarea {
+                font-size: 1.1rem;
+                padding: 12px 12px 12px 40px;
+            }
+
+            .profile-alias {
+                font-size: 1.8rem;
+            }
+
+            .profile-avatar {
+                width: 90px;
+                height: 90px;
+                font-size: 2.5rem;
+                margin-top: -45px;
+            }
+
+            .profile-banner {
+                height: 90px;
+            }
+
+            .feed-info {
+                bottom: 20px;
+                left: 10px;
+                padding: 10px;
+            }
+
+            .feed-actions {
+                right: 10px;
+                bottom: 100px;
+                gap: 15px;
+            }
+
+            .action-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+
+        .request-item {
+            background: rgba(0, 243, 255, 0.1);
+            border: 1px solid var(--cyber-cyan);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .req-btn {
+            cursor: pointer;
+            border: none;
+            padding: 5px 10px;
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        .req-accept {
+            background: var(--cyber-cyan);
+            color: #000;
+        }
+
+        .req-reject {
+            background: transparent;
+            border: 1px solid var(--blood-red);
+            color: var(--blood-red);
+        }
+
+        .active-uplink-item {
+            background: rgba(0, 243, 255, 0.05);
+            border-left: 3px solid var(--cyber-cyan);
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 0 5px 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s;
+        }
+
+        .active-uplink-item:hover {
+            background: rgba(0, 243, 255, 0.15);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .active-uplink-alias {
+            color: #fff;
+            font-family: 'Orbitron';
+            letter-spacing: 1px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .active-uplink-alias:hover {
+            color: var(--cyber-cyan);
+            text-shadow: 0 0 10px var(--cyber-cyan);
+        }
+
+        .remove-uplink-btn {
+            background: transparent;
+            border: 1px solid var(--blood-red);
+            color: var(--blood-red);
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
+            transition: 0.3s;
+        }
+
+        .remove-uplink-btn:hover {
+            background: var(--blood-red);
+            color: #fff;
+            box-shadow: 0 0 10px var(--blood-red);
         }
     </style>
 </head>
+
 <body>
 
     <div class="system-hud">
-        <div class="hud-item"><i class="fas fa-eye"></i> UPLINK: XXX-ENCRYPTED</div>
-        <div class="hud-location"><i class="fas fa-crosshairs"></i> AKTİF DÜĞÜM: <span id="liveLocation">TARANIYOR...</span></div>
+        <div class="hud-item" id="hudStatusBox">
+            <i class="fas fa-eye"></i> UPLINK: XXX-ENCRYPTED
+            <span class="hud-alert" id="hudAlert" onclick="window.location.hash='#dashboard'"><i
+                    class="fas fa-bell"></i> YENİ SİNYAL</span>
+        </div>
+        <div class="hud-location"><i class="fas fa-crosshairs"></i> AKTİF DÜĞÜM: <span
+                id="liveLocation">TARANIYOR...</span></div>
         <div class="hud-item"><i class="fas fa-satellite-dish"></i> GECİKME: <span id="livePing">--ms</span></div>
     </div>
 
@@ -342,17 +1364,20 @@
     <div id="loginModal" class="login-modal">
         <div class="modal-content">
             <span class="close-btn" id="closeModalBtn">&times;</span>
-            <div class="terminal-header" style="font-size: 1.5rem; margin-bottom: 20px;">KİMLİK <span>DOĞRULAMA</span></div>
+            <div class="terminal-header" style="font-size: 1.5rem; margin-bottom: 20px;">KİMLİK <span>DOĞRULAMA</span>
+            </div>
             <form id="loginForm">
                 <div class="input-group">
                     <label>Siber Kimlik (Rumuz)</label>
                     <i class="fas fa-user"></i>
-                    <input type="text" id="loginAlias" class="cyber-input" placeholder="Kayıtlı Rumuz" required autocomplete="off">
+                    <input type="text" id="loginAlias" class="cyber-input" placeholder="Kayıtlı Rumuz" required
+                        autocomplete="off">
                 </div>
                 <div class="input-group">
                     <label>Ağ Kilidi (Şifre)</label>
                     <i class="fas fa-key"></i>
-                    <input type="password" id="loginPassword" class="cyber-input" placeholder="••••••••••••" required autocomplete="off">
+                    <input type="password" id="loginPassword" class="cyber-input" placeholder="••••••••••••" required
+                        autocomplete="off">
                 </div>
                 <button type="submit" class="cyber-button" id="loginSubmitBtn">BAĞLANTIYI KUR</button>
             </form>
@@ -365,7 +1390,7 @@
     </header>
 
     <div class="container">
-        
+
         <div class="value-card">
             <h3>Sansürsüz Ağa VIP Giriş</h3>
             <div class="price">KİLİTLİ</div>
@@ -373,34 +1398,50 @@
         </div>
 
         <div class="stats-grid">
-            <div class="stat-item"><i class="fas fa-fire-flame-curved"></i><h4>Aktif Gözetleyenler</h4><p id="userCount">0</p></div>
-            <div class="stat-item"><i class="fas fa-ban"></i><h4>Sansür / Limit</h4><p>%0</p></div>
-            <div class="stat-item"><i class="fas fa-mobile-screen"></i><h4>Algoritma Hızı</h4><p style="color: var(--cyber-cyan); text-shadow: 0 0 10px var(--cyber-cyan);">Maksimum</p></div>
-            <div class="stat-item"><i class="fas fa-heart-pulse"></i><h4>Bağımlılık Oranı</h4><p>Kritik</p></div>
+            <div class="stat-item"><i class="fas fa-fire-flame-curved"></i>
+                <h4>Aktif Gözetleyenler</h4>
+                <p id="userCount">0</p>
+            </div>
+            <div class="stat-item"><i class="fas fa-ban"></i>
+                <h4>Sansür / Limit</h4>
+                <p>%0</p>
+            </div>
+            <div class="stat-item"><i class="fas fa-mobile-screen"></i>
+                <h4>Algoritma Hızı</h4>
+                <p style="color: var(--cyber-cyan); text-shadow: 0 0 10px var(--cyber-cyan);">Maksimum</p>
+            </div>
+            <div class="stat-item"><i class="fas fa-heart-pulse"></i>
+                <h4>Bağımlılık Oranı</h4>
+                <p>Kritik</p>
+            </div>
         </div>
 
         <div class="registration-terminal">
             <div class="form-section">
-                
+
                 <div id="formContainer">
                     <div class="terminal-header">Karanlık Odaya <span>GİR.</span></div>
-                    <div class="terminal-desc">Akış henüz gizli tutuluyor. Fantezi kimliğini tanımla ve yeraltı kuyruğunda yerini al.</div>
-                    
+                    <div class="terminal-desc">Akış henüz gizli tutuluyor. Fantezi kimliğini tanımla ve yeraltı
+                        kuyruğunda yerini al.</div>
+
                     <form id="preRegForm">
                         <div class="input-group">
                             <label>Siber Kimlik (Rumuz)</label>
                             <i class="fas fa-user-secret"></i>
-                            <input type="text" id="aliasInput" class="cyber-input" placeholder="Örn: Sinner_99" required autocomplete="off">
+                            <input type="text" id="aliasInput" class="cyber-input" placeholder="Örn: Sinner_99" required
+                                autocomplete="off">
                         </div>
                         <div class="input-group">
                             <label>Özel Davetiye Kanalı (E-Mail)</label>
                             <i class="fas fa-envelope"></i>
-                            <input type="email" id="emailInput" class="cyber-input" placeholder="gizli@proton.me" required autocomplete="off">
+                            <input type="email" id="emailInput" class="cyber-input" placeholder="gizli@proton.me"
+                                required autocomplete="off">
                         </div>
                         <div class="input-group">
                             <label>Ağ Kilidi (Şifre)</label>
                             <i class="fas fa-lock"></i>
-                            <input type="password" id="passwordInput" class="cyber-input" placeholder="••••••••••••" required autocomplete="off">
+                            <input type="password" id="passwordInput" class="cyber-input" placeholder="••••••••••••"
+                                required autocomplete="off">
                         </div>
                         <button type="submit" class="cyber-button">TUTKUYU BAŞLAT</button>
                     </form>
@@ -410,16 +1451,18 @@
                     <div class="profile-container-inner">
                         <div class="profile-banner" id="myBanner"></div>
                         <div class="profile-avatar" id="myAvatar"><i class="fas fa-user-ninja"></i></div>
-                        
+
                         <div class="profile-details-wrapper">
                             <h2 class="profile-alias" id="profileAliasDisplay">GİZLİ_KİMLİK</h2>
                             <p id="profileEmailDisplay">veri.yok@sistem.net</p>
-                            <span class="join-date-display" id="myJoinDate"><i class="fas fa-link"></i> Sisteme Giriş: Aranıyor...</span>
-                            
-                            <a href="#" target="_blank" class="social-link-display" id="mySocialLink" style="display:none;">
+                            <span class="join-date-display" id="myJoinDate"><i class="fas fa-link"></i> Sisteme Giriş:
+                                Aranıyor...</span>
+
+                            <a href="#" target="_blank" class="social-link-display" id="mySocialLink"
+                                style="display:none;">
                                 <i class="fas fa-globe"></i> Bağlantıya Git
                             </a>
-                            
+
                             <div class="profile-tags">
                                 <span class="p-tag">VIP GÖZETLEYEN</span>
                                 <span class="p-tag dark" id="profileGenderDisplay">Beden: Gizli</span>
@@ -427,32 +1470,50 @@
                             </div>
 
                             <div class="profile-bio" id="profileBioDisplay">"Fantezi özeti henüz girilmedi..."</div>
-                            
+
                             <div class="profile-stats-mini">
                                 <div class="mini-stat"><span>0</span><label>Jeton (Kredi)</label></div>
-                                <div class="mini-stat"><span style="color: var(--hot-pink);">Açık</span><label>Beta Erişimi</label></div>
+                                <div class="mini-stat"><span style="color: var(--hot-pink);">Açık</span><label>Beta
+                                        Erişimi</label></div>
                             </div>
                         </div>
                     </div>
 
-                    <button id="enterFeedBtn" class="cyber-button" style="margin-bottom: 15px; background: linear-gradient(45deg, var(--cyber-cyan), #0055ff); text-shadow: 0 0 5px #fff;">
+                    <button id="enterFeedBtn" class="cyber-button"
+                        style="margin-bottom: 15px; background: linear-gradient(45deg, var(--cyber-cyan), #0055ff); text-shadow: 0 0 5px #fff;">
                         <i class="fas fa-satellite-dish"></i> SİBER AKIŞA BAĞLAN
                     </button>
 
-                    <button id="showEditFormBtn" class="cyber-button" style="margin-bottom: 15px;"><i class="fas fa-pen"></i> KİMLİĞİ DÜZENLE</button>
+                    <button id="showEditFormBtn" class="cyber-button" style="margin-bottom: 15px;"><i
+                            class="fas fa-pen"></i> KİMLİĞİ DÜZENLE</button>
+                    <div id="uplinkRequestsArea" style="margin-bottom: 20px; display:none;">
+                        <h4
+                            style="font-family:'Orbitron'; color:var(--cyber-cyan); font-size:0.8rem; margin-bottom:10px;">
+                            GELEN SİNYALLER (ISTEKLER)</h4>
+                        <div id="inboundRequestsList"></div>
+                    </div>
+                    <div id="activeUplinksArea" style="margin-bottom: 20px; display:none;">
+                        <h4
+                            style="font-family:'Orbitron'; color:var(--cyber-cyan); font-size:0.8rem; margin-bottom:10px;">
+                            <i class="fas fa-network-wired"></i> AKTİF BAĞLANTILARIM (UPLINKS)
+                        </h4>
+                        <div id="activeUplinksList"></div>
+                    </div>
                     <button id="logoutBtn" class="cyber-button outline">AĞDAN KOP (ÇIKIŞ YAP)</button>
                 </div>
 
                 <div id="profileEditScreen">
                     <div class="terminal-header">KİMLİK <span>SENKRONİZASYONU</span></div>
                     <div class="terminal-desc">Yeraltı ağındaki fantezi avatarını ve temasını kişiselleştir.</div>
-                    
+
                     <form id="editProfileForm">
                         <div class="input-group">
                             <label>Siber Yüz (Profil Fotoğrafı)</label>
                             <div class="file-input-wrapper">
-                                <div class="file-input-btn" id="fileInputLabel"><i class="fas fa-camera"></i> GÖRÜNTÜ YÜKLE (Max 500KB)</div>
-                                <input type="file" id="editAvatar" accept="image/png, image/jpeg, image/gif, image/webp">
+                                <div class="file-input-btn" id="fileInputLabel"><i class="fas fa-camera"></i> GÖRÜNTÜ
+                                    YÜKLE (Max 500KB)</div>
+                                <input type="file" id="editAvatar"
+                                    accept="image/png, image/jpeg, image/gif, image/webp">
                             </div>
                             <input type="hidden" id="editAvatarBase64">
                         </div>
@@ -473,12 +1534,14 @@
                         <div class="input-group">
                             <label>Ağ Bağlantısı (Web/Sosyal Medya Linki)</label>
                             <i class="fas fa-link"></i>
-                            <input type="url" id="editSocialLink" class="cyber-input" placeholder="https://instagram.com/..." autocomplete="off">
+                            <input type="url" id="editSocialLink" class="cyber-input"
+                                placeholder="https://instagram.com/..." autocomplete="off">
                         </div>
 
                         <div class="input-group">
                             <label>Fantezi Özeti (Bio)</label>
-                            <textarea id="editBio" class="cyber-textarea" rows="3" placeholder="Sınırlarını ve arzularını anlat..."></textarea>
+                            <textarea id="editBio" class="cyber-textarea" rows="3"
+                                placeholder="Sınırlarını ve arzularını anlat..."></textarea>
                         </div>
                         <div class="input-group">
                             <label>Biyolojik Beden (Avatar Türü)</label>
@@ -496,48 +1559,69 @@
                             <input type="date" id="editDob" class="cyber-input">
                         </div>
                         <button type="submit" class="cyber-button" id="saveEditBtn">BELLEĞE KAZI (KAYDET)</button>
-                        <button type="button" id="cancelEditBtn" class="cyber-button outline" style="margin-top: 15px;">İPTAL ET</button>
+                        <button type="button" id="cancelEditBtn" class="cyber-button outline"
+                            style="margin-top: 15px;">İPTAL ET</button>
                     </form>
                 </div>
 
                 <div id="publicProfileScreen">
                     <div style="text-align: left; margin-bottom: 20px;">
-                        <button id="backFromPublicBtn" class="cyber-button outline small"><i class="fas fa-arrow-left"></i> AĞA GERİ DÖN</button>
+                        <button id="backFromPublicBtn" class="cyber-button outline small"
+                            onclick="window.location.hash='#dashboard'">
+                            <i class="fas fa-arrow-left"></i> AĞA GERİ DÖN
+                        </button>
                     </div>
-                    
+
                     <div class="profile-container-inner">
                         <div class="profile-banner" id="publicBanner"></div>
                         <div class="profile-avatar avatar-public" id="publicAvatar"><i class="fas fa-eye"></i></div>
-                        
+
                         <div class="profile-details-wrapper">
-                            <h2 class="profile-alias" id="publicAliasDisplay" style="color: var(--cyber-cyan); text-shadow: 0 0 15px var(--cyber-cyan);">SORGULANIYOR...</h2>
-                            <span class="join-date-display" id="publicJoinDate"><i class="fas fa-link"></i> Sisteme Giriş: Aranıyor...</span>
-                            
-                            <a href="#" target="_blank" class="social-link-display" id="publicSocialLink" style="display:none;">
+                            <h2 class="profile-alias" id="publicAliasDisplay"
+                                style="color: var(--cyber-cyan); text-shadow: 0 0 15px var(--cyber-cyan);">
+                                SORGULANIYOR...</h2>
+                            <span class="join-date-display" id="publicJoinDate"><i class="fas fa-link"></i> Sisteme
+                                Giriş: Aranıyor...</span>
+
+                            <a href="#" target="_blank" class="social-link-display" id="publicSocialLink"
+                                style="display:none;">
                                 <i class="fas fa-globe"></i> Ağ Bağlantısı
                             </a>
-                            
+
                             <div class="profile-tags" style="margin-top: 15px;">
-                                <span class="p-tag" style="background: var(--cyber-cyan); box-shadow: 0 0 10px var(--cyber-cyan);">ONAYLI ÜYE</span>
-                                <span class="p-tag dark" id="publicGenderDisplay" style="border-color: var(--hot-pink); color: var(--hot-pink);">Beden: ?</span>
-                                <span class="p-tag dark" id="publicAgeDisplay" style="border-color: var(--hot-pink); color: var(--hot-pink);">Yaş: ?</span>
+                                <span class="p-tag"
+                                    style="background: var(--cyber-cyan); box-shadow: 0 0 10px var(--cyber-cyan);">ONAYLI
+                                    ÜYE</span>
+                                <span class="p-tag dark" id="publicGenderDisplay"
+                                    style="border-color: var(--hot-pink); color: var(--hot-pink);">Beden: ?</span>
+                                <span class="p-tag dark" id="publicAgeDisplay"
+                                    style="border-color: var(--hot-pink); color: var(--hot-pink);">Yaş: ?</span>
                             </div>
 
-                            <div class="profile-bio" id="publicBioDisplay" style="border-left-color: var(--cyber-cyan); color: #fff;">
+                            <div class="profile-bio" id="publicBioDisplay"
+                                style="border-left-color: var(--cyber-cyan); color: #fff;">
                                 "Veriler çekiliyor..."
                             </div>
                         </div>
                     </div>
-                    
-                    <button class="cyber-button" style="background: transparent; border: 2px solid var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 15px rgba(0,243,255,0.3);"><i class="fas fa-fire"></i> FANTEZİ AĞINA EKLE (TAKİP ET)</button>
+
+                    <button id="sendUplinkBtn" class="cyber-button"
+                        style="background: transparent; border: 2px solid var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 15px rgba(0,243,255,0.3);">
+                        <i class="fas fa-link"></i> UPLINK PROTOKOLÜ BAŞLAT
+                    </button>
                 </div>
 
             </div>
 
             <div class="connected-nodes">
-                <div class="nodes-header"><span>Ağa Sızanlar</span><i class="fas fa-eye" style="color: var(--blood-red);"></i></div>
-                <div style="font-size: 0.8rem; color: #888; margin-bottom: 10px; font-style: italic;">Gözetlemek için bir isme tıkla...</div>
-                <ul class="node-list" id="nodeList"><li class="node-item" style="justify-content: center; opacity: 0.5;"><span>Ağ Bekleniyor...</span></li></ul>
+                <div class="nodes-header"><span>Ağa Sızanlar</span><i class="fas fa-eye"
+                        style="color: var(--blood-red);"></i></div>
+                <div style="font-size: 0.8rem; color: #888; margin-bottom: 10px; font-style: italic;">Gözetlemek için
+                    bir isme tıkla...</div>
+                <ul class="node-list" id="nodeList">
+                    <li class="node-item" style="justify-content: center; opacity: 0.5;"><span>Ağ Bekleniyor...</span>
+                    </li>
+                </ul>
             </div>
         </div>
 
@@ -545,15 +1629,49 @@
             <h2>Kırmızı Işık Protokolü</h2>
             <div class="roadmap-item active">
                 <strong>FAZ 1: Gizli Tohum (İçerdesin)</strong>
-                <p>Kullanıcı kimliklerinin inşası, veritabanı şifrelemesi ve yeraltı ağının kurulması. Altyapı test ediliyor.</p>
+                <p>Kullanıcı kimliklerinin inşası, veritabanı şifrelemesi ve yeraltı ağının kurulması. Altyapı test
+                    ediliyor.</p>
             </div>
             <div class="roadmap-item" style="opacity: 0.6;">
                 <strong>FAZ 2: Sonsuz Kaydırma & Algoritmik Bağımlılık</strong>
-                <p>Kullanıcı zevklerini analiz eden yapay zeka destekli video akış arayüzünün (Feed) devreye girmesi.</p>
+                <p>Kullanıcı zevklerini analiz eden yapay zeka destekli video akış arayüzünün (Feed) devreye girmesi.
+                </p>
             </div>
             <div class="roadmap-item" style="opacity: 0.4;">
                 <strong>FAZ 3: Sınırların Kalkması (Tam Sürüm)</strong>
-                <p>İçerik üreticileri ile VIP kullanıcıların doğrudan etkileşimi. Sansürsüz yayın ve küresel lansman.</p>
+                <p>İçerik üreticileri ile VIP kullanıcıların doğrudan etkileşimi. Sansürsüz yayın ve küresel lansman.
+                </p>
+            </div>
+        </div>
+
+        <!-- --- GÜNCELLEME GÜNLÜĞÜ (UPDATE LOG) --- -->
+        <div class="roadmap" style="margin-top: 50px;">
+            <h2 style="border-left-color: var(--cyber-cyan);">Sistem Günlükleri (Update Log)</h2>
+            <div style="font-size: 0.9rem; color: #888; margin-bottom: 20px; font-style: italic;">Merkezi Çekirdek
+                Bağlantısı... Yalnızca Yönetici (sueyda) veri girebilir.</div>
+
+            <!-- Sadece Sueyda'ya Gösterilecek Alan -->
+            <div id="adminUpdateInputArea"
+                style="display: none; background: rgba(0, 243, 255, 0.05); padding: 20px; border-radius: 10px; border: 1px solid var(--cyber-cyan); margin-bottom: 30px;">
+                <h4 style="color: var(--cyber-cyan); font-family: 'Orbitron'; margin-top: 0;"><i
+                        class="fas fa-terminal"></i> YÖNETİCİ TERMİNALİ (LOG GİRİŞİ)</h4>
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <input type="text" id="logTitleInput" class="cyber-input" style="border-color: var(--cyber-cyan);"
+                        placeholder="Güncelleme Başlığı (Örn: v1.0.2 - Feed Eklendi)" autocomplete="off">
+                </div>
+                <div class="input-group" style="margin-bottom: 10px;">
+                    <textarea id="logDescInput" class="cyber-textarea"
+                        style="border-color: var(--cyber-cyan); min-height: 80px;"
+                        placeholder="Güncelleme detaylarını buraya yazın..."></textarea>
+                </div>
+                <button id="addLogBtn" class="cyber-button"
+                    style="background: linear-gradient(45deg, #0055ff, var(--cyber-cyan)); box-shadow: 0 0 15px rgba(0, 243, 255, 0.4);"><i
+                        class="fas fa-upload"></i> SİSTEME LOG İŞLE</button>
+            </div>
+
+            <div id="updateLogsContainer">
+                <div style="text-align: center; color: #555; font-family: 'Orbitron'; padding: 20px;">[ LOG KAYITLARI
+                    YÜKLENİYOR... ]</div>
             </div>
         </div>
 
@@ -561,45 +1679,138 @@
 
     <div id="feedScreen">
         <button class="close-feed-btn" id="closeFeedBtn"><i class="fas fa-times"></i></button>
-        
-        <div class="feed-container" id="feedContainer">
-            <div class="feed-item">
-                <div style="font-family: 'Orbitron'; color: #333; font-size: 2rem; text-align: center; padding: 20px;">[ MEDYA VERİSİ YÜKLENİYOR ]</div>
-                
-                <div class="feed-actions">
-                    <div class="action-btn"><i class="fas fa-fire"></i><span>12.4K</span></div>
-                    <div class="action-btn"><i class="fas fa-comment-dots"></i><span>842</span></div>
-                    <div class="action-btn"><i class="fas fa-share-nodes"></i><span>Paylaş</span></div>
+
+        <!-- Sinyal Oluştur (Toggle) Butonu -->
+        <button id="toggleFeedPostBtn" class="cyber-button"
+            style="position: absolute; top: 25px; left: 50%; transform: translateX(-50%); width: auto; z-index: 60; border-radius: 50px; padding: 12px 25px; box-shadow: 0 0 20px rgba(0,243,255,0.4); background: linear-gradient(45deg, var(--cyber-cyan), #0055ff); color: #000; font-family: 'Orbitron'; font-size: 1.1rem;">
+            <i class="fas fa-plus"></i> SİNYAL OLUŞTUR
+        </button>
+
+        <!-- Feed Veri Gönderme Paneli -->
+        <div id="feedPostArea"
+            style="display: none; position: absolute; bottom: 90px; left: 30px; width: 90%; max-width: 400px; z-index: 50; background: rgba(0,0,0,0.85); border: 2px solid var(--cyber-cyan); border-radius: 10px; padding: 20px; backdrop-filter: blur(15px); box-shadow: 0 0 30px rgba(0,0,0,0.9);">
+            <div
+                style="font-family: 'Orbitron'; color: var(--cyber-cyan); font-size: 1rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <span><i class="fas fa-satellite-dish"></i> AĞA VERİ GÖNDER</span>
+                <i class="fas fa-times" id="closeFeedPostAreaBtn" style="cursor: pointer; color: var(--blood-red);"></i>
+            </div>
+            <textarea id="feedPostContent" class="cyber-textarea"
+                style="font-size: 1rem; padding: 10px; border-color: rgba(0, 243, 255, 0.5); min-height: 80px;"
+                placeholder="Siber akışa neleri fısıldamak istersin? (Maks 150 Karakter)"></textarea>
+
+            <input type="hidden" id="editingFeedPostId" value="">
+
+            <!-- MEDYA YÜKLEME ALANI -->
+            <div class="input-group" style="margin-top: 15px; margin-bottom: 0;">
+                <div class="file-input-wrapper" style="width: 100%;">
+                    <div class="file-input-btn" id="feedFileLabel" style="font-size: 0.85rem; padding: 10px;"><i
+                            class="fas fa-camera"></i> GÖRSEL/VİDEO EKLE (Max 5MB)</div>
+                    <input type="file" id="feedMediaInput" accept="image/*, video/mp4, video/webm">
                 </div>
-                
-                <div class="feed-info">
-                    <div class="feed-alias">@Neon_Ghost</div>
-                    <div class="feed-desc">Sınırları zorlayan yeni bir simülasyon testi. Ağa bağlı kalın. 🔌✨</div>
-                    <div class="feed-tags">#cyber #glitch #VIP</div>
-                </div>
+                <!-- CORS Uyarı Notu -->
+                <div
+                    style="font-size: 0.7rem; color: #888; font-family: 'Orbitron'; margin-top: 5px; text-align: center;">
+                    (i) Localhost testlerinde medya sunucusu CORS engeline takılabilir. Gerçek ağda sorunsuz
+                    çalışacaktır.</div>
+                <div id="feedUploadProgress"
+                    style="display:none; font-size: 0.8rem; color: var(--cyber-cyan); text-align: center; margin-top: 5px; font-family: 'Orbitron';">
+                    YÜKLENİYOR: %0</div>
+                <input type="hidden" id="feedMediaUrl">
+                <input type="hidden" id="feedMediaType">
             </div>
 
-            <div class="feed-item" style="background: radial-gradient(circle at center, rgba(20, 0, 30, 1) 0%, var(--void-bg) 100%);">
-                <div style="font-family: 'Orbitron'; color: #333; font-size: 2rem; text-align: center; padding: 20px;">[ VİDEO_002.mp4 ]</div>
-                
-                <div class="feed-actions">
-                    <div class="action-btn"><i class="fas fa-fire"></i><span>45.1K</span></div>
-                    <div class="action-btn"><i class="fas fa-comment-dots"></i><span>3.2K</span></div>
-                    <div class="action-btn"><i class="fas fa-share-nodes"></i><span>Paylaş</span></div>
-                </div>
-                
-                <div class="feed-info">
-                    <div class="feed-alias">@Cyber_Kitsune</div>
-                    <div class="feed-desc">Yeraltı bağlantıları aktif. Kimler uyanık? 🦊🔴</div>
-                    <div class="feed-tags">#nightcity #redlight #protocol</div>
-                </div>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="text" id="feedPostTags" class="cyber-input"
+                    style="font-size: 0.9rem; padding: 8px; flex: 1; border-color: rgba(0, 243, 255, 0.5);"
+                    placeholder="#etiket1 #etiket2">
+                <button id="sendFeedBtn" class="cyber-button small"
+                    style="margin-top: 0; background: var(--cyber-cyan); color: #000;">YAYINLA</button>
+            </div>
+        </div>
+
+        <div class="feed-container" id="feedContainer">
+            <div id="feedLoadingText"
+                style="font-family: 'Orbitron'; color: #333; font-size: 1.5rem; text-align: center; padding: 50px;">[
+                MEDYA VERİSİ YÜKLENİYOR ]</div>
+            <div id="feedContentArea"></div> <!-- Dinamik İçerik Buraya Gelecek -->
+            <div id="feedLoader"
+                style="display: none; text-align: center; padding: 30px; color: var(--hot-pink); font-family: 'Orbitron'; animation: blink 1s infinite;">
+                [ DAHA FAZLA VERİ ÇEKİLİYOR... ]</div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        .comment-item {
+            background: rgba(0, 243, 255, 0.05);
+            border-left: 2px solid var(--cyber-cyan);
+            padding: 10px 15px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .comment-alias {
+            font-family: 'Orbitron';
+            color: var(--hot-pink);
+            font-size: 0.85rem;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+
+        .comment-text {
+            color: #ddd;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .comment-time {
+            font-family: 'Orbitron';
+            font-size: 0.7rem;
+            color: #888;
+            text-align: right;
+            margin-top: 5px;
+        }
+    </style>
+    <div id="commentModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 4000; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px);">
+        <div
+            style="background: var(--void-bg); width: 100%; max-width: 600px; height: 75vh; border-top: 2px solid var(--cyber-cyan); border-radius: 20px 20px 0 0; display: flex; flex-direction: column; padding: 20px; box-shadow: 0 -10px 30px rgba(0, 243, 255, 0.2); animation: slideUp 0.3s ease-out;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(0, 243, 255, 0.3); padding-bottom: 10px;">
+                <div style="font-family: 'Orbitron'; font-size: 1.2rem; color: var(--cyber-cyan);"><i
+                        class="fas fa-comment-dots"></i> YORUMLAR (FISILTILAR)</div>
+                <button onclick="document.getElementById('commentModal').style.display='none'"
+                    style="background: transparent; border: none; color: var(--blood-red); font-size: 1.5rem; cursor: pointer;"><i
+                        class="fas fa-times"></i></button>
+            </div>
+
+            <div id="commentListArea"
+                style="flex: 1; overflow-y: auto; padding-right: 10px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 15px; scrollbar-width: thin; scrollbar-color: var(--cyber-cyan) transparent;">
+                <!-- Comments API -->
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+                <input type="text" id="whisperInput" class="cyber-input" placeholder="Karanlığa fısılda..."
+                    style="border-color: rgba(0, 243, 255, 0.5); font-size: 0.95rem;" autocomplete="off">
+                <button id="sendWhisperBtn" class="cyber-button small" style="margin-top: 0; padding: 0 20px;"><i
+                        class="fas fa-paper-plane"></i></button>
             </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, where, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, startAfter, where, getDocs, updateDoc, doc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAbm2ySNK2jeIvZKRPHkUfgD1kEv17reG0",
@@ -612,6 +1823,7 @@
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         const formContainer = document.getElementById("formContainer");
         const profileDashboard = document.getElementById("profileDashboard");
@@ -619,7 +1831,7 @@
         const publicProfileScreen = document.getElementById("publicProfileScreen");
         const topLoginBtn = document.getElementById('openLoginBtn');
         const loginModal = document.getElementById('loginModal');
-        
+
         topLoginBtn.addEventListener('click', () => loginModal.style.display = 'flex');
         document.getElementById('closeModalBtn').addEventListener('click', () => loginModal.style.display = 'none');
 
@@ -628,32 +1840,104 @@
         const feedScreen = document.getElementById('feedScreen');
         const closeFeedBtn = document.getElementById('closeFeedBtn');
 
-        if(enterFeedBtn) {
+        if (enterFeedBtn) {
             enterFeedBtn.addEventListener('click', () => {
-                feedScreen.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Akış açıldığında arka plan kaymasını engeller
+                window.location.hash = '#feed';
             });
         }
 
-        if(closeFeedBtn) {
+        if (closeFeedBtn) {
             closeFeedBtn.addEventListener('click', () => {
-                feedScreen.style.display = 'none';
-                document.body.style.overflow = 'auto'; // Akış kapanınca arka plan kaymasını geri açar
+                window.location.hash = '#dashboard';
             });
         }
+
+        // Toggle Feed Post Area
+        const toggleFeedPostBtn = document.getElementById('toggleFeedPostBtn');
+        const feedPostArea = document.getElementById('feedPostArea');
+        const closeFeedPostAreaBtn = document.getElementById('closeFeedPostAreaBtn');
+
+        function resetFeedPostForm() {
+            document.getElementById("feedPostContent").value = "";
+            document.getElementById("feedPostTags").value = "";
+            document.getElementById("feedMediaUrl").value = "";
+            document.getElementById("feedMediaType").value = "";
+            document.getElementById("feedMediaInput").value = "";
+            document.getElementById("editingFeedPostId").value = "";
+            document.getElementById('feedFileLabel').innerHTML = '<i class="fas fa-camera"></i> GÖRSEL/VİDEO EKLE (Max 5MB)';
+            document.getElementById('feedFileLabel').style.color = "#fff";
+            document.getElementById('feedFileLabel').style.borderColor = "rgba(0, 243, 255, 0.4)";
+            document.getElementById("sendFeedBtn").innerText = "YAYINLA";
+        }
+
+        if (toggleFeedPostBtn && feedPostArea) {
+            toggleFeedPostBtn.addEventListener('click', () => {
+                if (feedPostArea.style.display === 'none' || feedPostArea.style.display === '') {
+                    feedPostArea.style.display = 'block';
+                    toggleFeedPostBtn.style.display = 'none'; // Sinyal oluştur butonunu gizle
+                } else {
+                    feedPostArea.style.display = 'none';
+                }
+            });
+
+            closeFeedPostAreaBtn.addEventListener('click', () => {
+                feedPostArea.style.display = 'none';
+                toggleFeedPostBtn.style.display = 'flex'; // Geri göster
+                resetFeedPostForm();
+            });
+        }
+
+        // JS SPA (ROUTING) MANTIĞI
+        function handleRouting() {
+            const hash = window.location.hash;
+            const alias = localStorage.getItem("hotdragons_alias");
+
+            // Panelleri Sıfırla
+            formContainer.style.display = "none";
+            profileDashboard.style.display = "none";
+            profileEditScreen.style.display = "none";
+            publicProfileScreen.style.display = "none";
+            feedScreen.style.display = "none";
+            document.body.style.overflow = "auto";
+
+            if (!alias) {
+                // Giriş yapmamışsa anasayfaya (Kayıt Ekranına) at
+                formContainer.style.display = "block";
+                window.location.hash = ''; // Temizle
+                return;
+            }
+
+            if (hash.startsWith('#public-profile/')) {
+                const targetAlias = hash.split('/')[1];
+                viewPublicProfile(targetAlias);
+            } else if (hash === '#edit-profile') {
+                profileEditScreen.style.display = "block";
+            } else if (hash === '#feed') {
+                profileDashboard.style.display = "block"; // Arkada dashboard kalsın
+                feedScreen.style.display = "block";
+                document.body.style.overflow = "hidden"; // Kaymayı durdur
+                fetchInitialFeeds(); // Feed'e her geçildiğinde sıfırdan çek
+            } else {
+                // Default: Dashboard
+                profileDashboard.style.display = "block";
+                renderMyProfile(); // Profil bilgilerini çiz
+            }
+        }
+
+        window.addEventListener('hashchange', handleRouting);
 
         // FOTOĞRAF YÜKLEME VE BASE64 ÇEVİRİCİ
-        document.getElementById('editAvatar').addEventListener('change', function(e) {
+        document.getElementById('editAvatar').addEventListener('change', function (e) {
             const file = e.target.files[0];
-            if(file) {
-                if(file.size > 500 * 1024) {
+            if (file) {
+                if (file.size > 500 * 1024) {
                     alert("Sistem Reddi: Görsel çok büyük. Maksimum 500KB yükleyebilirsin.");
-                    this.value = ''; 
+                    this.value = '';
                     return;
                 }
-                
+
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = function (event) {
                     document.getElementById('editAvatarBase64').value = event.target.result;
                     document.getElementById('fileInputLabel').innerHTML = '<i class="fas fa-check"></i> YÜKLENDİ';
                     document.getElementById('fileInputLabel').style.color = "var(--cyber-cyan)";
@@ -663,9 +1947,53 @@
             }
         });
 
+        // FEED MEDYA YÜKLEME (STORAGE)
+        document.getElementById('feedMediaInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Sistem Reddi: Medya çok büyük. Maksimum 5MB yükleyebilirsin.");
+                this.value = '';
+                return;
+            }
+
+            const isVideo = file.type.startsWith('video/');
+            const typeStr = isVideo ? 'video' : 'image';
+            document.getElementById('feedMediaType').value = typeStr;
+
+            const storageRef = ref(storage, 'feed_media/' + Date.now() + '_' + file.name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            const progressDiv = document.getElementById('feedUploadProgress');
+            progressDiv.style.display = 'block';
+            document.getElementById('feedFileLabel').innerText = "YÜKLENİYOR...";
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    progressDiv.innerText = `YÜKLENİYOR: %${Math.round(progress)}`;
+                },
+                (error) => {
+                    console.error("Yükleme hatası", error);
+                    alert("Sistem Reddi: Medya sunucuya iletilemedi.");
+                    progressDiv.style.display = 'none';
+                    document.getElementById('feedFileLabel').innerHTML = '<i class="fas fa-camera"></i> TEKRAR DENE';
+                },
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    document.getElementById('feedMediaUrl').value = downloadURL;
+                    progressDiv.style.display = 'none';
+                    document.getElementById('feedFileLabel').innerHTML = '<i class="fas fa-check"></i> ' + (isVideo ? 'VİDEO' : 'GÖRSEL') + ' HAZIR';
+                    document.getElementById('feedFileLabel').style.color = "var(--cyber-cyan)";
+                    document.getElementById('feedFileLabel').style.borderColor = "var(--cyber-cyan)";
+                }
+            );
+        });
+
         // YARDIMCI FONKSİYON: Tarih Formatlama
         function formatTimestamp(timestampObj) {
-            if(!timestampObj) return "Bilinmiyor";
+            if (!timestampObj) return "Bilinmiyor";
             const date = timestampObj.toDate();
             return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
         }
@@ -682,7 +2010,7 @@
             document.getElementById("publicAgeDisplay").innerText = "Yaş: Gizli";
             document.getElementById("publicJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: Aranıyor...`;
             document.getElementById("publicSocialLink").style.display = "none";
-            
+
             const publicAvatar = document.getElementById("publicAvatar");
             const publicBanner = document.getElementById("publicBanner");
             publicAvatar.innerHTML = '<i class="fas fa-eye"></i>';
@@ -695,17 +2023,17 @@
             try {
                 const targetQuery = query(collection(db, "preRegistrations"), where("alias", "==", targetAlias));
                 const snap = await getDocs(targetQuery);
-                
-                if(!snap.empty) {
+
+                if (!snap.empty) {
                     const data = snap.docs[0].data();
                     document.getElementById("publicAliasDisplay").innerText = data.alias.toUpperCase();
-                    
-                    if(data.bio) document.getElementById("publicBioDisplay").innerText = `"${data.bio}"`;
+
+                    if (data.bio) document.getElementById("publicBioDisplay").innerText = `"${data.bio}"`;
                     else document.getElementById("publicBioDisplay").innerText = '"Sessizliği ve karanlığı tercih ediyor..."';
-                    
-                    if(data.gender) document.getElementById("publicGenderDisplay").innerText = `Beden: ${data.gender}`;
-                    
-                    if(data.dob) {
+
+                    if (data.gender) document.getElementById("publicGenderDisplay").innerText = `Beden: ${data.gender}`;
+
+                    if (data.dob) {
                         const birthDate = new Date(data.dob);
                         const ageDate = new Date(Date.now() - birthDate.getTime());
                         document.getElementById("publicAgeDisplay").innerText = `Yaş: ${Math.abs(ageDate.getUTCFullYear() - 1970)}`;
@@ -713,7 +2041,7 @@
 
                     document.getElementById("publicJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(data.timestamp)}`;
 
-                    if(data.socialLink) {
+                    if (data.socialLink) {
                         const sLink = document.getElementById("publicSocialLink");
                         sLink.style.display = "inline-block";
                         sLink.href = data.socialLink;
@@ -726,111 +2054,634 @@
                     document.getElementById("publicAliasDisplay").style.color = themeColor;
                     document.getElementById("publicAliasDisplay").style.textShadow = `0 0 15px ${themeColor}`;
 
-                    if(data.avatar) {
+                    // SUEYDA Admin Badge Kontrolü
+                    const profileTagsDiv = document.querySelector("#publicProfileScreen .profile-tags");
+                    if (profileTagsDiv) {
+                        const existingAdminBadge = profileTagsDiv.querySelector(".admin-badge");
+                        if (existingAdminBadge) existingAdminBadge.remove();
+
+                        if (targetAlias.toLowerCase() === "sueyda") {
+                            // "ONAYLI ÜYE" gibib ilk standart tag'i gizle/sil
+                            const firstTag = profileTagsDiv.querySelector(".p-tag:not(.dark)");
+                            if (firstTag) firstTag.style.display = "none";
+
+                            const adminBadge = document.createElement("span");
+                            adminBadge.className = "p-tag admin-badge";
+                            adminBadge.style = "background: red; box-shadow: 0 0 15px red; color: white;";
+                            adminBadge.innerText = "SİSTEM YÖNETİCİSİ";
+                            profileTagsDiv.insertBefore(adminBadge, profileTagsDiv.firstChild);
+                        } else {
+                            const firstTag = profileTagsDiv.querySelector(".p-tag:not(.dark)");
+                            if (firstTag) firstTag.style.display = "inline-block";
+                        }
+                    }
+
+                    if (data.avatar) {
                         publicAvatar.innerHTML = `<img src="${data.avatar}" alt="${data.alias}">`;
                     }
                 } else {
                     document.getElementById("publicAliasDisplay").innerText = "HAYALET (BULUNAMADI)";
                 }
-            } catch(e) { console.error("Sorgu Hatası", e); }
+            } catch (e) { console.error("Sorgu Hatası", e); }
+
+            // Uplink Check
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            const uplinkBtn = document.getElementById("sendUplinkBtn");
+
+            uplinkBtn.innerHTML = '<i class="fas fa-link"></i> UPLINK PROTOKOLÜ BAŞLAT';
+            uplinkBtn.style = "background: transparent; border: 2px solid var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 15px rgba(0,243,255,0.3);";
+            uplinkBtn.disabled = false;
+
+            if (!myAlias || myAlias.toLowerCase() === targetAlias.toLowerCase()) {
+                uplinkBtn.style.display = "none";
+            } else {
+                uplinkBtn.style.display = "inline-block";
+                try {
+                    const q1 = query(collection(db, "uplinks"), where("sender", "==", myAlias), where("receiver", "==", targetAlias));
+                    const q2 = query(collection(db, "uplinks"), where("sender", "==", targetAlias), where("receiver", "==", myAlias));
+                    const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+
+                    let combinedSnap = [];
+                    snap1.forEach(doc => combinedSnap.push({ id: doc.id, ...doc.data() }));
+                    snap2.forEach(doc => combinedSnap.push({ id: doc.id, ...doc.data() }));
+
+                    if (combinedSnap.length > 0) {
+                        const link = combinedSnap[0];
+                        if (link.status === "established") {
+                            uplinkBtn.innerHTML = '<i class="fas fa-unlink"></i> BAĞLANTI AKTİF (KOPAR)';
+                            uplinkBtn.style = "background: rgba(255,0,60,0.1); border: 2px solid var(--blood-red); color: var(--blood-red); box-shadow: 0 0 15px rgba(255,0,60,0.3);";
+                            uplinkBtn.onclick = () => window.removeUplink(link.id, targetAlias);
+                        } else if (link.status === "pending") {
+                            if (link.sender === myAlias) {
+                                uplinkBtn.innerHTML = '<i class="fas fa-satellite"></i> SİNYAL GÖNDERİLDİ (İPTAL ET)';
+                                uplinkBtn.style = "background: rgba(255,170,0,0.1); border: 2px solid #ffaa00; color: #ffaa00; box-shadow: 0 0 15px rgba(255,170,0,0.3);";
+                                uplinkBtn.onclick = () => window.removeUplink(link.id, targetAlias);
+                            } else {
+                                uplinkBtn.innerHTML = '<i class="fas fa-satellite-dish"></i> SİNYAL GELDİ (ONAYLA)';
+                                uplinkBtn.style = "background: rgba(0,255,136,0.1); border: 2px solid #00ff88; color: #00ff88; box-shadow: 0 0 15px rgba(0,255,136,0.3);";
+                                uplinkBtn.onclick = () => window.respondUplink(link.id, 'established');
+                            }
+                        }
+                    } else {
+                        uplinkBtn.onclick = () => window.sendUplink(myAlias, targetAlias);
+                    }
+                } catch (e) { console.error("Uplink check error", e); }
+            }
         }
 
-        document.getElementById('backFromPublicBtn').addEventListener('click', () => {
-            publicProfileScreen.style.display = "none";
-            if(localStorage.getItem("hotdragons_alias")) {
-                profileDashboard.style.display = "block";
-            } else {
-                formContainer.style.display = "block";
-            }
-        });
+        // Geri Dön Butonu Kaldırıldı, HTML'de Hash'e bağlandı.
+        // renderMyProfile Fonksiyonu
+        async function renderMyProfile() {
+            const savedAlias = localStorage.getItem("hotdragons_alias");
+            if (!savedAlias) return;
+
+            document.getElementById("profileAliasDisplay").innerText = savedAlias.toUpperCase();
+            try {
+                const userQuery = query(collection(db, "preRegistrations"), where("alias", "==", savedAlias));
+                const querySnapshot = await getDocs(userQuery);
+
+                if (!querySnapshot.empty) {
+                    const userData = querySnapshot.docs[0].data();
+                    document.getElementById("profileEmailDisplay").innerText = userData.email;
+
+                    if (userData.bio) {
+                        document.getElementById("profileBioDisplay").innerText = `"${userData.bio}"`;
+                        document.getElementById('editBio').value = userData.bio;
+                    }
+                    if (userData.gender) {
+                        document.getElementById("profileGenderDisplay").innerText = `Beden: ${userData.gender}`;
+                        document.getElementById('editGender').value = userData.gender;
+                    }
+                    if (userData.dob) {
+                        const birthDate = new Date(userData.dob);
+                        const ageDate = new Date(Date.now() - birthDate.getTime());
+                        document.getElementById("profileAgeDisplay").innerText = `Yaş: ${Math.abs(ageDate.getUTCFullYear() - 1970)}`;
+                        document.getElementById('editDob').value = userData.dob;
+                    }
+
+                    document.getElementById("myJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(userData.timestamp)}`;
+
+                    if (userData.socialLink) {
+                        const mySocialLink = document.getElementById("mySocialLink");
+                        mySocialLink.style.display = "inline-block";
+                        mySocialLink.href = userData.socialLink;
+                        document.getElementById('editSocialLink').value = userData.socialLink;
+                    }
+
+                    const themeColor = userData.themeColor || "#ff003c";
+                    document.getElementById('editThemeColor').value = themeColor;
+
+                    const myBanner = document.getElementById("myBanner");
+                    const myAvatar = document.getElementById("myAvatar");
+
+                    myBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                    myAvatar.style.borderColor = themeColor;
+                    myAvatar.style.boxShadow = `0 0 25px ${themeColor}80`;
+
+                    // SUEYDA Kendi Profilinde Admin Badge Kontrolü
+                    const myTagsDiv = document.querySelector("#profileDashboard .profile-tags");
+                    if (myTagsDiv) {
+                        const myExistingAdminBadge = myTagsDiv.querySelector(".admin-badge");
+                        if (myExistingAdminBadge) myExistingAdminBadge.remove();
+
+                        if (savedAlias.toLowerCase() === "sueyda") {
+                            // "VIP GÖZETLEYEN" tag'ini gizle
+                            const firstTag = myTagsDiv.querySelector(".p-tag:not(.dark)");
+                            if (firstTag) firstTag.style.display = "none";
+
+                            const adminBadge = document.createElement("span");
+                            adminBadge.className = "p-tag admin-badge";
+                            adminBadge.style = "background: red; box-shadow: 0 0 15px red; color: white;";
+                            adminBadge.innerText = "SİSTEM YÖNETİCİSİ";
+                            myTagsDiv.insertBefore(adminBadge, myTagsDiv.firstChild);
+                        } else {
+                            const firstTag = myTagsDiv.querySelector(".p-tag:not(.dark)");
+                            if (firstTag) firstTag.style.display = "inline-block";
+                        }
+                    }
+
+                    if (userData.avatar) {
+                        myAvatar.innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
+                        document.getElementById('editAvatarBase64').value = userData.avatar;
+                    }
+                }
+            } catch (error) { console.error("Profil çekilemedi: ", error); }
+        }
 
         const qList = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"));
         onSnapshot(qList, (snapshot) => {
             const nodeList = document.getElementById('nodeList');
-            nodeList.innerHTML = ''; let count = 0; 
-            
+            nodeList.innerHTML = ''; let count = 0;
+
             snapshot.forEach((docSnap) => {
                 count++; const data = docSnap.data(); const rumuz = data.alias || "Gizli_Düğüm";
                 let timeString = "Az önce";
-                if(data.timestamp) {
+                if (data.timestamp) {
                     const now = new Date(); const past = data.timestamp.toDate(); const diffMins = Math.floor((now - past) / 60000);
-                    if(diffMins > 0 && diffMins < 60) timeString = `${diffMins} dk`; else if(diffMins >= 60) timeString = `${Math.floor(diffMins/60)} sa`;
+                    if (diffMins > 0 && diffMins < 60) timeString = `${diffMins} dk`; else if (diffMins >= 60) timeString = `${Math.floor(diffMins / 60)} sa`;
                 }
-                const newItem = document.createElement('li'); 
+                const newItem = document.createElement('li');
                 newItem.className = 'node-item';
-                
+
                 newItem.addEventListener('click', () => {
-                    viewPublicProfile(rumuz);
+                    window.location.hash = `#public-profile/${rumuz}`;
                 });
 
                 const isLatest = (count === 1) ? 'style="background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);"' : '';
                 newItem.innerHTML = `<div class="node-status" ${isLatest}></div><span class="node-name">${rumuz}</span><span class="node-time">${timeString}</span>`;
-                nodeList.appendChild(newItem); 
+                nodeList.appendChild(newItem);
             });
-            if(count > 0) document.getElementById('userCount').innerText = count * 14; 
+            if (count > 0) document.getElementById('userCount').innerText = count * 14;
         });
 
-        window.onload = async function() {
+        window.onload = async function () {
             const savedAlias = localStorage.getItem("hotdragons_alias");
             const docId = localStorage.getItem("hotdragons_doc_id");
-            if(savedAlias && docId) {
+            if (savedAlias && docId) {
                 topLoginBtn.style.display = "none";
-                formContainer.style.display = "none";
-                profileDashboard.style.display = "block";
-                document.getElementById("profileAliasDisplay").innerText = savedAlias.toUpperCase();
-                
-                try {
-                    const userQuery = query(collection(db, "preRegistrations"), where("alias", "==", savedAlias));
-                    const querySnapshot = await getDocs(userQuery);
-                    
-                    if (!querySnapshot.empty) {
-                        const userData = querySnapshot.docs[0].data();
-                        document.getElementById("profileEmailDisplay").innerText = userData.email;
-                        
-                        if(userData.bio) {
-                            document.getElementById("profileBioDisplay").innerText = `"${userData.bio}"`;
-                            document.getElementById('editBio').value = userData.bio;
-                        }
-                        if(userData.gender) {
-                            document.getElementById("profileGenderDisplay").innerText = `Beden: ${userData.gender}`;
-                            document.getElementById('editGender').value = userData.gender;
-                        }
-                        if(userData.dob) {
-                            const birthDate = new Date(userData.dob);
-                            const ageDate = new Date(Date.now() - birthDate.getTime());
-                            document.getElementById("profileAgeDisplay").innerText = `Yaş: ${Math.abs(ageDate.getUTCFullYear() - 1970)}`;
-                            document.getElementById('editDob').value = userData.dob;
-                        }
 
-                        document.getElementById("myJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(userData.timestamp)}`;
+                // Eğer yönetici (sueyda) giriş yaptıysa Update Log giriş ekranını göster
+                if (savedAlias.toLowerCase() === "sueyda") {
+                    document.getElementById("adminUpdateInputArea").style.display = "block";
+                }
+            }
 
-                        if(userData.socialLink) {
-                            const mySocialLink = document.getElementById("mySocialLink");
-                            mySocialLink.style.display = "inline-block";
-                            mySocialLink.href = userData.socialLink;
-                            document.getElementById('editSocialLink').value = userData.socialLink;
-                        }
+            // Sistem Loglarını Çek (Herkes Görebilir)
+            fetchUpdateLogs();
 
-                        const themeColor = userData.themeColor || "#ff003c";
-                        document.getElementById('editThemeColor').value = themeColor;
-                        
-                        const myBanner = document.getElementById("myBanner");
-                        const myAvatar = document.getElementById("myAvatar");
-                        
-                        myBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
-                        myAvatar.style.borderColor = themeColor;
-                        myAvatar.style.boxShadow = `0 0 25px ${themeColor}80`;
-                        
-                        if(userData.avatar) {
-                            myAvatar.innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
-                            document.getElementById('editAvatarBase64').value = userData.avatar;
-                        }
+            handleRouting(); // Yönlendirmeyi Başlat
+        };
+
+        // --- GÜNCELLEME GÜNLÜĞÜ JS (UPDATE LOGS) ---
+        async function fetchUpdateLogs() {
+            const logsQ = query(collection(db, "updateLogs"), orderBy("timestamp", "desc"));
+            onSnapshot(logsQ, (snapshot) => {
+                const container = document.getElementById("updateLogsContainer");
+                container.innerHTML = "";
+                const currentAlias = localStorage.getItem("hotdragons_alias")?.toLowerCase();
+
+                if (snapshot.empty) {
+                    container.innerHTML = `<div style="text-align: center; color: #555; font-family: 'Orbitron';">Henüz bir sistem günlüğü kaydedilmedi.</div>`;
+                    return;
+                }
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const docId = docSnap.id;
+                    const dateStr = formatTimestamp(data.timestamp);
+
+                    let adminControls = "";
+                    if (currentAlias === "sueyda") {
+                        const safeTitle = data.title.replace(/'/g, "\\'");
+                        const safeDesc = data.description.replace(/'/g, "\\'");
+                        adminControls = `
+                            <div style="margin-top: 10px; display: flex; gap: 10px;">
+                                <button onclick="window.editLog('${docId}', '${safeTitle}', '${safeDesc}')" class="cyber-button small outline" style="border-color: #00f3ff; color: #00f3ff; font-size: 0.7rem; padding: 5px 10px;"><i class="fas fa-edit"></i> DÜZENLE</button>
+                                <button onclick="window.deleteLog('${docId}')" class="cyber-button small outline" style="border-color: #ff003c; color: #ff003c; font-size: 0.7rem; padding: 5px 10px;"><i class="fas fa-trash"></i> SİL</button>
+                            </div>
+                        `;
                     }
-                } catch(error) { console.error("Profil çekilemedi: ", error); }
+
+                    container.innerHTML += `
+                        <div class="roadmap-item" style="border-left-color: var(--cyber-cyan);">
+                            <strong style="color: var(--cyber-cyan);">${data.title}</strong>
+                            <p>${data.description}</p>
+                            <span style="font-size: 0.75rem; color: #666; font-family: 'Orbitron'; margin-top: 5px; display: block;">[ KOD_GİRİŞİ: ${dateStr} ]</span>
+                            ${adminControls}
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        // --- GÜNCELLEME LOG (DÜZENLE / SİL) FONKSİYONLARI ---
+        let editingLogId = null;
+
+        window.deleteLog = async function (docId) {
+            if (confirm("DİKKAT: Bu sistem günlüğünü silmek istediğine emin misin? İzler tamamen kalıcı olarak silinecek.")) {
+                try {
+                    await deleteDoc(doc(db, "updateLogs", docId));
+                    console.log("Log başarıyla silindi.");
+                } catch (e) {
+                    console.error("Log silinemedi: ", e);
+                    alert("Sistem Reddi: Silme işlemi başarısız.");
+                }
             }
         };
 
-        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+        window.editLog = function (docId, currentTitle, currentDesc) {
+            document.getElementById("logTitleInput").value = currentTitle;
+            document.getElementById("logDescInput").value = currentDesc;
+            editingLogId = docId;
+
+            document.getElementById("adminUpdateInputArea").scrollIntoView({ behavior: 'smooth' });
+
+            const btn = document.getElementById("addLogBtn");
+            btn.innerHTML = `<i class="fas fa-save"></i> GÜNCELLE`;
+            btn.style.background = "linear-gradient(45deg, #00ff88, var(--cyber-cyan))";
+            btn.style.color = "#000";
+        };
+
+        // --- SADECE SUEYDA LOG EKLEYEBİLİR ---
+        const addLogBtn = document.getElementById("addLogBtn");
+        if (addLogBtn) {
+            addLogBtn.addEventListener("click", async () => {
+                const title = document.getElementById("logTitleInput").value.trim();
+                const desc = document.getElementById("logDescInput").value.trim();
+                const alias = localStorage.getItem("hotdragons_alias");
+
+                if (alias?.toLowerCase() !== "sueyda") {
+                    alert("YETKİ REDDEDİLDİ: Yalnızca Ana Düğüm (sueyda) log girebilir.");
+                    return;
+                }
+
+                if (!title || !desc) {
+                    alert("Başlık ve açıklama alanları boş bırakılamaz.");
+                    return;
+                }
+
+                addLogBtn.innerText = "YÜKLENİYOR...";
+                try {
+                    if (editingLogId) {
+                        await updateDoc(doc(db, "updateLogs", editingLogId), {
+                            title: title,
+                            description: desc
+                        });
+                        addLogBtn.innerHTML = `<i class="fas fa-check"></i> GÜNCELLENDİ`;
+                        editingLogId = null;
+                    } else {
+                        await addDoc(collection(db, "updateLogs"), {
+                            title: title,
+                            description: desc,
+                            author: "sueyda",
+                            timestamp: serverTimestamp()
+                        });
+                        addLogBtn.innerHTML = `<i class="fas fa-check"></i> BAŞARILI`;
+                    }
+
+                    document.getElementById("logTitleInput").value = "";
+                    document.getElementById("logDescInput").value = "";
+
+                    setTimeout(() => {
+                        addLogBtn.innerHTML = `<i class="fas fa-upload"></i> SİSTEME LOG İŞLE`;
+                        addLogBtn.style.background = "linear-gradient(45deg, #0055ff, var(--cyber-cyan))";
+                        addLogBtn.style.color = "#fff";
+                    }, 2000);
+                } catch (e) {
+                    console.error("Log ekleme/güncelleme hatası: ", e);
+                    addLogBtn.innerText = "HATA!";
+                }
+            });
+        }
+
+        // --- SİBER AKIŞ (INFINITE FEED) JS MANTIĞI ---
+        let lastVisibleFeed = null;
+        let isFetchingFeed = false;
+        let hasMoreFeeds = true;
+
+        async function fetchInitialFeeds() {
+            const feedArea = document.getElementById("feedContentArea");
+            document.getElementById("feedLoadingText").style.display = "block";
+            feedArea.innerHTML = "";
+            lastVisibleFeed = null;
+            hasMoreFeeds = true;
+
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            // Sinyal gönder butonunu göster
+            if (myAlias && document.getElementById("toggleFeedPostBtn")) {
+                document.getElementById("toggleFeedPostBtn").style.display = "flex";
+            }
+
+            try {
+                const feedQ = query(collection(db, "globalFeed"), orderBy("timestamp", "desc"), limit(3));
+                const snap = await getDocs(feedQ);
+
+                document.getElementById("feedLoadingText").style.display = "none";
+
+                if (snap.empty) {
+                    feedArea.innerHTML = `<div style="font-family: 'Orbitron'; color: #555; font-size: 1.5rem; text-align: center; padding: 50px;">[ HENÜZ VERİ YOK ]</div>`;
+                    hasMoreFeeds = false;
+                    return;
+                }
+
+                lastVisibleFeed = snap.docs[snap.docs.length - 1];
+                snap.forEach(docSnap => {
+                    renderFeedItem(docSnap.id, docSnap.data());
+                });
+
+            } catch (e) {
+                console.error("Feed çekilemedi: ", e);
+                document.getElementById("feedLoadingText").innerText = "[ BAĞLANTI HATASI ]";
+            }
+        }
+
+        async function fetchMoreFeeds() {
+            if (isFetchingFeed || !hasMoreFeeds || !lastVisibleFeed) return;
+            isFetchingFeed = true;
+            document.getElementById("feedLoader").style.display = "block";
+
+            try {
+                const nextQ = query(collection(db, "globalFeed"), orderBy("timestamp", "desc"), startAfter(lastVisibleFeed), limit(3));
+                const nextSnap = await getDocs(nextQ);
+
+                document.getElementById("feedLoader").style.display = "none";
+
+                if (nextSnap.empty) {
+                    hasMoreFeeds = false;
+                    document.getElementById("feedContentArea").innerHTML += `<div style="padding:40px; text-align:center; color:#555; font-family:'Orbitron'; scroll-snap-align: start; width:100%;">[ AĞIN SONUNA ULAŞILDINIZ ]</div>`;
+                } else {
+                    lastVisibleFeed = nextSnap.docs[nextSnap.docs.length - 1];
+                    nextSnap.forEach(docSnap => {
+                        renderFeedItem(docSnap.id, docSnap.data());
+                    });
+                }
+            } catch (e) { console.error("Daha fazla feed çekilemedi", e); }
+
+            isFetchingFeed = false;
+        }
+
+        // Sonsuz kaydırma algılayıcısı (Scroll Listener)
+        document.getElementById("feedContainer").addEventListener("scroll", (e) => {
+            const container = e.target;
+            // Ekranda dibe yaklaşıldıysa (Tam dibe vurmadan %90'ında falan çekmeye başlayalım)
+            if (container.scrollHeight - container.scrollTop <= container.clientHeight + 200) {
+                fetchMoreFeeds();
+            }
+        });
+
+        // BOOST VE YORUM FONKSİYONLARI
+        window.boostPost = async function (postId) {
+            const btn = document.getElementById(`boostBtn_${postId}`);
+            const countSpan = document.getElementById(`boostCount_${postId}`);
+
+            btn.style.color = 'var(--cyber-cyan)';
+            btn.style.borderColor = 'var(--cyber-cyan)';
+            btn.style.transform = 'scale(1.1)';
+            btn.style.boxShadow = '0 0 25px var(--cyber-cyan)';
+            btn.style.textShadow = '0 0 5px #fff';
+
+            let currentCount = parseInt(countSpan.innerText) || 0;
+            countSpan.innerText = currentCount + 1;
+            btn.style.pointerEvents = 'none';
+
+            try {
+                await updateDoc(doc(db, "globalFeed", postId), {
+                    boostCount: increment(1)
+                });
+            } catch (e) { console.error("Boost failed", e); }
+        };
+
+        let currentCommentPostId = null;
+        let commentsUnsubscribe = null;
+
+        window.toggleComments = function (postId) {
+            const modal = document.getElementById('commentModal');
+            modal.style.display = 'flex';
+            currentCommentPostId = postId;
+
+            const listArea = document.getElementById('commentListArea');
+            listArea.innerHTML = `<div style="text-align:center; color: var(--cyber-cyan); font-family: 'Orbitron'; padding: 20px;">[ SİNYALLER DİNLENİYOR... ]</div>`;
+
+            if (commentsUnsubscribe) commentsUnsubscribe();
+
+            const q = query(collection(db, `globalFeed/${postId}/comments`), orderBy("timestamp", "asc"));
+            commentsUnsubscribe = onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    listArea.innerHTML = `<div style="text-align:center; color: #666; font-family: 'Orbitron'; padding: 20px;">İlk fısıltıyı sen gönder...</div>`;
+                    return;
+                }
+
+                listArea.innerHTML = "";
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    let tStr = "";
+                    if (data.timestamp) {
+                        const date = data.timestamp.toDate();
+                        tStr = date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+                    }
+
+                    listArea.innerHTML += `
+                        <div class="comment-item">
+                            <div class="comment-alias" onclick="document.getElementById('commentModal').style.display='none'; window.location.hash='#public-profile/${data.author}'">@${data.author}</div>
+                            <div class="comment-text">${data.content}</div>
+                            <div class="comment-time">${tStr}</div>
+                        </div>
+                    `;
+                });
+                setTimeout(() => listArea.scrollTop = listArea.scrollHeight, 100);
+            });
+        };
+
+        const sendWhisperBtn = document.getElementById("sendWhisperBtn");
+        if (sendWhisperBtn) {
+            sendWhisperBtn.addEventListener("click", async () => {
+                const input = document.getElementById("whisperInput");
+                const content = input.value.trim();
+                const alias = localStorage.getItem("hotdragons_alias") || "Anonim";
+
+                if (!content || !currentCommentPostId) return;
+
+                input.value = "";
+                try {
+                    await addDoc(collection(db, `globalFeed/${currentCommentPostId}/comments`), {
+                        author: alias,
+                        content: content,
+                        timestamp: serverTimestamp()
+                    });
+                } catch (e) { console.error("Fısıltı hatası", e); }
+            });
+
+            document.getElementById("whisperInput").addEventListener("keypress", function (e) {
+                if (e.key === "Enter") sendWhisperBtn.click();
+            });
+        }
+
+        function renderFeedItem(id, data) {
+            const feedArea = document.getElementById("feedContentArea");
+            const tagsFormatted = data.tags ? data.tags.split(' ').map(t => t.startsWith('#') ? t : `#${t}`).join(' ') : "";
+            const currentAlias = localStorage.getItem("hotdragons_alias");
+
+            let bgStyle = `background: radial-gradient(circle at center, rgba(${Math.floor(Math.random() * 40)}, 0, ${Math.floor(Math.random() * 40)}, 1) 0%, var(--void-bg) 100%);`;
+            let mediaHtml = "";
+
+            if (data.mediaUrl) {
+                if (data.mediaType === 'video') {
+                    mediaHtml = `<video src="${data.mediaUrl}" autoplay loop muted playsinline style="position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.6; filter: hue-rotate(${Math.floor(Math.random() * 30)}deg) contrast(1.2);"></video>`;
+                } else {
+                    bgStyle = `background: url('${data.mediaUrl}') center/cover no-repeat;`;
+                    mediaHtml = `<div style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 0;"></div>`;
+                }
+            }
+
+            const contentHtml = data.content ? `
+                <div style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; text-align: center; padding: 20px 10%; line-height: 1.3; text-shadow: 0 0 10px rgba(0,0,0,0.8); z-index: 5; position: relative;">
+                    "${data.content}"
+                </div>
+            ` : '';
+
+            // Post yazarım veya adminsem sil/düzenle butonlarını ekle
+            let authorActionsHtml = '';
+            if (currentAlias && (currentAlias === data.author || currentAlias.toLowerCase() === "sueyda")) {
+                const safeContent = (data.content || "").replace(/'/g, "\\'");
+                const safeTags = (data.tags || "").replace(/'/g, "\\'");
+                authorActionsHtml = `
+                    <div style="position: absolute; top: 15px; right: 15px; z-index: 20; display: flex; gap: 10px; background: rgba(0,0,0,0.5); padding: 5px 10px; border-radius: 5px; border: 1px solid rgba(255,255,255,0.2); backdrop-filter: blur(5px);">
+                        <button onclick="window.editFeedPost('${id}', '${safeContent}', '${safeTags}')" style="background: transparent; border: none; color: #00f3ff; cursor: pointer; font-size: 1.2rem; transition: 0.2s;" title="Düzenle"><i class="fas fa-edit"></i></button>
+                        <button onclick="window.deleteFeedPost('${id}')" style="background: transparent; border: none; color: #ff003c; cursor: pointer; font-size: 1.2rem; transition: 0.2s;" title="Sil"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            }
+
+            const itemHTML = `
+            <div class="feed-item" style="${bgStyle} position: relative;">
+                ${mediaHtml}
+                ${contentHtml}
+                ${authorActionsHtml}
+
+                <div class="feed-actions" style="z-index: 10;">
+                    <div class="action-btn" onclick="window.toggleComments('${id}')" id="commentBtn_${id}"><i class="fas fa-comment-dots"></i><span>FISILDA</span></div>
+                    <div class="action-btn" onclick="window.boostPost('${id}')" id="boostBtn_${id}"><i class="fas fa-fire"></i><span id="boostCount_${id}">${data.boostCount || 0}</span></div>
+                </div>
+
+                <div class="feed-info" style="z-index: 10;">
+                    <div class="feed-alias" style="cursor:pointer;" onclick="window.location.hash='#public-profile/${data.author}'">@${data.author}</div>
+                    <div class="feed-tags">${tagsFormatted}</div>
+                </div>
+            </div>`;
+
+            feedArea.insertAdjacentHTML('beforeend', itemHTML);
+        }
+
+        // Feed Post Silme
+        window.deleteFeedPost = async function (postId) {
+            if (confirm("Bu sinyali ağdan tamamen silmek istediğine emin misin?")) {
+                try {
+                    await deleteDoc(doc(db, "globalFeed", postId));
+                    fetchInitialFeeds(); // Feed'i yenile
+                } catch (e) {
+                    console.error("Silme hatası:", e);
+                    alert("Sinyal silinirken hata oluştu.");
+                }
+            }
+        };
+
+        // Feed Post Düzenlemeyi Başlat
+        window.editFeedPost = function (postId, currentContent, currentTags) {
+            const feedPostArea = document.getElementById('feedPostArea');
+            const toggleFeedPostBtn = document.getElementById('toggleFeedPostBtn');
+            const submitBtn = document.getElementById("sendFeedBtn");
+
+            feedPostArea.style.display = 'block';
+            toggleFeedPostBtn.style.display = 'none';
+
+            document.getElementById("feedPostContent").value = currentContent;
+            document.getElementById("feedPostTags").value = currentTags;
+            document.getElementById("editingFeedPostId").value = postId;
+
+            submitBtn.innerText = "GÜNCELLE";
+            submitBtn.style.background = "linear-gradient(45deg, #00ff88, var(--cyber-cyan))";
+        };
+
+        // FEED'e veri gönderme (Herkes gönderebilir) veya Güncelleme
+        const sendFeedBtn = document.getElementById("sendFeedBtn");
+        if (sendFeedBtn) {
+            sendFeedBtn.addEventListener("click", async () => {
+                const content = document.getElementById("feedPostContent").value.trim();
+                const tags = document.getElementById("feedPostTags").value.trim();
+                const alias = localStorage.getItem("hotdragons_alias");
+                const mediaUrl = document.getElementById("feedMediaUrl").value;
+                const mediaType = document.getElementById("feedMediaType").value;
+                const editingId = document.getElementById("editingFeedPostId").value;
+
+                if (!content && !mediaUrl && !editingId) { alert("Siber ağa boş bir sinyal gönderemezsin (Metin veya Medya zorunlu)."); return; }
+                if (content && content.length > 200) { alert("Sinyal çok uzun. Maksimum 200 karakter."); return; }
+
+                sendFeedBtn.innerText = "YAYINLANIYOR...";
+                sendFeedBtn.disabled = true;
+
+                try {
+                    if (editingId) {
+                        // Güncelleme Modu
+                        // Sadece metin ve etiketleri güncelliyoruz şimdilik, medya sabit kalıyor.
+                        await updateDoc(doc(db, "globalFeed", editingId), {
+                            content: content,
+                            tags: tags
+                        });
+                        sendFeedBtn.innerText = "GÜNCELLENDİ";
+                    } else {
+                        // Yeni Ekleme Modu
+                        await addDoc(collection(db, "globalFeed"), {
+                            content: content,
+                            tags: tags,
+                            author: alias,
+                            mediaUrl: mediaUrl || null,
+                            mediaType: mediaType || null,
+                            boostCount: 0,
+                            timestamp: serverTimestamp()
+                        });
+                        sendFeedBtn.innerText = "YAYINLANDI";
+                    }
+
+                    resetFeedPostForm();
+                    document.getElementById('feedPostArea').style.display = 'none';
+                    document.getElementById('toggleFeedPostBtn').style.display = 'flex';
+
+                    // Gönderdikten veya güncelledikten sonra feed'i tazele (İlk sayfaya dön)
+                    fetchInitialFeeds();
+
+                    setTimeout(() => {
+                        sendFeedBtn.innerText = "YAYINLA";
+                        sendFeedBtn.disabled = false;
+                        sendFeedBtn.style.background = "var(--cyber-cyan)";
+                    }, 2000);
+                } catch (e) {
+                    sendFeedBtn.innerText = "HATA OLUŞTU";
+                    sendFeedBtn.disabled = false;
+                }
+            });
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             const alias = document.getElementById('loginAlias').value; const pass = document.getElementById('loginPassword').value;
             const btn = document.getElementById('loginSubmitBtn'); const originalText = btn.innerText; btn.innerText = "ŞİFRE ÇÖZÜLÜYOR...";
@@ -848,14 +2699,14 @@
             } catch (error) { console.error(error); }
         });
 
-        document.getElementById('preRegForm').addEventListener('submit', async function(e) {
+        document.getElementById('preRegForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            const alias = document.getElementById('aliasInput').value; 
-            const email = document.getElementById('emailInput').value; 
+            const alias = document.getElementById('aliasInput').value;
+            const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
-            
-            const btn = this.querySelector('.cyber-button'); 
-            const originalText = btn.innerText; 
+
+            const btn = this.querySelector('.cyber-button');
+            const originalText = btn.innerText;
             btn.innerText = "SİSTEM KONTROLÜ...";
 
             try {
@@ -882,20 +2733,20 @@
                 });
 
                 if (isDuplicate) {
-                    btn.innerText = errorMessage; 
-                    btn.style.background = "transparent"; 
-                    btn.style.border = "2px solid red"; 
+                    btn.innerText = errorMessage;
+                    btn.style.background = "transparent";
+                    btn.style.border = "2px solid red";
                     btn.style.color = "red";
                     setTimeout(() => { btn.innerText = originalText; btn.style = ""; }, 3000);
-                    return; 
+                    return;
                 }
 
                 btn.innerText = "KİLİT KIRILIYOR...";
                 const docRef = await addDoc(collection(db, "preRegistrations"), {
-                    alias: alias, email: email, password: password, gender: "Gizli", bio: "", dob: "", avatar: "", 
+                    alias: alias, email: email, password: password, gender: "Gizli", bio: "", dob: "", avatar: "",
                     themeColor: "#ff003c", socialLink: "", timestamp: serverTimestamp()
                 });
-                
+
                 localStorage.setItem("hotdragons_alias", alias); localStorage.setItem("hotdragons_doc_id", docRef.id);
                 btn.innerText = "İÇERDESİN // ONAYLANDI"; btn.style.background = "#fff"; btn.style.color = "#000";
                 setTimeout(() => window.location.reload(), 1500);
@@ -905,25 +2756,26 @@
             }
         });
 
-        document.getElementById('showEditFormBtn').addEventListener('click', () => { profileDashboard.style.display = "none"; profileEditScreen.style.display = "block"; });
-        document.getElementById('cancelEditBtn').addEventListener('click', () => { profileEditScreen.style.display = "none"; profileDashboard.style.display = "block"; });
-        document.getElementById('logoutBtn').addEventListener('click', function() { localStorage.clear(); window.location.reload(); });
-        
-        document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+        // SPA Routing Linkleri
+        document.getElementById('showEditFormBtn').addEventListener('click', () => { window.location.hash = '#edit-profile'; });
+        document.getElementById('cancelEditBtn').addEventListener('click', () => { window.location.hash = '#dashboard'; });
+        document.getElementById('logoutBtn').addEventListener('click', function () { localStorage.clear(); window.location.hash = ''; window.location.reload(); });
+
+        document.getElementById('editProfileForm').addEventListener('submit', async function (e) {
             e.preventDefault();
             const btn = document.getElementById('saveEditBtn'); btn.innerText = "SİSTEME İŞLENİYOR...";
             try {
                 await updateDoc(doc(db, "preRegistrations", localStorage.getItem("hotdragons_doc_id")), {
-                    bio: document.getElementById('editBio').value, 
-                    gender: document.getElementById('editGender').value, 
+                    bio: document.getElementById('editBio').value,
+                    gender: document.getElementById('editGender').value,
                     dob: document.getElementById('editDob').value,
                     themeColor: document.getElementById('editThemeColor').value,
                     socialLink: document.getElementById('editSocialLink').value,
-                    avatar: document.getElementById('editAvatarBase64').value 
+                    avatar: document.getElementById('editAvatarBase64').value
                 });
                 btn.innerText = "KİMLİK GÜNCELLENDİ"; btn.style.background = "#00ff88"; btn.style.color = "#000";
                 setTimeout(() => window.location.reload(), 1000);
-            } catch(error) { btn.innerText = "HATA OLUŞTU"; }
+            } catch (error) { btn.innerText = "HATA OLUŞTU"; }
         });
 
         async function fetchLocation() {
@@ -937,13 +2789,140 @@
                 const p = performance.getEntriesByType("navigation")[0];
                 if (p) {
                     let ping = Math.round(p.responseStart - p.requestStart);
-                    if (ping <= 0) ping = Math.floor(Math.random() * 20) + 5; 
+                    if (ping <= 0) ping = Math.floor(Math.random() * 20) + 5;
                     const e = document.getElementById('livePing'); e.innerText = `${ping}ms`;
-                    e.style.color = (ping < 50) ? "#00ff88" : (ping < 150) ? "orange" : "red"; 
+                    e.style.color = (ping < 50) ? "#00ff88" : (ping < 150) ? "orange" : "red";
                 }
-            }, 1000); 
+            }, 1000);
         }
         fetchLocation(); calculatePing();
+        // --- UPLINK SİSTEMİ MANTIĞI ---
+
+        // 1. İstek Gönder
+        window.sendUplink = async function (myAlias, targetAlias) {
+            if (myAlias.toLowerCase() === targetAlias) return alert("Kendi düğümüne bağlanamazsın.");
+            try {
+                const q = query(collection(db, "uplinks"), where("sender", "==", myAlias), where("receiver", "==", targetAlias));
+                const snap = await getDocs(q);
+                if (!snap.empty) return alert("Sinyal zaten gönderilmiş.");
+
+                await addDoc(collection(db, "uplinks"), {
+                    sender: myAlias,
+                    receiver: targetAlias,
+                    status: "pending",
+                    timestamp: serverTimestamp()
+                });
+                viewPublicProfile(targetAlias); // Refresh button state
+            } catch (e) { console.error(e); }
+        };
+
+        // İstek / Arkadaş İptali
+        window.removeUplink = async function (docId, targetAlias) {
+            try {
+                await deleteDoc(doc(db, "uplinks", docId));
+                if (targetAlias) viewPublicProfile(targetAlias); // Refresh button state
+            } catch (e) { console.error(e); }
+        };
+
+        // 2. Gelen İstekleri Dinle (Dashboard'da Göster)
+        function listenInboundRequests() {
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            if (!myAlias) return;
+
+            const q = query(collection(db, "uplinks"), where("receiver", "==", myAlias), where("status", "==", "pending"));
+
+            onSnapshot(q, (snapshot) => {
+                const listContainer = document.getElementById("inboundRequestsList");
+                const area = document.getElementById("uplinkRequestsArea");
+
+                const hudAlert = document.getElementById("hudAlert");
+                if (snapshot.empty) {
+                    area.style.display = "none";
+                    hudAlert.style.display = "none";
+                    return;
+                }
+
+                area.style.display = "block";
+                hudAlert.style.display = "inline-block"; // HUD Alert tetikleniyor
+                listContainer.innerHTML = "";
+
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+                    listContainer.innerHTML += `
+                <div class="request-item">
+                    <span>@${data.sender.toUpperCase()}</span>
+                    <div>
+                        <button class="req-btn req-accept" onclick="respondUplink('${id}', 'established')">ONAYLA</button>
+                        <button class="req-btn req-reject" onclick="removeUplink('${id}')">X</button>
+                    </div>
+                </div>
+            `;
+                });
+            });
+        }
+
+        // 3. Aktif Bağlantıları Dinle (Dashboard'da Göster)
+        function listenActiveUplinks() {
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            if (!myAlias) return;
+
+            // Both queries where user is sender OR receiver and status is established.
+            // Firestore OR queries are possible but we can just use two snapshots or combine in client.
+            // For simplicity and realtime, let's setup two listeners and merge.
+            const activeUplinksMap = new Map();
+
+            const renderActiveUplinks = () => {
+                const listContainer = document.getElementById("activeUplinksList");
+                const area = document.getElementById("activeUplinksArea");
+
+                if (activeUplinksMap.size === 0) {
+                    area.style.display = "none";
+                    return;
+                }
+                area.style.display = "block";
+                listContainer.innerHTML = "";
+                activeUplinksMap.forEach((data, id) => {
+                    const friendAlias = data.sender === myAlias ? data.receiver : data.sender;
+                    listContainer.innerHTML += `
+                <div class="active-uplink-item">
+                    <span class="active-uplink-alias" onclick="window.location.hash='#public-profile/${friendAlias}'">@${friendAlias}</span>
+                    <button class="remove-uplink-btn" onclick="removeUplink('${id}')"><i class="fas fa-unlink"></i> KOPAR</button>
+                </div>
+            `;
+                });
+            };
+
+            onSnapshot(query(collection(db, "uplinks"), where("sender", "==", myAlias), where("status", "==", "established")), (snapshot) => {
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === "added" || change.type === "modified") activeUplinksMap.set(change.doc.id, change.doc.data());
+                    if (change.type === "removed") activeUplinksMap.delete(change.doc.id);
+                });
+                renderActiveUplinks();
+            });
+
+            onSnapshot(query(collection(db, "uplinks"), where("receiver", "==", myAlias), where("status", "==", "established")), (snapshot) => {
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === "added" || change.type === "modified") activeUplinksMap.set(change.doc.id, change.doc.data());
+                    if (change.type === "removed") activeUplinksMap.delete(change.doc.id);
+                });
+                renderActiveUplinks();
+            });
+        }
+
+        // 4. İsteğe Yanıt Ver (Kabul/Red)
+        window.respondUplink = async function (docId, newStatus) {
+            try {
+                await updateDoc(doc(db, "uplinks", docId), { status: newStatus });
+            } catch (e) { console.error(e); }
+        };
+
+        // Sayfa yüklendiğinde dinleyiciyi başlat
+        if (localStorage.getItem("hotdragons_alias")) {
+            listenInboundRequests();
+            listenActiveUplinks();
+        }
     </script>
 </body>
+
 </html>
