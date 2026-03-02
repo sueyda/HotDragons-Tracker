@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://hotdragons.com"><img src="https://img.icons8.com/nolan/128/fire-element.png" alt="HotDragons"></a>
+  <a href="https://hotdragons.com"><img src="https://raw.githubusercontent.com/sueyda/HotDragons-Tracker/refs/heads/main/favicon.png" alt="HotDragons"></a>
   <br>
   HOTDRAGONS // XXX PROTOCOL
   <br>
