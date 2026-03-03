@@ -1484,6 +1484,11 @@
                         <i class="fas fa-satellite-dish"></i> SİBER AKIŞA BAĞLAN
                     </button>
 
+                    <button id="enterNsfwFeedBtn" class="cyber-button"
+                        style="margin-bottom: 15px; background: linear-gradient(45deg, #ff003c, #8a0000); text-shadow: 0 0 5px #fff; box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);">
+                        <i class="fas fa-exclamation-triangle"></i> NSFW (18+) AKIŞA GİR
+                    </button>
+
                     <button id="showEditFormBtn" class="cyber-button" style="margin-bottom: 15px;"><i
                             class="fas fa-pen"></i> KİMLİĞİ DÜZENLE</button>
                     <div id="uplinkRequestsArea" style="margin-bottom: 20px; display:none;">
@@ -1704,7 +1709,7 @@
             <div class="input-group" style="margin-top: 15px; margin-bottom: 0;">
                 <div class="file-input-wrapper" style="width: 100%;">
                     <div class="file-input-btn" id="feedFileLabel" style="font-size: 0.85rem; padding: 10px;"><i
-                            class="fas fa-camera"></i> GÖRSEL/VİDEO EKLE (Max 5MB)</div>
+                            class="fas fa-camera"></i> GÖRSEL/VİDEO EKLE (Max 50MB)</div>
                     <input type="file" id="feedMediaInput" accept="image/*, video/mp4, video/webm">
                 </div>
                 <!-- CORS Uyarı Notu -->
@@ -1736,6 +1741,92 @@
             <div id="feedLoader"
                 style="display: none; text-align: center; padding: 30px; color: var(--hot-pink); font-family: 'Orbitron'; animation: blink 1s infinite;">
                 [ DAHA FAZLA VERİ ÇEKİLİYOR... ]</div>
+        </div>
+    </div>
+
+    <!-- NSFW UYARI MODALI -->
+    <div id="nsfwWarningModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(20px);">
+        <div
+            style="background: rgba(20, 0, 5, 0.9); border: 2px solid var(--blood-red); padding: 50px; border-radius: 10px; max-width: 500px; text-align: center; box-shadow: 0 0 50px rgba(255, 0, 60, 0.6); position: relative;">
+            <i class="fas fa-exclamation-triangle"
+                style="font-size: 4rem; color: var(--blood-red); margin-bottom: 20px; animation: blink 1s infinite;"></i>
+            <h2 style="font-family: 'Orbitron'; color: #fff; margin-bottom: 15px; letter-spacing: 2px;">BÖLGE İHLALİ
+                <span style="color: var(--blood-red);">18+</span>
+            </h2>
+            <p style="font-family: 'Rajdhani'; color: #ccc; font-size: 1.2rem; margin-bottom: 30px; line-height: 1.5;">
+                Bu siber akış tamamen sansürsüz, aşırı ve yetişkinlere yönelik (+18) paylaşımlar barındırır. Eğer 18
+                yaşından küçük veya bu tür içeriklerden rahatsız olan biriysen, derhal buradan ayrıl.</p>
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="declineNsfwBtn" class="cyber-button outline"
+                    style="flex: 1; border-color: var(--cyber-cyan); color: var(--cyber-cyan);">HAYIR, GERİ DÖN</button>
+                <button id="acceptNsfwBtn" class="cyber-button"
+                    style="flex: 1; background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);">EVET, GİRİŞ
+                    YAP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NSFW FEED EKRANI -->
+    <div id="feedScreenNsfw"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--void-bg); z-index: 1000;">
+        <button class="close-feed-btn" id="closeNsfwFeedBtn"><i class="fas fa-times"></i></button>
+
+        <!-- NSFW Sinyal Oluştur Butonu -->
+        <button id="toggleNsfwFeedPostBtn" class="cyber-button"
+            style="position: absolute; top: 25px; left: 50%; transform: translateX(-50%); width: auto; z-index: 60; border-radius: 50px; padding: 12px 25px; box-shadow: 0 0 20px rgba(255,0,60,0.4); background: linear-gradient(45deg, var(--blood-red), #8a0000); color: #fff; font-family: 'Orbitron'; font-size: 1.1rem;">
+            <i class="fas fa-fire"></i> NSFW SİNYAL OLUŞTUR
+        </button>
+
+        <!-- NSFW Feed Veri Gönderme Paneli -->
+        <div id="nsfwFeedPostArea"
+            style="display: none; position: absolute; bottom: 90px; left: 30px; width: 90%; max-width: 400px; z-index: 50; background: rgba(20,0,5,0.9); border: 2px solid var(--blood-red); border-radius: 10px; padding: 20px; backdrop-filter: blur(15px); box-shadow: 0 0 40px rgba(255,0,60,0.5);">
+            <div
+                style="font-family: 'Orbitron'; color: var(--blood-red); font-size: 1rem; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                <span><i class="fas fa-exclamation-triangle"></i> NSFW İÇERİK YÜKLE</span>
+                <i class="fas fa-times" id="closeNsfwFeedPostAreaBtn" style="cursor: pointer; color: #fff;"></i>
+            </div>
+            <textarea id="nsfwFeedPostContent" class="cyber-textarea"
+                style="font-size: 1rem; padding: 10px; border-color: rgba(255, 0, 60, 0.5); min-height: 80px;"
+                placeholder="Yalnızca 18+ Gönderiler (Maks 150 Karakter)"></textarea>
+
+            <input type="hidden" id="editingNsfwFeedPostId" value="">
+
+            <div class="input-group" style="margin-top: 15px; margin-bottom: 0;">
+                <div class="file-input-wrapper" style="width: 100%;">
+                    <div class="file-input-btn" id="nsfwFeedFileLabel"
+                        style="font-size: 0.85rem; padding: 10px; border-color: var(--blood-red); color: var(--blood-red);">
+                        <i class="fas fa-camera"></i> 18+ MEDYA EKLE (Max 50MB)
+                    </div>
+                    <input type="file" id="nsfwFeedMediaInput" accept="image/*, video/mp4, video/webm">
+                </div>
+                <div
+                    style="font-size: 0.7rem; color: #888; font-family: 'Orbitron'; margin-top: 5px; text-align: center;">
+                    (i) Sansürsüz, orijinal medyanı paylaş.</div>
+                <div id="nsfwFeedUploadProgress"
+                    style="display:none; font-size: 0.8rem; color: var(--blood-red); text-align: center; margin-top: 5px; font-family: 'Orbitron';">
+                    YÜKLENİYOR: %0</div>
+                <input type="hidden" id="nsfwFeedMediaUrl">
+                <input type="hidden" id="nsfwFeedMediaType">
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <input type="text" id="nsfwFeedPostTags" class="cyber-input"
+                    style="font-size: 0.9rem; padding: 8px; flex: 1; border-color: rgba(255, 0, 60, 0.5);"
+                    placeholder="#nsfw1 #nsfw2">
+                <button id="sendNsfwFeedBtn" class="cyber-button small"
+                    style="margin-top: 0; background: var(--blood-red); color: #fff;">YAYINLA</button>
+            </div>
+        </div>
+
+        <div class="feed-container" id="nsfwFeedContainer">
+            <div id="nsfwFeedLoadingText"
+                style="font-family: 'Orbitron'; color: #550000; font-size: 1.5rem; text-align: center; padding: 50px;">[
+                KARANLIK BÖLGE YÜKLENİYOR ]</div>
+            <div id="nsfwFeedContentArea"></div>
+            <div id="nsfwFeedLoader"
+                style="display: none; text-align: center; padding: 30px; color: var(--blood-red); font-family: 'Orbitron'; animation: blink 1s infinite;">
+                [ DAHA FAZLA GÜNAH ÇEKİLİYOR... ]</div>
         </div>
     </div>
 
@@ -1852,6 +1943,73 @@
             });
         }
 
+        // NSFW FEED JS KONTROLLERİ
+        const enterNsfwFeedBtn = document.getElementById('enterNsfwFeedBtn');
+        const feedScreenNsfw = document.getElementById('feedScreenNsfw');
+        const closeNsfwFeedBtn = document.getElementById('closeNsfwFeedBtn');
+        const nsfwWarningModal = document.getElementById('nsfwWarningModal');
+        const acceptNsfwBtn = document.getElementById('acceptNsfwBtn');
+        const declineNsfwBtn = document.getElementById('declineNsfwBtn');
+
+        if (enterNsfwFeedBtn) {
+            enterNsfwFeedBtn.addEventListener('click', () => {
+                window.location.hash = '#nsfw-feed';
+            });
+        }
+
+        if (closeNsfwFeedBtn) {
+            closeNsfwFeedBtn.addEventListener('click', () => {
+                window.location.hash = '#dashboard';
+            });
+        }
+
+        // NSFW Uyarı Modalı Butonları
+        acceptNsfwBtn.addEventListener('click', () => {
+            sessionStorage.setItem('nsfw_accepted', 'true');
+            nsfwWarningModal.style.display = 'none';
+            feedScreenNsfw.style.display = 'block';
+            document.body.style.overflow = "hidden";
+            fetchInitialNsfwFeeds();
+        });
+
+        declineNsfwBtn.addEventListener('click', () => {
+            nsfwWarningModal.style.display = 'none';
+            window.location.hash = '#dashboard';
+        });
+
+        // Toggle NSFW Feed Post Area
+        const toggleNsfwFeedPostBtn = document.getElementById('toggleNsfwFeedPostBtn');
+        const nsfwFeedPostArea = document.getElementById('nsfwFeedPostArea');
+        const closeNsfwFeedPostAreaBtn = document.getElementById('closeNsfwFeedPostAreaBtn');
+
+        function resetNsfwFeedPostForm() {
+            document.getElementById("nsfwFeedPostContent").value = "";
+            document.getElementById("nsfwFeedPostTags").value = "";
+            document.getElementById("nsfwFeedMediaUrl").value = "";
+            document.getElementById("nsfwFeedMediaType").value = "";
+            document.getElementById("nsfwFeedMediaInput").value = "";
+            document.getElementById("editingNsfwFeedPostId").value = "";
+            document.getElementById('nsfwFeedFileLabel').innerHTML = '<i class="fas fa-camera"></i> 18+ MEDYA EKLE (Max 50MB)';
+            document.getElementById("sendNsfwFeedBtn").innerText = "YAYINLA";
+        }
+
+        if (toggleNsfwFeedPostBtn && nsfwFeedPostArea) {
+            toggleNsfwFeedPostBtn.addEventListener('click', () => {
+                if (nsfwFeedPostArea.style.display === 'none' || nsfwFeedPostArea.style.display === '') {
+                    nsfwFeedPostArea.style.display = 'block';
+                    toggleNsfwFeedPostBtn.style.display = 'none';
+                } else {
+                    nsfwFeedPostArea.style.display = 'none';
+                }
+            });
+
+            closeNsfwFeedPostAreaBtn.addEventListener('click', () => {
+                nsfwFeedPostArea.style.display = 'none';
+                toggleNsfwFeedPostBtn.style.display = 'flex';
+                resetNsfwFeedPostForm();
+            });
+        }
+
         // Toggle Feed Post Area
         const toggleFeedPostBtn = document.getElementById('toggleFeedPostBtn');
         const feedPostArea = document.getElementById('feedPostArea');
@@ -1898,6 +2056,8 @@
             profileEditScreen.style.display = "none";
             publicProfileScreen.style.display = "none";
             feedScreen.style.display = "none";
+            feedScreenNsfw.style.display = "none";
+            nsfwWarningModal.style.display = "none";
             document.body.style.overflow = "auto";
 
             if (!alias) {
@@ -1908,7 +2068,7 @@
             }
 
             if (hash.startsWith('#public-profile/')) {
-                const targetAlias = hash.split('/')[1];
+                const targetAlias = decodeURIComponent(hash.split('/')[1]);
                 viewPublicProfile(targetAlias);
             } else if (hash === '#edit-profile') {
                 profileEditScreen.style.display = "block";
@@ -1917,6 +2077,16 @@
                 feedScreen.style.display = "block";
                 document.body.style.overflow = "hidden"; // Kaymayı durdur
                 fetchInitialFeeds(); // Feed'e her geçildiğinde sıfırdan çek
+            } else if (hash === '#nsfw-feed') {
+                profileDashboard.style.display = "block";
+                // Onay kontrolü
+                if (sessionStorage.getItem('nsfw_accepted') === 'true') {
+                    feedScreenNsfw.style.display = "block";
+                    document.body.style.overflow = "hidden";
+                    fetchInitialNsfwFeeds();
+                } else {
+                    nsfwWarningModal.style.display = "flex";
+                }
             } else {
                 // Default: Dashboard
                 profileDashboard.style.display = "block";
@@ -1952,8 +2122,8 @@
             const file = e.target.files[0];
             if (!file) return;
 
-            if (file.size > 5 * 1024 * 1024) {
-                alert("Sistem Reddi: Medya çok büyük. Maksimum 5MB yükleyebilirsin.");
+            if (file.size > 50 * 1024 * 1024) {
+                alert("Sistem Reddi: Medya çok büyük. Maksimum 50MB yükleyebilirsin.");
                 this.value = '';
                 return;
             }
@@ -1987,6 +2157,48 @@
                     document.getElementById('feedFileLabel').innerHTML = '<i class="fas fa-check"></i> ' + (isVideo ? 'VİDEO' : 'GÖRSEL') + ' HAZIR';
                     document.getElementById('feedFileLabel').style.color = "var(--cyber-cyan)";
                     document.getElementById('feedFileLabel').style.borderColor = "var(--cyber-cyan)";
+                }
+            );
+        });
+
+        // NSFW FEED MEDYA YÜKLEME (STORAGE)
+        document.getElementById('nsfwFeedMediaInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 50 * 1024 * 1024) {
+                alert("Sistem Reddi: Medya çok büyük. Maksimum 50MB yükleyebilirsin.");
+                this.value = '';
+                return;
+            }
+
+            const isVideo = file.type.startsWith('video/');
+            const typeStr = isVideo ? 'video' : 'image';
+            document.getElementById('nsfwFeedMediaType').value = typeStr;
+
+            const storageRef = ref(storage, 'nsfw_media/' + Date.now() + '_' + file.name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            const progressDiv = document.getElementById('nsfwFeedUploadProgress');
+            progressDiv.style.display = 'block';
+            document.getElementById('nsfwFeedFileLabel').innerText = "YÜKLENİYOR...";
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    progressDiv.innerText = `YÜKLENİYOR: %${Math.round(progress)}`;
+                },
+                (error) => {
+                    console.error("Yükleme hatası", error);
+                    alert("Sistem Reddi: Medya sunucuya iletilemedi.");
+                    progressDiv.style.display = 'none';
+                    document.getElementById('nsfwFeedFileLabel').innerHTML = '<i class="fas fa-camera"></i> TEKRAR DENE';
+                },
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    document.getElementById('nsfwFeedMediaUrl').value = downloadURL;
+                    progressDiv.style.display = 'none';
+                    document.getElementById('nsfwFeedFileLabel').innerHTML = '<i class="fas fa-check"></i> +18 HAZIR';
                 }
             );
         });
@@ -2546,7 +2758,7 @@
 
             if (data.mediaUrl) {
                 if (data.mediaType === 'video') {
-                    mediaHtml = `<video src="${data.mediaUrl}" autoplay loop muted playsinline style="position: absolute; width: 100%; height: 100%; object-fit: cover; z-index: 0; opacity: 0.6; filter: hue-rotate(${Math.floor(Math.random() * 30)}deg) contrast(1.2);"></video>`;
+                    mediaHtml = `<video src="${data.mediaUrl}" controls playsinline style="position: absolute; width: 100%; height: 100%; object-fit: contain; z-index: 1; opacity: 1; background: #000;"></video>`;
                 } else {
                     bgStyle = `background: url('${data.mediaUrl}') center/cover no-repeat;`;
                     mediaHtml = `<div style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 0;"></div>`;
@@ -2554,7 +2766,7 @@
             }
 
             const contentHtml = data.content ? `
-                <div style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; text-align: center; padding: 20px 10%; line-height: 1.3; text-shadow: 0 0 10px rgba(0,0,0,0.8); z-index: 5; position: relative;">
+                <div style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; text-align: center; padding: 20px 10%; line-height: 1.3; text-shadow: 0 0 10px rgba(0,0,0,0.8); z-index: 5; position: relative; pointer-events: none;">
                     "${data.content}"
                 </div>
             ` : '';
@@ -2677,6 +2889,298 @@
                 } catch (e) {
                     sendFeedBtn.innerText = "HATA OLUŞTU";
                     sendFeedBtn.disabled = false;
+                }
+            });
+        }
+
+        // --- NSFW SİBER AKIŞ JS MANTIĞI ---
+        let lastVisibleNsfwFeed = null;
+        let isFetchingNsfwFeed = false;
+        let hasMoreNsfwFeeds = true;
+
+        async function fetchInitialNsfwFeeds() {
+            const feedAreaNum = document.getElementById("nsfwFeedContentArea");
+            document.getElementById("nsfwFeedLoadingText").style.display = "block";
+            feedAreaNum.innerHTML = "";
+            lastVisibleNsfwFeed = null;
+            hasMoreNsfwFeeds = true;
+
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            if (myAlias && document.getElementById("toggleNsfwFeedPostBtn")) {
+                document.getElementById("toggleNsfwFeedPostBtn").style.display = "flex";
+            }
+
+            try {
+                const feedQ = query(collection(db, "globalNsfwFeed"), orderBy("timestamp", "desc"), limit(3));
+                const snap = await getDocs(feedQ);
+
+                document.getElementById("nsfwFeedLoadingText").style.display = "none";
+
+                if (snap.empty) {
+                    feedAreaNum.innerHTML = `<div style="font-family: 'Orbitron'; color: #880000; font-size: 1.5rem; text-align: center; padding: 50px;">[ HENÜZ GÜNAH İŞLENMEDİ ]</div>`;
+                    hasMoreNsfwFeeds = false;
+                    return;
+                }
+
+                lastVisibleNsfwFeed = snap.docs[snap.docs.length - 1];
+                snap.forEach(docSnap => {
+                    renderNsfwFeedItem(docSnap.id, docSnap.data());
+                });
+
+            } catch (e) {
+                console.error("NSFW Feed çekilemedi: ", e);
+                document.getElementById("nsfwFeedLoadingText").innerText = "[ BAĞLANTI HATASI ]";
+            }
+        }
+
+        async function fetchMoreNsfwFeeds() {
+            if (isFetchingNsfwFeed || !hasMoreNsfwFeeds || !lastVisibleNsfwFeed) return;
+            isFetchingNsfwFeed = true;
+            document.getElementById("nsfwFeedLoader").style.display = "block";
+
+            try {
+                const nextQ = query(collection(db, "globalNsfwFeed"), orderBy("timestamp", "desc"), startAfter(lastVisibleNsfwFeed), limit(3));
+                const nextSnap = await getDocs(nextQ);
+
+                document.getElementById("nsfwFeedLoader").style.display = "none";
+
+                if (nextSnap.empty) {
+                    hasMoreNsfwFeeds = false;
+                    document.getElementById("nsfwFeedContentArea").innerHTML += `<div style="padding:40px; text-align:center; color:#550000; font-family:'Orbitron'; scroll-snap-align: start; width:100%;">[ CEHENNEMİN DİBİNE ULAŞTINIZ ]</div>`;
+                } else {
+                    lastVisibleNsfwFeed = nextSnap.docs[nextSnap.docs.length - 1];
+                    nextSnap.forEach(docSnap => {
+                        renderNsfwFeedItem(docSnap.id, docSnap.data());
+                    });
+                }
+            } catch (e) { console.error("Daha fazla NSFW feed çekilemedi", e); }
+
+            isFetchingNsfwFeed = false;
+        }
+
+        document.getElementById("nsfwFeedContainer").addEventListener("scroll", (e) => {
+            const container = e.target;
+            if (container.scrollHeight - container.scrollTop <= container.clientHeight + 200) {
+                fetchMoreNsfwFeeds();
+            }
+        });
+
+        function renderNsfwFeedItem(id, data) {
+            const feedArea = document.getElementById("nsfwFeedContentArea");
+            const tagsFormatted = data.tags ? data.tags.split(' ').map(t => t.startsWith('#') ? t : `#${t}`).join(' ') : "";
+            const currentAlias = localStorage.getItem("hotdragons_alias");
+
+            let bgStyle = `background: radial-gradient(circle at center, rgba(${Math.floor(Math.random() * 60)}, 0, 0, 1) 0%, var(--void-bg) 100%);`;
+            let mediaHtml = "";
+
+            if (data.mediaUrl) {
+                if (data.mediaType === 'video') {
+                    mediaHtml = `<video src="${data.mediaUrl}" controls playsinline style="position: absolute; width: 100%; height: 100%; object-fit: contain; z-index: 1; opacity: 1; background: #000; border: 1px solid var(--blood-red);"></video>`;
+                } else {
+                    bgStyle = `background: url('${data.mediaUrl}') center/cover no-repeat;`;
+                    mediaHtml = `<div style="position: absolute; width: 100%; height: 100%; background: rgba(20,0,5,0.3); z-index: 0;"></div>`;
+                }
+            }
+
+            const contentHtml = data.content ? `
+                <div style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; text-align: center; padding: 20px 10%; line-height: 1.3; text-shadow: 0 0 15px var(--blood-red); z-index: 5; position: relative; pointer-events: none;">
+                    "${data.content}"
+                </div>
+            ` : '';
+
+            let authorActionsHtml = '';
+            if (currentAlias && (currentAlias === data.author || currentAlias.toLowerCase() === "sueyda")) {
+                const safeContent = (data.content || "").replace(/'/g, "\\'");
+                const safeTags = (data.tags || "").replace(/'/g, "\\'");
+                authorActionsHtml = `
+                    <div style="position: absolute; top: 15px; right: 15px; z-index: 20; display: flex; gap: 10px; background: rgba(20,0,5,0.7); padding: 5px 10px; border-radius: 5px; border: 1px solid var(--blood-red); backdrop-filter: blur(5px);">
+                        <button onclick="window.editNsfwFeedPost('${id}', '${safeContent}', '${safeTags}')" style="background: transparent; border: none; color: #ffaa00; cursor: pointer; font-size: 1.2rem; transition: 0.2s;" title="Düzenle"><i class="fas fa-edit"></i></button>
+                        <button onclick="window.deleteNsfwFeedPost('${id}')" style="background: transparent; border: none; color: #fff; cursor: pointer; font-size: 1.2rem; transition: 0.2s;" title="Sil"><i class="fas fa-trash"></i></button>
+                    </div>
+                `;
+            }
+
+            const itemHTML = `
+            <div class="feed-item" style="${bgStyle} border: 1px solid var(--blood-red); position: relative;">
+                ${mediaHtml}
+                ${contentHtml}
+                ${authorActionsHtml}
+
+                <div class="feed-actions" style="z-index: 10;">
+                    <div class="action-btn" onclick="window.toggleNsfwComments('${id}')" style="color:var(--blood-red); border-color:var(--blood-red);"><i class="fas fa-comment-dots"></i><span style="color:var(--blood-red);">FISILDA</span></div>
+                    <div class="action-btn" onclick="window.boostNsfwPost('${id}')" id="boostNsfwBtn_${id}" style="color:var(--blood-red); border-color:var(--blood-red);"><i class="fas fa-fire"></i><span id="boostNsfwCount_${id}">${data.boostCount || 0}</span></div>
+                </div>
+
+                <div class="feed-info" style="z-index: 10;">
+                    <div class="feed-alias" style="cursor:pointer; color:var(--blood-red); text-shadow: 0 0 10px var(--blood-red);" onclick="window.location.hash='#public-profile/${data.author}'">@${data.author}</div>
+                    <div class="feed-tags" style="color:#ffaa00;">${tagsFormatted}</div>
+                </div>
+            </div>`;
+
+            feedArea.insertAdjacentHTML('beforeend', itemHTML);
+        }
+
+        window.deleteNsfwFeedPost = async function (postId) {
+            if (confirm("Bu çılgınlığı kalıcı olarak temizlemek istediğine emin misin?")) {
+                try {
+                    await deleteDoc(doc(db, "globalNsfwFeed", postId));
+                    fetchInitialNsfwFeeds();
+                } catch (e) {
+                    console.error("Silme hatası:", e);
+                }
+            }
+        };
+
+        window.editNsfwFeedPost = function (postId, currentContent, currentTags) {
+            const feedPostArea = document.getElementById('nsfwFeedPostArea');
+            const toggleFeedPostBtn = document.getElementById('toggleNsfwFeedPostBtn');
+            const submitBtn = document.getElementById("sendNsfwFeedBtn");
+
+            feedPostArea.style.display = 'block';
+            toggleFeedPostBtn.style.display = 'none';
+
+            document.getElementById("nsfwFeedPostContent").value = currentContent;
+            document.getElementById("nsfwFeedPostTags").value = currentTags;
+            document.getElementById("editingNsfwFeedPostId").value = postId;
+
+            submitBtn.innerText = "GÜNCELLE";
+            submitBtn.style.background = "#ffaa00";
+        };
+
+        window.boostNsfwPost = async function (postId) {
+            const btn = document.getElementById(`boostNsfwBtn_${postId}`);
+            const countSpan = document.getElementById(`boostNsfwCount_${postId}`);
+
+            btn.style.color = '#fff';
+            btn.style.background = 'var(--blood-red)';
+            btn.style.transform = 'scale(1.1)';
+            btn.style.boxShadow = '0 0 25px var(--blood-red)';
+
+            let currentCount = parseInt(countSpan.innerText) || 0;
+            countSpan.innerText = currentCount + 1;
+            btn.style.pointerEvents = 'none';
+
+            try {
+                await updateDoc(doc(db, "globalNsfwFeed", postId), {
+                    boostCount: increment(1)
+                });
+            } catch (e) { console.error("Boost failed", e); }
+        };
+
+        let currentNsfwCommentPostId = null;
+        let nsfwCommentsUnsubscribe = null;
+
+        window.toggleNsfwComments = function (postId) {
+            const modal = document.getElementById('commentModal');
+            modal.style.display = 'flex';
+            currentNsfwCommentPostId = postId;
+            currentCommentPostId = null; // Normal feed'i pasifleştir
+
+            const listArea = document.getElementById('commentListArea');
+            listArea.innerHTML = `<div style="text-align:center; color: var(--blood-red); font-family: 'Orbitron'; padding: 20px;">[ YASAKLI SİNYALLER DİNLENİYOR... ]</div>`;
+
+            if (nsfwCommentsUnsubscribe) nsfwCommentsUnsubscribe();
+
+            const q = query(collection(db, `globalNsfwFeed/${postId}/comments`), orderBy("timestamp", "asc"));
+            nsfwCommentsUnsubscribe = onSnapshot(q, (snapshot) => {
+                if (snapshot.empty) {
+                    listArea.innerHTML = `<div style="text-align:center; color: #666; font-family: 'Orbitron'; padding: 20px;">Karanlığa ilk sen fısılda...</div>`;
+                    return;
+                }
+
+                listArea.innerHTML = "";
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    let tStr = "";
+                    if (data.timestamp) {
+                        const date = data.timestamp.toDate();
+                        tStr = date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+                    }
+
+                    listArea.innerHTML += `
+                        <div class="comment-item" style="border-color: var(--blood-red); background: rgba(255,0,60,0.05);">
+                            <div class="comment-alias" style="color: var(--blood-red);" onclick="document.getElementById('commentModal').style.display='none'; window.location.hash='#public-profile/${data.author}'">@${data.author}</div>
+                            <div class="comment-text">${data.content}</div>
+                            <div class="comment-time">${tStr}</div>
+                        </div>
+                    `;
+                });
+                setTimeout(() => listArea.scrollTop = listArea.scrollHeight, 100);
+            });
+        };
+
+        // Mevcut Fısılda butonunun hem normal feed hem nsfw feed desteklemesi için override
+        const sendWhisperBtnMain = document.getElementById("sendWhisperBtn");
+        if (sendWhisperBtnMain) {
+            // Önceki event listener'ı ezmek için klonlayıp değiştirmek en temizi
+            const newWhisperBtn = sendWhisperBtnMain.cloneNode(true);
+            sendWhisperBtnMain.parentNode.replaceChild(newWhisperBtn, sendWhisperBtnMain);
+
+            newWhisperBtn.addEventListener("click", async () => {
+                const input = document.getElementById("whisperInput");
+                const content = input.value.trim();
+                const alias = localStorage.getItem("hotdragons_alias") || "Anonim";
+
+                if (!content || (!currentCommentPostId && !currentNsfwCommentPostId)) return;
+
+                input.value = "";
+                try {
+                    const collectionPath = currentNsfwCommentPostId ? `globalNsfwFeed/${currentNsfwCommentPostId}/comments` : `globalFeed/${currentCommentPostId}/comments`;
+                    await addDoc(collection(db, collectionPath), {
+                        author: alias,
+                        content: content,
+                        timestamp: serverTimestamp()
+                    });
+                } catch (e) { console.error("Fısıltı hatası", e); }
+            });
+
+            // Enter key bind
+            document.getElementById("whisperInput").addEventListener("keypress", function (e) {
+                if (e.key === "Enter") newWhisperBtn.click();
+            });
+        }
+
+        const sendNsfwFeedBtn = document.getElementById("sendNsfwFeedBtn");
+        if (sendNsfwFeedBtn) {
+            sendNsfwFeedBtn.addEventListener("click", async () => {
+                const content = document.getElementById("nsfwFeedPostContent").value.trim();
+                const tags = document.getElementById("nsfwFeedPostTags").value.trim();
+                const alias = localStorage.getItem("hotdragons_alias");
+                const mediaUrl = document.getElementById("nsfwFeedMediaUrl").value;
+                const mediaType = document.getElementById("nsfwFeedMediaType").value;
+                const editingId = document.getElementById("editingNsfwFeedPostId").value;
+
+                if (!content && !mediaUrl && !editingId) { alert("Ağa hiçbir şey göndermedin."); return; }
+                if (content && content.length > 200) { alert("Sinyal çok uzun. Maksimum 200 karakter."); return; }
+
+                sendNsfwFeedBtn.innerText = "YAYINLANIYOR...";
+                sendNsfwFeedBtn.disabled = true;
+
+                try {
+                    if (editingId) {
+                        await updateDoc(doc(db, "globalNsfwFeed", editingId), { content: content, tags: tags });
+                        sendNsfwFeedBtn.innerText = "GÜNCELLENDİ";
+                    } else {
+                        await addDoc(collection(db, "globalNsfwFeed"), {
+                            content: content, tags: tags, author: alias, mediaUrl: mediaUrl || null,
+                            mediaType: mediaType || null, boostCount: 0, timestamp: serverTimestamp()
+                        });
+                        sendNsfwFeedBtn.innerText = "YAYINLANDI";
+                    }
+
+                    resetNsfwFeedPostForm();
+                    document.getElementById('nsfwFeedPostArea').style.display = 'none';
+                    document.getElementById('toggleNsfwFeedPostBtn').style.display = 'flex';
+                    fetchInitialNsfwFeeds();
+
+                    setTimeout(() => {
+                        sendNsfwFeedBtn.innerText = "YAYINLA";
+                        sendNsfwFeedBtn.disabled = false;
+                        sendNsfwFeedBtn.style.background = "var(--blood-red)";
+                    }, 2000);
+                } catch (e) {
+                    sendNsfwFeedBtn.innerText = "HATA OLUŞTU";
+                    sendNsfwFeedBtn.disabled = false;
                 }
             });
         }
