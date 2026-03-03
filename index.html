@@ -1026,17 +1026,6 @@
             overflow: hidden;
         }
 
-        .feed-item::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, rgba(0, 243, 255, 0.05) 3px, rgba(0, 243, 255, 0.05) 4px);
-            pointer-events: none;
-        }
-
         .feed-actions {
             position: absolute;
             right: 15px;
@@ -1467,6 +1456,7 @@
                                 <span class="p-tag">VIP GÖZETLEYEN</span>
                                 <span class="p-tag dark" id="profileGenderDisplay">Beden: Gizli</span>
                                 <span class="p-tag dark" id="profileAgeDisplay">Yaş: Gizli</span>
+                                <span class="p-tag dark" id="profileLastSeenDisplay">Son Görülme: Gizli</span>
                             </div>
 
                             <div class="profile-bio" id="profileBioDisplay">"Fantezi özeti henüz girilmedi..."</div>
@@ -1601,6 +1591,8 @@
                                     style="border-color: var(--hot-pink); color: var(--hot-pink);">Beden: ?</span>
                                 <span class="p-tag dark" id="publicAgeDisplay"
                                     style="border-color: var(--hot-pink); color: var(--hot-pink);">Yaş: ?</span>
+                                <span class="p-tag dark" id="publicLastSeenDisplay"
+                                    style="border-color: var(--hot-pink); color: var(--hot-pink);">Son Görülme: ?</span>
                             </div>
 
                             <div class="profile-bio" id="publicBioDisplay"
@@ -1831,6 +1823,51 @@
     </div>
 
     <style>
+        .boost-wrapper {
+            position: relative;
+        }
+
+        .boosters-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: 120%;
+            /* Gönderinin yukarısına taşı */
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 20, 30, 0.95);
+            border: 1px solid var(--cyber-cyan);
+            color: var(--cyber-cyan);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-family: 'Orbitron';
+            font-size: 0.8rem;
+            min-width: 150px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .boost-wrapper:hover .boosters-tooltip {
+            visibility: visible;
+            opacity: 1;
+            bottom: 140%;
+        }
+
+        /* Tooltip Arrow */
+        .boosters-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--cyber-cyan) transparent transparent transparent;
+        }
+
         @keyframes slideUp {
             from {
                 transform: translateY(100%);
@@ -1870,7 +1907,109 @@
             text-align: right;
             margin-top: 5px;
         }
+
+        .feed-video {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+            cursor: pointer;
+            background: #000;
+            left: 0;
+            top: 0;
+        }
+
+        @media (min-width: 850px) {
+            .feed-video {
+                object-fit: contain;
+            }
+        }
+
+        .feed-avatar-wrapper {
+            position: relative;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .feed-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid currentColor;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            font-size: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .feed-avatar-wrapper:hover .feed-avatar {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .feed-alias-tooltip {
+            position: absolute;
+            bottom: 120%;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid currentColor;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-family: 'Orbitron';
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            transform: translateY(10px);
+        }
+
+        .feed-avatar-wrapper:hover .feed-alias-tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
+    <div id="miniProfileModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 5000; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
+        <div
+            style="background: rgba(20, 0, 10, 0.95); width: 90%; max-width: 400px; border: 2px solid var(--cyber-cyan); border-radius: 15px; padding: 25px; box-shadow: 0 0 30px rgba(0, 243, 255, 0.4); text-align: center; position: relative;">
+            <button onclick="document.getElementById('miniProfileModal').style.display='none'"
+                style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: var(--blood-red); font-size: 1.5rem; cursor: pointer;"><i
+                    class="fas fa-times"></i></button>
+            <div id="mpAvatar"
+                style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--cyber-cyan); margin: 0 auto 15px; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; color: var(--cyber-cyan);">
+                <i class="fas fa-user-ninja"></i>
+            </div>
+            <h2 id="mpAlias"
+                style="font-family: 'Orbitron'; color: var(--cyber-cyan); margin-bottom: 5px; text-shadow: 0 0 10px var(--cyber-cyan);">
+                @RUMUZ</h2>
+            <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 15px;" id="mpLastSeen">Son Görülme: Aranıyor...
+            </div>
+            <div id="mpBio"
+                style="font-family: 'Rajdhani'; color: #fff; font-size: 1.1rem; margin-bottom: 20px; font-style: italic; border-left: 3px solid var(--hot-pink); padding-left: 10px; text-align: left;">
+                "..."</div>
+            <div
+                style="display: flex; justify-content: space-between; margin-bottom: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
+                <div style="text-align: left;">
+                    <div style="font-family: 'Orbitron'; color: var(--hot-pink); font-size: 0.8rem;">BEDEN</div>
+                    <div id="mpGender" style="font-weight: bold; color: #fff;">?</div>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-family: 'Orbitron'; color: var(--hot-pink); font-size: 0.8rem;">YAŞ</div>
+                    <div id="mpAge" style="font-weight: bold; color: #fff;">?</div>
+                </div>
+            </div>
+            <button id="mpTamProfilBtn" class="cyber-button" style="width: 100%; font-size: 0.9rem; padding: 10px;"><i
+                    class="fas fa-external-link-alt"></i> TAM PROFİLİ GÖR</button>
+        </div>
+    </div>
     <div id="commentModal"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 4000; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px);">
         <div
@@ -1900,7 +2039,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, startAfter, where, getDocs, updateDoc, doc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, startAfter, where, getDocs, updateDoc, doc, deleteDoc, increment, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -2210,6 +2349,87 @@
             return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
         }
 
+        const userCache = {};
+        window.getUserAvatar = async function (alias) {
+            if (userCache[alias]) return userCache[alias];
+            try {
+                const q = query(collection(db, "preRegistrations"), where("alias", "==", alias));
+                const snap = await getDocs(q);
+                if (!snap.empty && snap.docs[0].data().avatar) {
+                    userCache[alias] = snap.docs[0].data().avatar;
+                    return userCache[alias];
+                }
+            } catch (e) { }
+            userCache[alias] = "default";
+            return "default";
+        }
+
+        window.showMiniProfile = async function (alias) {
+            const modal = document.getElementById("miniProfileModal");
+            const mpAlias = document.getElementById("mpAlias");
+            const mpAvatar = document.getElementById("mpAvatar");
+            const mpBio = document.getElementById("mpBio");
+            const mpGender = document.getElementById("mpGender");
+            const mpAge = document.getElementById("mpAge");
+            const mpLastSeen = document.getElementById("mpLastSeen");
+            const mpTamProfilBtn = document.getElementById("mpTamProfilBtn");
+
+            modal.style.display = "flex";
+            mpAlias.innerText = "@" + alias;
+            mpAvatar.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            mpBio.innerText = "Bağlantı Kuruluyor...";
+            mpGender.innerText = "?";
+            mpAge.innerText = "?";
+            mpLastSeen.innerText = "Son Görülme: Aranıyor...";
+
+            mpTamProfilBtn.onclick = function () {
+                modal.style.display = 'none';
+                window.location.hash = '#public-profile/' + alias;
+            };
+
+            try {
+                const q = query(collection(db, "preRegistrations"), where("alias", "==", alias));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    const data = snap.docs[0].data();
+
+                    if (data.avatar) mpAvatar.innerHTML = `<img src="${data.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+                    else mpAvatar.innerHTML = '<i class="fas fa-user-ninja"></i>';
+
+                    if (data.bio) mpBio.innerText = `"${data.bio}"`;
+                    else mpBio.innerText = '"Sessizliği tercih ediyor..."';
+
+                    if (data.gender) mpGender.innerText = data.gender;
+
+                    if (data.dob) {
+                        const birthDate = new Date(data.dob);
+                        const ageDate = new Date(Date.now() - birthDate.getTime());
+                        mpAge.innerText = Math.abs(ageDate.getUTCFullYear() - 1970);
+                    }
+
+                    if (data.lastSeen) {
+                        const date = data.lastSeen.toDate();
+                        mpLastSeen.innerText = `Son Görülme: ${date.toLocaleDateString('tr-TR')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                    } else {
+                        mpLastSeen.innerText = "Son Görülme: Gizli";
+                    }
+
+                    const themeColor = data.themeColor || "var(--cyber-cyan)";
+                    modal.querySelector('div>div').style.borderColor = themeColor;
+                    modal.querySelector('div>div').style.boxShadow = `0 0 30px ${themeColor}80`;
+                    mpAlias.style.color = themeColor;
+                    mpAlias.style.textShadow = `0 0 10px ${themeColor}`;
+                    mpAvatar.style.borderColor = themeColor;
+                    mpAvatar.style.color = themeColor;
+                } else {
+                    mpAvatar.innerHTML = '<i class="fas fa-ghost"></i>';
+                    mpBio.innerText = "Kayıp Ruh...";
+                }
+            } catch (e) {
+                mpBio.innerText = "Bağlantı Hatası!";
+            }
+        };
+
         async function viewPublicProfile(targetAlias) {
             formContainer.style.display = "none";
             profileDashboard.style.display = "none";
@@ -2249,6 +2469,13 @@
                         const birthDate = new Date(data.dob);
                         const ageDate = new Date(Date.now() - birthDate.getTime());
                         document.getElementById("publicAgeDisplay").innerText = `Yaş: ${Math.abs(ageDate.getUTCFullYear() - 1970)}`;
+                    }
+
+                    if (data.lastSeen) {
+                        const date = data.lastSeen.toDate();
+                        document.getElementById("publicLastSeenDisplay").innerText = `Son Görülme: ${date.toLocaleDateString('tr-TR')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                    } else {
+                        document.getElementById("publicLastSeenDisplay").innerText = "Son Görülme: Gizli";
                     }
 
                     document.getElementById("publicJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(data.timestamp)}`;
@@ -2369,6 +2596,13 @@
                         const ageDate = new Date(Date.now() - birthDate.getTime());
                         document.getElementById("profileAgeDisplay").innerText = `Yaş: ${Math.abs(ageDate.getUTCFullYear() - 1970)}`;
                         document.getElementById('editDob').value = userData.dob;
+                    }
+
+                    if (userData.lastSeen) {
+                        const date = userData.lastSeen.toDate();
+                        document.getElementById("profileLastSeenDisplay").innerText = `Son Görülme: ${date.toLocaleDateString('tr-TR')} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+                    } else {
+                        document.getElementById("profileLastSeenDisplay").innerText = "Son Görülme: Gizli";
                     }
 
                     document.getElementById("myJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(userData.timestamp)}`;
@@ -2586,6 +2820,27 @@
             });
         }
 
+        // --- VİDEO PERFORMANS OPTİMİZASYONU ---
+        // Ekrana giren videoyu oynat, çıkanı durdur
+        const videoObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const video = entry.target;
+                if (entry.isIntersecting) {
+                    // Video ekranda %60 göründüğünde oynat
+                    video.play().catch(e => console.log("Otomatik oynatma engellendi", e));
+                } else {
+                    // Ekranda değilse durdur (Performans tasarrufu)
+                    video.pause();
+                }
+            });
+        }, { threshold: 0.6 });
+
+        // Feed item render edildikten sonra videoyu observer'a eklemek için ufak bir yardımcı fonksiyon
+        window.observeNewVideos = function () {
+            const videos = document.querySelectorAll('.feed-video');
+            videos.forEach(vid => videoObserver.observe(vid));
+        };
+
         // --- SİBER AKIŞ (INFINITE FEED) JS MANTIĞI ---
         let lastVisibleFeed = null;
         let isFetchingFeed = false;
@@ -2621,6 +2876,8 @@
                     renderFeedItem(docSnap.id, docSnap.data());
                 });
 
+                window.observeNewVideos();
+
             } catch (e) {
                 console.error("Feed çekilemedi: ", e);
                 document.getElementById("feedLoadingText").innerText = "[ BAĞLANTI HATASI ]";
@@ -2646,6 +2903,8 @@
                     nextSnap.forEach(docSnap => {
                         renderFeedItem(docSnap.id, docSnap.data());
                     });
+
+                    window.observeNewVideos();
                 }
             } catch (e) { console.error("Daha fazla feed çekilemedi", e); }
 
@@ -2663,24 +2922,46 @@
 
         // BOOST VE YORUM FONKSİYONLARI
         window.boostPost = async function (postId) {
+            const alias = localStorage.getItem("hotdragons_alias");
+            if (!alias) return;
+
             const btn = document.getElementById(`boostBtn_${postId}`);
             const countSpan = document.getElementById(`boostCount_${postId}`);
+            if (!btn || !countSpan) return;
 
-            btn.style.color = 'var(--cyber-cyan)';
-            btn.style.borderColor = 'var(--cyber-cyan)';
-            btn.style.transform = 'scale(1.1)';
-            btn.style.boxShadow = '0 0 25px var(--cyber-cyan)';
-            btn.style.textShadow = '0 0 5px #fff';
-
+            // Check if active (already boosted) locally based on style/state
+            const isBoosted = btn.style.pointerEvents === 'none' || btn.style.boxShadow.includes('25px');
             let currentCount = parseInt(countSpan.innerText) || 0;
-            countSpan.innerText = currentCount + 1;
-            btn.style.pointerEvents = 'none';
 
-            try {
-                await updateDoc(doc(db, "globalFeed", postId), {
-                    boostCount: increment(1)
-                });
-            } catch (e) { console.error("Boost failed", e); }
+            if (isBoosted) {
+                // Toggling off (Un-boost)
+                btn.style.color = '';
+                btn.style.borderColor = '';
+                btn.style.transform = '';
+                btn.style.boxShadow = '';
+                btn.style.textShadow = '';
+                btn.style.pointerEvents = 'auto'; // allow re-clicking
+                countSpan.innerText = Math.max(0, currentCount - 1);
+
+                try {
+                    await updateDoc(doc(db, "globalFeed", postId), { boosters: arrayRemove(alias) });
+                    await updateDoc(doc(db, "preRegistrations", alias), { likedPosts: arrayRemove(postId) }).catch(e => console.log("No personal doc found", e));
+                } catch (e) { console.error("Un-boost failed", e); }
+            } else {
+                // Toggling on (Boost)
+                btn.style.color = 'var(--cyber-cyan)';
+                btn.style.borderColor = 'var(--cyber-cyan)';
+                btn.style.transform = 'scale(1.1)';
+                btn.style.boxShadow = '0 0 25px var(--cyber-cyan)';
+                btn.style.textShadow = '0 0 5px #fff';
+                // Butonu deaktif yapmıyoruz, artık toggle açık. pointerEvents auto kalıyor.
+                countSpan.innerText = currentCount + 1;
+
+                try {
+                    await updateDoc(doc(db, "globalFeed", postId), { boosters: arrayUnion(alias) });
+                    await updateDoc(doc(db, "preRegistrations", alias), { likedPosts: arrayUnion(postId) }).catch(e => console.log("No personal doc found", e));
+                } catch (e) { console.error("Boost failed", e); }
+            }
         };
 
         let currentCommentPostId = null;
@@ -2714,7 +2995,7 @@
 
                     listArea.innerHTML += `
                         <div class="comment-item">
-                            <div class="comment-alias" onclick="document.getElementById('commentModal').style.display='none'; window.location.hash='#public-profile/${data.author}'">@${data.author}</div>
+                            <div class="comment-alias" onclick="document.getElementById('commentModal').style.display='none'; window.showMiniProfile('${data.author}')">@${data.author}</div>
                             <div class="comment-text">${data.content}</div>
                             <div class="comment-time">${tStr}</div>
                         </div>
@@ -2748,6 +3029,21 @@
             });
         }
 
+        window.toggleVideoPlay = function (videoEl) {
+            const overlay = videoEl.nextElementSibling;
+            if (videoEl.paused) {
+                videoEl.play();
+                videoEl.muted = false; // Tıklayınca sesi aç
+                if (overlay) overlay.style.display = 'none';
+            } else {
+                videoEl.pause();
+                if (overlay) {
+                    overlay.style.display = 'block';
+                    overlay.innerHTML = '<i class="fas fa-pause"></i>';
+                }
+            }
+        };
+
         function renderFeedItem(id, data) {
             const feedArea = document.getElementById("feedContentArea");
             const tagsFormatted = data.tags ? data.tags.split(' ').map(t => t.startsWith('#') ? t : `#${t}`).join(' ') : "";
@@ -2758,7 +3054,20 @@
 
             if (data.mediaUrl) {
                 if (data.mediaType === 'video') {
-                    mediaHtml = `<video src="${data.mediaUrl}" controls playsinline style="position: absolute; width: 100%; height: 100%; object-fit: contain; z-index: 1; opacity: 1; background: #000;"></video>`;
+                    mediaHtml = `
+                        <video 
+                            src="${data.mediaUrl}" 
+                            autoplay
+                            loop 
+                            muted 
+                            playsinline 
+                            preload="metadata"
+                            class="feed-video"
+                            onclick="window.toggleVideoPlay(this)">
+                        </video>
+                        <div class="play-pause-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; font-size: 4rem; color: rgba(255,255,255,0.5); display: none; pointer-events: none;">
+                            <i class="fas fa-play"></i>
+                        </div>`;
                 } else {
                     bgStyle = `background: url('${data.mediaUrl}') center/cover no-repeat;`;
                     mediaHtml = `<div style="position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 0;"></div>`;
@@ -2766,7 +3075,7 @@
             }
 
             const contentHtml = data.content ? `
-                <div style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; text-align: center; padding: 20px 10%; line-height: 1.3; text-shadow: 0 0 10px rgba(0,0,0,0.8); z-index: 5; position: relative; pointer-events: none;">
+                <div style="font-family: 'Rajdhani'; color: #fff; font-size: 1.3rem; text-align: left; padding: 20px 20px 40px 20px; line-height: 1.4; text-shadow: 0 1px 3px rgba(0,0,0,0.8); z-index: 5; position: absolute; bottom: 0; width: 100%; pointer-events: none; background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);">
                     "${data.content}"
                 </div>
             ` : '';
@@ -2784,6 +3093,16 @@
                 `;
             }
 
+            // Beğeni Sayısı ve Durumu
+            const boostersArray = data.boosters || [];
+            const boostCountDisplay = boostersArray.length > 0 ? boostersArray.length : (data.boostCount || 0);
+            const hasBoosted = boostersArray.includes(currentAlias);
+            let boostersTooltipHTML = "";
+            if (boostersArray.length > 0) {
+                const tooltipText = boostersArray.map(b => "@" + b).join("<br>");
+                boostersTooltipHTML = `<div class="boosters-tooltip">${tooltipText}</div>`;
+            }
+
             const itemHTML = `
             <div class="feed-item" style="${bgStyle} position: relative;">
                 ${mediaHtml}
@@ -2792,16 +3111,29 @@
 
                 <div class="feed-actions" style="z-index: 10;">
                     <div class="action-btn" onclick="window.toggleComments('${id}')" id="commentBtn_${id}"><i class="fas fa-comment-dots"></i><span>FISILDA</span></div>
-                    <div class="action-btn" onclick="window.boostPost('${id}')" id="boostBtn_${id}"><i class="fas fa-fire"></i><span id="boostCount_${id}">${data.boostCount || 0}</span></div>
+                    <div class="action-btn boost-wrapper" style="position:relative; ${hasBoosted ? 'color:var(--cyber-cyan); border-color:var(--cyber-cyan); box-shadow:0 0 25px var(--cyber-cyan);' : ''}" onclick="window.boostPost('${id}')" id="boostBtn_${id}">
+                        <i class="fas fa-fire"></i><span id="boostCount_${id}" style="pointer-events:none;">${boostCountDisplay}</span>
+                        ${boostersTooltipHTML}
+                    </div>
                 </div>
 
-                <div class="feed-info" style="z-index: 10;">
-                    <div class="feed-alias" style="cursor:pointer;" onclick="window.location.hash='#public-profile/${data.author}'">@${data.author}</div>
-                    <div class="feed-tags">${tagsFormatted}</div>
+                <div class="feed-info" style="z-index: 10; display: flex; align-items: center; gap: 10px;">
+                    <div class="feed-avatar-wrapper" style="color: var(--cyber-cyan);" onclick="window.showMiniProfile('${data.author}')">
+                        <div class="feed-avatar" id="avatar_feed_${id}"><i class="fas fa-user-ninja"></i></div>
+                        <div class="feed-alias-tooltip">@${data.author}</div>
+                    </div>
+                    <div class="feed-tags" style="margin-top: 5px;">${tagsFormatted}</div>
                 </div>
             </div>`;
 
             feedArea.insertAdjacentHTML('beforeend', itemHTML);
+
+            window.getUserAvatar(data.author).then(avatar => {
+                const avEl = document.getElementById(`avatar_feed_${id}`);
+                if (avEl && avatar !== "default") {
+                    avEl.innerHTML = `<img src="${avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+                }
+            });
         }
 
         // Feed Post Silme
@@ -2868,7 +3200,7 @@
                             author: alias,
                             mediaUrl: mediaUrl || null,
                             mediaType: mediaType || null,
-                            boostCount: 0,
+                            boosters: [], // Use boosters array instead of boostCount
                             timestamp: serverTimestamp()
                         });
                         sendFeedBtn.innerText = "YAYINLANDI";
@@ -2927,6 +3259,8 @@
                     renderNsfwFeedItem(docSnap.id, docSnap.data());
                 });
 
+                window.observeNewVideos();
+
             } catch (e) {
                 console.error("NSFW Feed çekilemedi: ", e);
                 document.getElementById("nsfwFeedLoadingText").innerText = "[ BAĞLANTI HATASI ]";
@@ -2952,6 +3286,8 @@
                     nextSnap.forEach(docSnap => {
                         renderNsfwFeedItem(docSnap.id, docSnap.data());
                     });
+
+                    window.observeNewVideos();
                 }
             } catch (e) { console.error("Daha fazla NSFW feed çekilemedi", e); }
 
@@ -2975,7 +3311,20 @@
 
             if (data.mediaUrl) {
                 if (data.mediaType === 'video') {
-                    mediaHtml = `<video src="${data.mediaUrl}" controls playsinline style="position: absolute; width: 100%; height: 100%; object-fit: contain; z-index: 1; opacity: 1; background: #000; border: 1px solid var(--blood-red);"></video>`;
+                    mediaHtml = `
+                        <video 
+                            src="${data.mediaUrl}" 
+                            autoplay
+                            loop 
+                            muted 
+                            playsinline 
+                            preload="metadata"
+                            class="feed-video"
+                            onclick="window.toggleVideoPlay(this)">
+                        </video>
+                        <div class="play-pause-overlay" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2; font-size: 4rem; color: rgba(255,255,255,0.5); display: none; pointer-events: none;">
+                            <i class="fas fa-play"></i>
+                        </div>`;
                 } else {
                     bgStyle = `background: url('${data.mediaUrl}') center/cover no-repeat;`;
                     mediaHtml = `<div style="position: absolute; width: 100%; height: 100%; background: rgba(20,0,5,0.3); z-index: 0;"></div>`;
@@ -2983,7 +3332,7 @@
             }
 
             const contentHtml = data.content ? `
-                <div style="font-family: 'Rajdhani'; color: #fff; font-size: 1.8rem; text-align: center; padding: 20px 10%; line-height: 1.3; text-shadow: 0 0 15px var(--blood-red); z-index: 5; position: relative; pointer-events: none;">
+                <div style="font-family: 'Rajdhani'; color: #fff; font-size: 1.3rem; text-align: left; padding: 20px 20px 40px 20px; line-height: 1.4; text-shadow: 0 0 15px var(--blood-red); z-index: 5; position: absolute; bottom: 0; width: 100%; pointer-events: none; background: linear-gradient(to top, rgba(20,0,5,0.95) 0%, rgba(20,0,5,0.6) 50%, transparent 100%);">
                     "${data.content}"
                 </div>
             ` : '';
@@ -3000,6 +3349,16 @@
                 `;
             }
 
+            // Beğeni Sayısı ve Durumu
+            const nsfwBoostersArray = data.boosters || [];
+            const boostNsfwCountDisplay = nsfwBoostersArray.length > 0 ? nsfwBoostersArray.length : (data.boostCount || 0);
+            const hasNsfwBoosted = nsfwBoostersArray.includes(currentAlias);
+            let nsfwBoostersTooltipHTML = "";
+            if (nsfwBoostersArray.length > 0) {
+                const tooltipText = nsfwBoostersArray.map(b => "@" + b).join("<br>");
+                nsfwBoostersTooltipHTML = `<div class="boosters-tooltip" style="border-color: var(--blood-red); color: #fff; background: rgba(20,0,5,0.95);">${tooltipText}</div>`;
+            }
+
             const itemHTML = `
             <div class="feed-item" style="${bgStyle} border: 1px solid var(--blood-red); position: relative;">
                 ${mediaHtml}
@@ -3008,16 +3367,29 @@
 
                 <div class="feed-actions" style="z-index: 10;">
                     <div class="action-btn" onclick="window.toggleNsfwComments('${id}')" style="color:var(--blood-red); border-color:var(--blood-red);"><i class="fas fa-comment-dots"></i><span style="color:var(--blood-red);">FISILDA</span></div>
-                    <div class="action-btn" onclick="window.boostNsfwPost('${id}')" id="boostNsfwBtn_${id}" style="color:var(--blood-red); border-color:var(--blood-red);"><i class="fas fa-fire"></i><span id="boostNsfwCount_${id}">${data.boostCount || 0}</span></div>
+                    <div class="action-btn boost-wrapper" style="position:relative; ${hasNsfwBoosted ? 'color:#fff; background:var(--blood-red); box-shadow:0 0 25px var(--blood-red);' : 'color:var(--blood-red); border-color:var(--blood-red);'}" onclick="window.boostNsfwPost('${id}')" id="boostNsfwBtn_${id}">
+                        <i class="fas fa-fire"></i><span id="boostNsfwCount_${id}" style="pointer-events:none;">${boostNsfwCountDisplay}</span>
+                        ${nsfwBoostersTooltipHTML}
+                    </div>
                 </div>
 
-                <div class="feed-info" style="z-index: 10;">
-                    <div class="feed-alias" style="cursor:pointer; color:var(--blood-red); text-shadow: 0 0 10px var(--blood-red);" onclick="window.location.hash='#public-profile/${data.author}'">@${data.author}</div>
-                    <div class="feed-tags" style="color:#ffaa00;">${tagsFormatted}</div>
+                <div class="feed-info" style="z-index: 10; display: flex; align-items: center; gap: 10px;">
+                    <div class="feed-avatar-wrapper" style="color: var(--blood-red);" onclick="window.showMiniProfile('${data.author}')">
+                        <div class="feed-avatar" id="avatar_nsfw_${id}"><i class="fas fa-fire"></i></div>
+                        <div class="feed-alias-tooltip" style="border-color: var(--blood-red); background: rgba(255,0,0,0.1);">@${data.author}</div>
+                    </div>
+                    <div class="feed-tags" style="color:#ffaa00; margin-top: 5px;">${tagsFormatted}</div>
                 </div>
             </div>`;
 
             feedArea.insertAdjacentHTML('beforeend', itemHTML);
+
+            window.getUserAvatar(data.author).then(avatar => {
+                const avEl = document.getElementById(`avatar_nsfw_${id}`);
+                if (avEl && avatar !== "default") {
+                    avEl.innerHTML = `<img src="${avatar}" style="width:100%; height:100%; object-fit:cover;">`;
+                }
+            });
         }
 
         window.deleteNsfwFeedPost = async function (postId) {
@@ -3048,23 +3420,43 @@
         };
 
         window.boostNsfwPost = async function (postId) {
+            const alias = localStorage.getItem("hotdragons_alias");
+            if (!alias) return;
+
             const btn = document.getElementById(`boostNsfwBtn_${postId}`);
             const countSpan = document.getElementById(`boostNsfwCount_${postId}`);
+            if (!btn || !countSpan) return;
 
-            btn.style.color = '#fff';
-            btn.style.background = 'var(--blood-red)';
-            btn.style.transform = 'scale(1.1)';
-            btn.style.boxShadow = '0 0 25px var(--blood-red)';
-
+            const isBoosted = btn.style.background.includes('var(--blood-red)') || btn.style.boxShadow.includes('var(--blood-red)');
             let currentCount = parseInt(countSpan.innerText) || 0;
-            countSpan.innerText = currentCount + 1;
-            btn.style.pointerEvents = 'none';
 
-            try {
-                await updateDoc(doc(db, "globalNsfwFeed", postId), {
-                    boostCount: increment(1)
-                });
-            } catch (e) { console.error("Boost failed", e); }
+            if (isBoosted) {
+                // Toggling off
+                btn.style.color = 'var(--blood-red)';
+                btn.style.background = 'transparent';
+                btn.style.borderColor = 'var(--blood-red)';
+                btn.style.transform = '';
+                btn.style.boxShadow = '';
+                countSpan.innerText = Math.max(0, currentCount - 1);
+
+                try {
+                    await updateDoc(doc(db, "globalNsfwFeed", postId), { boosters: arrayRemove(alias) });
+                    await updateDoc(doc(db, "preRegistrations", alias), { likedPosts: arrayRemove(postId) }).catch(e => console.log("No personal doc found", e));
+                } catch (e) { console.error("Un-boost nsfw failed", e); }
+            } else {
+                // Toggling on
+                btn.style.color = '#fff';
+                btn.style.background = 'var(--blood-red)';
+                btn.style.borderColor = 'var(--blood-red)';
+                btn.style.transform = 'scale(1.1)';
+                btn.style.boxShadow = '0 0 25px var(--blood-red)';
+                countSpan.innerText = currentCount + 1;
+
+                try {
+                    await updateDoc(doc(db, "globalNsfwFeed", postId), { boosters: arrayUnion(alias) });
+                    await updateDoc(doc(db, "preRegistrations", alias), { likedPosts: arrayUnion(postId) }).catch(e => console.log("No personal doc found", e));
+                } catch (e) { console.error("Boost nsfw failed", e); }
+            }
         };
 
         let currentNsfwCommentPostId = null;
@@ -3099,7 +3491,7 @@
 
                     listArea.innerHTML += `
                         <div class="comment-item" style="border-color: var(--blood-red); background: rgba(255,0,60,0.05);">
-                            <div class="comment-alias" style="color: var(--blood-red);" onclick="document.getElementById('commentModal').style.display='none'; window.location.hash='#public-profile/${data.author}'">@${data.author}</div>
+                            <div class="comment-alias" style="color: var(--blood-red);" onclick="document.getElementById('commentModal').style.display='none'; window.showMiniProfile('${data.author}')">@${data.author}</div>
                             <div class="comment-text">${data.content}</div>
                             <div class="comment-time">${tStr}</div>
                         </div>
@@ -3195,6 +3587,13 @@
                 if (!querySnapshot.empty) {
                     btn.innerText = "KİMLİK DOĞRULANDI"; btn.style.background = "#00ff88"; btn.style.color = "#000";
                     localStorage.setItem("hotdragons_alias", alias); localStorage.setItem("hotdragons_doc_id", querySnapshot.docs[0].id);
+
+                    try {
+                        await updateDoc(doc(db, "preRegistrations", querySnapshot.docs[0].id), {
+                            lastSeen: serverTimestamp()
+                        });
+                    } catch (err) { console.error("LastSeen güncellenemedi", err); }
+
                     setTimeout(() => window.location.reload(), 1000);
                 } else {
                     btn.innerText = "KİMLİK REDDEDİLDİ"; btn.style.background = "transparent"; btn.style.color = "red"; btn.style.border = "1px solid red";
@@ -3248,7 +3647,7 @@
                 btn.innerText = "KİLİT KIRILIYOR...";
                 const docRef = await addDoc(collection(db, "preRegistrations"), {
                     alias: alias, email: email, password: password, gender: "Gizli", bio: "", dob: "", avatar: "",
-                    themeColor: "#ff003c", socialLink: "", timestamp: serverTimestamp()
+                    themeColor: "#ff003c", socialLink: "", timestamp: serverTimestamp(), lastSeen: serverTimestamp()
                 });
 
                 localStorage.setItem("hotdragons_alias", alias); localStorage.setItem("hotdragons_doc_id", docRef.id);
