@@ -3824,6 +3824,14 @@
         if (localStorage.getItem("hotdragons_alias")) {
             listenInboundRequests();
             listenActiveUplinks();
+
+            // Kullanıcının Son Görülme Zamanını Otomatik Güncelle
+            const docId = localStorage.getItem("hotdragons_doc_id");
+            if (docId) {
+                updateDoc(doc(db, "preRegistrations", docId), {
+                    lastSeen: serverTimestamp()
+                }).catch(e => console.error("Son görülme güncellenemedi:", e));
+            }
         }
     </script>
 </body>
