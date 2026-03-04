@@ -12,6 +12,13 @@
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- EmailJS Kütüphanesi -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        (function () {
+            emailjs.init("NfGTZy9DZdvwT29C5"); // Senin Public Key'in
+        })();
+    </script>
     <style>
         /* SİSTEM KÖK DEĞİŞKENLERİ */
         :root {
@@ -1369,6 +1376,28 @@
                         autocomplete="off">
                 </div>
                 <button type="submit" class="cyber-button" id="loginSubmitBtn">BAĞLANTIYI KUR</button>
+                <button type="button" id="forgotPasswordBtn" class="cyber-button outline small"
+                    style="margin-top: 10px; width: 100%;">ŞİFREMİ UNUTTUM</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ŞİFRE KURTARMA MODALI -->
+    <div id="forgotPasswordModal" class="login-modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeForgotModalBtn">&times;</span>
+            <div class="terminal-header" style="font-size: 1.5rem; margin-bottom: 20px;">ŞİFRE <span>KURTARMA</span>
+            </div>
+            <div class="terminal-desc">Ağa kayıtlı e-posta adresini gir. Sistem, verilerini kontrol edip şifreni
+                iletecek.</div>
+            <form id="forgotPasswordForm">
+                <div class="input-group">
+                    <label>Gizli E-Mail</label>
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="resetEmailInput" class="cyber-input" placeholder="gizli@proton.me" required
+                        autocomplete="off">
+                </div>
+                <button type="submit" class="cyber-button" id="resetSubmitBtn">SİNYALİ GÖNDER</button>
             </form>
         </div>
     </div>
@@ -3832,6 +3861,89 @@
                     lastSeen: serverTimestamp()
                 }).catch(e => console.error("Son görülme güncellenemedi:", e));
             }
+        }
+
+        // --- ŞİFREMİ UNUTTUM SİSTEMİ JS ---
+        const forgotPasswordBtn = document.getElementById('forgotPasswordBtn');
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+        const closeForgotModalBtn = document.getElementById('closeForgotModalBtn');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const resetSubmitBtn = document.getElementById('resetSubmitBtn');
+
+        // Modallar arası geçiş
+        if (forgotPasswordBtn) {
+            forgotPasswordBtn.addEventListener('click', () => {
+                document.getElementById('loginModal').style.display = 'none';
+                forgotPasswordModal.style.display = 'flex';
+            });
+        }
+
+        if (closeForgotModalBtn) {
+            closeForgotModalBtn.addEventListener('click', () => {
+                forgotPasswordModal.style.display = 'none';
+            });
+        }
+
+        // Şifre Sıfırlama İsteği Gönderme
+        if (forgotPasswordForm) {
+            forgotPasswordForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+                const emailToReset = document.getElementById('resetEmailInput').value.trim();
+                const originalText = resetSubmitBtn.innerText;
+
+                resetSubmitBtn.innerText = "VERİTABANI TARANIYOR...";
+                resetSubmitBtn.disabled = true;
+
+                try {
+                    // Firebase Firestore'dan E-Mail sorgusu
+                    const emailQuery = query(collection(db, "preRegistrations"), where("email", "==", emailToReset));
+                    const querySnapshot = await getDocs(emailQuery);
+
+                    if (!querySnapshot.empty) {
+                        const userData = querySnapshot.docs[0].data();
+
+                        resetSubmitBtn.innerText = "E-POSTA İLETİLİYOR...";
+
+                        // KENDİ SERVICE ID VE TEMPLATE ID'N BURADA:
+                        await emailjs.send("service_wx6t1ub", "template_8unhfil", {
+                            to_email: userData.email,
+                            alias: userData.alias,
+                            password: userData.password
+                        });
+
+                        resetSubmitBtn.innerText = "BAŞARILI! MAILINI KONTROL ET";
+                        resetSubmitBtn.style.background = "#00ff88";
+                        resetSubmitBtn.style.color = "#000";
+
+                        setTimeout(() => {
+                            forgotPasswordModal.style.display = 'none';
+                            resetSubmitBtn.innerText = originalText;
+                            resetSubmitBtn.style = "";
+                            resetSubmitBtn.disabled = false;
+                            forgotPasswordForm.reset();
+                        }, 3000);
+
+                    } else {
+                        resetSubmitBtn.innerText = "BU E-MAIL AĞDA YOK";
+                        resetSubmitBtn.style.background = "transparent";
+                        resetSubmitBtn.style.border = "2px solid red";
+                        resetSubmitBtn.style.color = "red";
+
+                        setTimeout(() => {
+                            resetSubmitBtn.innerText = originalText;
+                            resetSubmitBtn.style = "";
+                            resetSubmitBtn.disabled = false;
+                        }, 3000);
+                    }
+                } catch (error) {
+                    console.error("Şifre kurtarma hatası:", error);
+                    resetSubmitBtn.innerText = "SİSTEM HATASI";
+                    setTimeout(() => {
+                        resetSubmitBtn.innerText = originalText;
+                        resetSubmitBtn.disabled = false;
+                    }, 3000);
+                }
+            });
         }
     </script>
 </body>
