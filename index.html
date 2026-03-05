@@ -1583,11 +1583,11 @@
                             <label>Siber Yüz (Profil Fotoğrafı)</label>
                             <div class="file-input-wrapper">
                                 <div class="file-input-btn" id="fileInputLabel"><i class="fas fa-camera"></i> GÖRÜNTÜ
-                                    YÜKLE (Max 500KB)</div>
+                                    YÜKLE (Max 5MB)</div>
                                 <input type="file" id="editAvatar"
                                     accept="image/png, image/jpeg, image/gif, image/webp">
                             </div>
-                            <input type="hidden" id="editAvatarBase64">
+                            <input type="hidden" id="editAvatarUrl">
                         </div>
 
                         <div class="input-group">
@@ -2059,6 +2059,42 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* ADMIN TAB SİSTEMİ */
+        .admin-tab-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 0, 0, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .admin-tab-btn {
+            background: transparent;
+            color: #888;
+            border: none;
+            font-family: 'Orbitron';
+            font-size: 1rem;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 2px;
+        }
+
+        .admin-tab-btn.active {
+            color: red;
+            border-bottom: 3px solid red;
+            text-shadow: 0 0 10px red;
+        }
+
+        .admin-tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .admin-tab-content.active {
+            display: block;
+        }
     </style>
     <div id="miniProfileModal" onclick="if(event.target === this) this.style.display='none'"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 5000; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
@@ -2182,8 +2218,9 @@
     <div id="adminPanelScreen"
         style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 0, 5, 0.98); z-index: 5000; overflow-y: auto; padding: 40px 20px;">
         <div style="max-width: 1000px; margin: 0 auto;">
+
             <div
-                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid red; padding-bottom: 20px; margin-bottom: 30px;">
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid red; padding-bottom: 20px; margin-bottom: 20px;">
                 <h1
                     style="font-family: 'Orbitron'; color: red; margin: 0; text-shadow: 0 0 15px red; letter-spacing: 2px;">
                     <i class="fas fa-skull-crossbones"></i> MERKEZİ KONTROL AĞI
@@ -2194,65 +2231,62 @@
                 </button>
             </div>
 
-            <div
-                style="background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.3); padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-                <div class="input-group" style="margin-bottom: 0;">
-                    <i class="fas fa-search" style="color: red;"></i>
-                    <input type="text" id="adminSearchInput" class="cyber-input"
-                        style="border-color: rgba(255, 0, 0, 0.5);" placeholder="Kullanıcı rumuzu ara...">
-                </div>
+            <div class="admin-tab-container">
+                <button class="admin-tab-btn active" onclick="switchAdminTab('usersTab')"><i class="fas fa-users"></i>
+                    DÜĞÜMLER</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('intelTab')"><i class="fas fa-satellite-dish"></i>
+                    İSTİHBARAT</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('systemTab')"><i class="fas fa-cogs"></i>
+                    SİSTEM</button>
             </div>
 
-            <h3 style="font-family: 'Orbitron'; color: white; margin-bottom: 15px;">SİSTEMDEKİ DÜĞÜMLER (KULLANICILAR)
-            </h3>
-            <div id="adminUserList" style="display: grid; gap: 15px; margin-bottom: 40px;">
-                <div style="text-align: center; color: red; font-family: 'Orbitron'; padding: 20px;">[ VERİLER
-                    ÇEKİLİYOR... ]</div>
-            </div>
-
-            <!-- SİNYAL İSTİHBARATI (CONTENT INTELLIGENCE) -->
-            <div style="border-top: 1px solid rgba(255, 0, 0, 0.3); padding-top: 30px; margin-bottom: 40px;">
-                <h2
-                    style="font-family: 'Orbitron'; color: var(--hot-pink); margin-bottom: 15px; text-shadow: 0 0 10px var(--hot-pink);">
-                    <i class="fas fa-satellite-dish"></i> SİNYAL İSTİHBARATI (PAYLAŞIM KONTROLÜ)
-                </h2>
+            <div id="usersTab" class="admin-tab-content active">
                 <div
-                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; @media (max-width: 768px) { grid-template-columns: 1fr; }">
+                    style="background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.3); padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <i class="fas fa-search" style="color: red;"></i>
+                        <input type="text" id="adminSearchInput" class="cyber-input"
+                            style="border-color: rgba(255, 0, 0, 0.5);" placeholder="Kullanıcı rumuzu ara...">
+                    </div>
+                </div>
+                <div id="adminUserList" style="display: grid; gap: 15px;"></div>
+            </div>
+
+            <div id="intelTab" class="admin-tab-content">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
                     <div
-                        style="background: rgba(0, 243, 255, 0.05); border: 1px solid var(--cyber-cyan); padding: 15px; border-radius: 10px; max-height: 400px; overflow-y: auto;">
+                        style="background: rgba(0, 243, 255, 0.05); border: 1px solid var(--cyber-cyan); padding: 15px; border-radius: 10px; height: 600px; overflow-y: auto;">
                         <h4
                             style="color: var(--cyber-cyan); font-family: 'Orbitron'; margin-top: 0; text-align: center;">
                             GLOBAL AKIŞ</h4>
-                        <div id="adminGlobalFeedList" style="display: flex; flex-direction: column; gap: 10px;">
-                            <div style="text-align: center; color: #555;">[ SİNYALLER ARANIYOR... ]</div>
-                        </div>
+                        <div id="adminGlobalFeedList" style="display: flex; flex-direction: column; gap: 10px;"></div>
                     </div>
                     <div
-                        style="background: rgba(255, 0, 0, 0.05); border: 1px solid var(--blood-red); padding: 15px; border-radius: 10px; max-height: 400px; overflow-y: auto;">
+                        style="background: rgba(255, 0, 0, 0.05); border: 1px solid var(--blood-red); padding: 15px; border-radius: 10px; height: 600px; overflow-y: auto;">
                         <h4
                             style="color: var(--blood-red); font-family: 'Orbitron'; margin-top: 0; text-align: center;">
                             NSFW (18+) AKIŞ</h4>
-                        <div id="adminNsfwFeedList" style="display: flex; flex-direction: column; gap: 10px;">
-                            <div style="text-align: center; color: #555;">[ GÜNAHLAR ARANIYOR... ]</div>
-                        </div>
+                        <div id="adminNsfwFeedList" style="display: flex; flex-direction: column; gap: 10px;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- HUD ALERT (SİSTEM ANONSU) -->
-            <div style="border-top: 1px solid rgba(255, 0, 0, 0.3); padding-top: 30px;">
-                <h2
-                    style="font-family: 'Orbitron'; color: #ffaa00; margin-bottom: 15px; text-shadow: 0 0 10px #ffaa00;">
-                    <i class="fas fa-bullhorn"></i> HUD ALERT (SİSTEM ANONSU)
-                </h2>
-                <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Tüm kullanıcıların ekranında belirecek
-                    anlık bir sistem mesajı yayınla.</p>
-                <div style="display: flex; gap: 10px; align-items: stretch;">
-                    <input type="text" id="adminHudAlertInput" class="cyber-input"
-                        style="border-color: #ffaa00; flex: 1; padding-left: 15px; color: #fff;"
-                        placeholder="Duyuru metni (Max 100 karakter)...">
-                    <button id="adminSendHudAlertBtn" class="cyber-button outline"
-                        style="border-color: #ffaa00; color: #ffaa00; width: auto; margin-top: 0; padding: 0 30px; flex-shrink: 0;">YAYINLA</button>
+            <div id="systemTab" class="admin-tab-content">
+                <div
+                    style="background: rgba(255, 170, 0, 0.05); border: 1px solid #ffaa00; padding: 20px; border-radius: 10px;">
+                    <h2
+                        style="font-family: 'Orbitron'; color: #ffaa00; margin-top:0; margin-bottom: 15px; text-shadow: 0 0 10px #ffaa00;">
+                        <i class="fas fa-bullhorn"></i> HUD ALERT (SİSTEM ANONSU)
+                    </h2>
+                    <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Tüm kullanıcıların ekranında
+                        belirecek anlık bir sistem mesajı yayınla.</p>
+                    <div style="display: flex; gap: 10px; align-items: stretch;">
+                        <input type="text" id="adminHudAlertInput" class="cyber-input"
+                            style="border-color: #ffaa00; flex: 1; padding-left: 15px; color: #fff;"
+                            placeholder="Duyuru metni (Max 100 karakter)...">
+                        <button id="adminSendHudAlertBtn" class="cyber-button outline"
+                            style="border-color: #ffaa00; color: #ffaa00; width: auto; margin-top: 0; padding: 0 30px; flex-shrink: 0;">YAYINLA</button>
+                    </div>
                 </div>
             </div>
 
@@ -2512,24 +2546,45 @@
         window.addEventListener('hashchange', handleRouting);
 
         // FOTOĞRAF YÜKLEME VE BASE64 ÇEVİRİCİ
+        // YÜKSEK KALİTE FOTOĞRAF YÜKLEME (FIREBASE STORAGE)
         document.getElementById('editAvatar').addEventListener('change', function (e) {
             const file = e.target.files[0];
-            if (file) {
-                if (file.size > 500 * 1024) {
-                    alert("Sistem Reddi: Görsel çok büyük. Maksimum 500KB yükleyebilirsin.");
-                    this.value = '';
-                    return;
-                }
+            if (!file) return;
 
-                const reader = new FileReader();
-                reader.onload = function (event) {
-                    document.getElementById('editAvatarBase64').value = event.target.result;
-                    document.getElementById('fileInputLabel').innerHTML = '<i class="fas fa-check"></i> YÜKLENDİ';
-                    document.getElementById('fileInputLabel').style.color = "var(--cyber-cyan)";
-                    document.getElementById('fileInputLabel').style.borderColor = "var(--cyber-cyan)";
-                }
-                reader.readAsDataURL(file);
+            // Limiti 5MB'a çıkardık
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Sistem Reddi: Görsel çok büyük. Maksimum 5MB yükleyebilirsin.");
+                this.value = '';
+                return;
             }
+
+            // Storage referansı oluştur (avatars klasörüne kaydedecek)
+            const storageRef = ref(storage, 'avatars/' + Date.now() + '_' + file.name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            const labelBtn = document.getElementById('fileInputLabel');
+            labelBtn.innerHTML = "SİSTEME YÜKLENİYOR... %0";
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    labelBtn.innerHTML = `YÜKLENİYOR... %${Math.round(progress)}`;
+                },
+                (error) => {
+                    console.error("Avatar yükleme hatası", error);
+                    alert("Sistem Reddi: Görsel sunucuya iletilemedi.");
+                    labelBtn.innerHTML = '<i class="fas fa-camera"></i> TEKRAR DENE';
+                },
+                async () => {
+                    // Yükleme bitti, URL'i al ve gizli inputa yaz
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    document.getElementById('editAvatarUrl').value = downloadURL;
+                    labelBtn.innerHTML = '<i class="fas fa-check"></i> GÖRSEL AĞA İŞLENDİ';
+                    labelBtn.style.color = "var(--cyber-cyan)";
+                    labelBtn.style.borderColor = "var(--cyber-cyan)";
+                    labelBtn.style.textShadow = "0 0 10px var(--cyber-cyan)";
+                }
+            );
         });
 
         // FEED MEDYA YÜKLEME (STORAGE)
@@ -2983,7 +3038,7 @@
 
                     if (userData.avatar) {
                         myAvatar.innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
-                        document.getElementById('editAvatarBase64').value = userData.avatar;
+                        document.getElementById('editAvatarUrl').value = userData.avatar;
                     }
                 }
             } catch (error) { console.error("Profil çekilemedi: ", error); }
@@ -3069,15 +3124,16 @@
             }
         }
 
-        // Listeyi Çizen Ana Fonksiyon
+        // Listeyi Çizen Ana Fonksiyon (OPTİMİZE EDİLDİ)
         function renderAdminUserList(usersList) {
             const adminUserList = document.getElementById("adminUserList");
-            adminUserList.innerHTML = "";
 
             if (usersList.length === 0) {
                 adminUserList.innerHTML = `<div style="text-align: center; color: #888; font-family: 'Orbitron'; padding: 20px;">KAYIT BULUNAMADI.</div>`;
                 return;
             }
+
+            let finalHTML = ""; // Bütün HTML'i burada biriktireceğiz (Performans için)
 
             usersList.forEach(user => {
                 const isSueyda = user.alias.toLowerCase() === "sueyda";
@@ -3088,16 +3144,16 @@
                     : `<button onclick="window.adminDeleteUser('${user.id}', '${user.alias}')" class="cyber-button small outline" style="border-color: red; color: red;"><i class="fas fa-trash"></i> SİL</button>`;
 
                 const shadowbanBtnHtml = isSueyda
-                    ? `` // Sueyda banlanamaz
+                    ? ``
                     : isBanned
                         ? `<button onclick="window.adminToggleShadowban('${user.id}', '${user.alias}', false)" class="cyber-button small outline" style="border-color: #ffaa00; color: #ffaa00;"><i class="fas fa-sun"></i> BAN KALDIR</button>`
                         : `<button onclick="window.adminToggleShadowban('${user.id}', '${user.alias}', true)" class="cyber-button small outline" style="border-color: #555; color: #aaa;"><i class="fas fa-ghost"></i> GÖLGE BAN</button>`;
 
-
                 const customBadgesCount = user.customBadges ? user.customBadges.length : 0;
                 const banStatusText = isBanned ? `<span style="color: #ffaa00; font-size: 0.8rem; margin-left:10px;"><i class="fas fa-ghost"></i> SHADOWBANNED</span>` : "";
 
-                adminUserList.innerHTML += `
+                // finalHTML içine ekleme yapıyoruz, DOM'a dokunmuyoruz!
+                finalHTML += `
                     <div style="background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.3); padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                         <div style="flex: 1; min-width: 200px;">
                             <strong style="color: white; font-family: 'Orbitron'; font-size: 1.1rem; text-transform: uppercase;">@${user.alias}</strong>${banStatusText}
@@ -3112,7 +3168,22 @@
                     </div>
                 `;
             });
+
+            // Döngü bittikten sonra DOM'a tek seferde yazdırıyoruz. (Hız x10 artar)
+            adminUserList.innerHTML = finalHTML;
         }
+
+        // Admin Panel Sekme Değiştirici
+        window.switchAdminTab = function (tabId) {
+            // İçerikleri Gizle
+            document.querySelectorAll('.admin-tab-content').forEach(el => el.classList.remove('active'));
+            // Butonların aktifliğini al
+            document.querySelectorAll('.admin-tab-btn').forEach(el => el.classList.remove('active'));
+
+            // Tıklananı Aktif Et
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        };
 
         // Admin Arama Kutusu
         adminSearchInput.addEventListener("input", (e) => {
@@ -4455,7 +4526,7 @@
                     dob: document.getElementById('editDob').value,
                     themeColor: document.getElementById('editThemeColor').value,
                     socialLink: document.getElementById('editSocialLink').value,
-                    avatar: document.getElementById('editAvatarBase64').value
+                    avatar: document.getElementById('editAvatarUrl').value // <-- DÜZELTİLDİ
                 });
                 btn.innerText = "KİMLİK GÜNCELLENDİ"; btn.style.background = "#00ff88"; btn.style.color = "#000";
                 setTimeout(() => window.location.reload(), 1000);
