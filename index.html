@@ -34,6 +34,30 @@
 
         * {
             box-sizing: border-box;
+            scrollbar-width: thin;
+            scrollbar-color: var(--blood-red) var(--void-bg);
+        }
+
+        /* Özel Kaydırma Çubuğu (Scrollbar) - Webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+            background: var(--void-bg);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--blood-red);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-corner {
+            background: var(--void-bg);
+        }
+
+        /* Metin Seçimi (Selection) */
+        ::selection {
+            background: var(--hot-pink);
+            color: #fff;
+            text-shadow: none;
         }
 
         body {
@@ -167,6 +191,17 @@
             z-index: 100;
             transition: all 0.3s;
             box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+            animation: pulseLogin 2s infinite alternate;
+        }
+
+        @keyframes pulseLogin {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 0, 60, 0.2);
+            }
+
+            100% {
+                box-shadow: 0 0 25px rgba(255, 0, 60, 0.6);
+            }
         }
 
         .top-login-btn:hover {
@@ -185,10 +220,12 @@
 
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 4.5rem;
+            font-size: 3.5rem;
+            /* 4.5rem'den küçültüldü */
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 8px;
+            letter-spacing: 5px;
+            /* 8px'den düşürüldü, yatay taşmayı engeller */
             background: linear-gradient(to bottom, #fff, var(--hot-pink), var(--blood-red));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -1024,6 +1061,8 @@
             width: 100%;
             height: 100vh;
             scroll-snap-align: start;
+            scroll-snap-stop: always;
+            /* EKLENEN KOD: Kaydırmanın zorunlu durmasını sağlar */
             position: relative;
             background: radial-gradient(circle at center, rgba(20, 0, 10, 1) 0%, var(--void-bg) 100%);
             border-bottom: 2px solid var(--blood-red);
@@ -1184,7 +1223,9 @@
             }
 
             .logo {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
+                /* Daha da optimize edildi */
+                letter-spacing: 3px;
             }
 
             .price {
@@ -1523,6 +1564,13 @@
                         </h4>
                         <div id="activeUplinksList"></div>
                     </div>
+
+                    <!-- YÖNETİCİ PANELİ BUTONU (Yalnızca yetkili kullanıcıda js ile görünür yapılacak) -->
+                    <button id="adminPanelBtn" class="cyber-button outline"
+                        style="display: none; margin-bottom: 30px; border-color: red; color: red; text-shadow: 0 0 5px red; box-shadow: 0 0 15px rgba(255,0,0,0.3);">
+                        <i class="fas fa-skull"></i> YÖNETİCİ PANELİ
+                    </button>
+
                     <button id="logoutBtn" class="cyber-button outline">AĞDAN KOP (ÇIKIŞ YAP)</button>
                 </div>
 
@@ -1671,9 +1719,16 @@
         </div>
 
         <!-- --- GÜNCELLEME GÜNLÜĞÜ (UPDATE LOG) --- -->
-        <div class="roadmap" style="margin-top: 50px;">
-            <h2 style="border-left-color: var(--cyber-cyan);">Sistem Günlükleri (Update Log)</h2>
-            <div style="font-size: 0.9rem; color: #888; margin-bottom: 20px; font-style: italic;">Merkezi Çekirdek
+        <div class="roadmap" style="margin-top: 50px; position: relative;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="border-left-color: var(--cyber-cyan); margin: 0;">Sistem Günlükleri (Update Log)</h2>
+                <!-- BUG REPORT BUTONU EKLENDİ -->
+                <button id="bugReportBtn" class="cyber-button outline"
+                    style="width: auto; z-index: 100; font-size: 0.8rem; padding: 8px 12px; border-color: var(--blood-red); color: var(--blood-red); box-shadow: 0 0 10px rgba(255, 0, 60, 0.3); margin: 0;">
+                    <i class="fas fa-bug"></i> BUG BİLDİR
+                </button>
+            </div>
+            <div style="font-size: 0.9rem; color: #888; font-style: italic;">Merkezi Çekirdek
                 Bağlantısı... Yalnızca Yönetici (sueyda) veri girebilir.</div>
 
             <!-- Sadece Sueyda'ya Gösterilecek Alan -->
@@ -2005,7 +2060,7 @@
             transform: translateY(0);
         }
     </style>
-    <div id="miniProfileModal"
+    <div id="miniProfileModal" onclick="if(event.target === this) this.style.display='none'"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 5000; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
         <div
             style="background: rgba(20, 0, 10, 0.95); width: 90%; max-width: 400px; border: 2px solid var(--cyber-cyan); border-radius: 15px; padding: 25px; box-shadow: 0 0 30px rgba(0, 243, 255, 0.4); text-align: center; position: relative;">
@@ -2039,7 +2094,7 @@
                     class="fas fa-external-link-alt"></i> TAM PROFİLİ GÖR</button>
         </div>
     </div>
-    <div id="commentModal"
+    <div id="commentModal" onclick="if(event.target === this) this.style.display='none'"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 4000; justify-content: center; align-items: flex-end; backdrop-filter: blur(5px);">
         <div
             style="background: var(--void-bg); width: 100%; max-width: 600px; height: 75vh; border-top: 2px solid var(--cyber-cyan); border-radius: 20px 20px 0 0; display: flex; flex-direction: column; padding: 20px; box-shadow: 0 -10px 30px rgba(0, 243, 255, 0.2); animation: slideUp 0.3s ease-out;">
@@ -2062,6 +2117,198 @@
                     style="border-color: rgba(0, 243, 255, 0.5); font-size: 0.95rem;" autocomplete="off">
                 <button id="sendWhisperBtn" class="cyber-button small" style="margin-top: 0; padding: 0 20px;"><i
                         class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- BUG REPORT MODALI (Buton Yukarı Taşındı) -->
+    <div class="login-modal" id="bugReportModal" style="z-index: 2500;">
+        <div class="modal-content"
+            style="border-color: var(--blood-red); box-shadow: 0 0 50px rgba(255, 0, 60, 0.4); background: rgba(15, 0, 5, 0.95);">
+            <div class="close-btn" id="closeBugModalBtn"
+                style="color: var(--blood-red); text-shadow: 0 0 10px var(--blood-red);">&times;</div>
+            <p
+                style="margin: 0 0 10px 0; font-size: 11px; color: var(--blood-red); letter-spacing: 3px; font-weight: bold; font-family: 'Courier New', monospace;">
+                [ XXX PROTOCOL // KIRMIZI IŞIK ]</p>
+            <h2 class="terminal-header" style="text-shadow: 0 0 15px var(--blood-red);">BUG <span
+                    style="color: var(--blood-red);">RAPORU</span></h2>
+            <p class="terminal-desc" style="color: #ccc;">Karanlık ağda bulduğun anomalileri (hataları) yönetici
+                düğümlere bildir. Sistem
+                kusursuzlaşmalı.</p>
+            <form id="bugReportForm">
+                <div class="input-group">
+                    <i class="fas fa-envelope" style="color: var(--blood-red);"></i>
+                    <input type="email" id="bugEmailInput" class="cyber-input"
+                        style="border-color: rgba(255, 0, 60, 0.3); color: #fff; background: rgba(0, 0, 0, 0.6);"
+                        placeholder="E-Posta Adresin" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-bug" style="color: var(--blood-red);"></i>
+                    <textarea id="bugDescInput" class="cyber-textarea"
+                        style="border-color: rgba(255, 0, 60, 0.3); color: #fff; background: rgba(0, 0, 0, 0.6);"
+                        placeholder="Anomali detayları..." rows="4" required></textarea>
+                </div>
+                <button type="submit" id="bugSubmitBtn" class="cyber-button"
+                    style="background: linear-gradient(45deg, #7a0000, var(--blood-red)); border: 1px solid var(--blood-red); box-shadow: 0 10px 20px rgba(255, 0, 60, 0.5); color: #fff; text-shadow: 0 0 5px #fff;">
+                    SİNYALİ AĞA İLET
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ADMIN ŞİFRE MODALI -->
+    <div id="adminPasswordModal" class="login-modal" style="z-index: 6000;">
+        <div class="modal-content" style="border-color: red; box-shadow: 0 0 50px rgba(255, 0, 0, 0.4);">
+            <span class="close-btn" id="closeAdminPasswordBtn" style="color: red;">&times;</span>
+            <div class="terminal-header" style="font-size: 1.5rem; margin-bottom: 20px; color: red;">YÖNETİCİ
+                <span>GİRİŞİ</span>
+            </div>
+            <div class="terminal-desc" style="color: #aaa;">Sisteme derin erişim sağlamak için Kırmızı Işık protokolü
+                şifrenizi girin.</div>
+            <div class="input-group">
+                <label style="color: red;">Kırmızı Işık Şifresi</label>
+                <i class="fas fa-lock" style="color: red;"></i>
+                <input type="password" id="adminPasswordInput" class="cyber-input" placeholder="••••••••••••"
+                    style="border-color: rgba(255, 0, 0, 0.5);">
+            </div>
+            <button id="verifyAdminBtn" class="cyber-button"
+                style="background: linear-gradient(45deg, #aa0000, red); color: white; box-shadow: 0 0 20px rgba(255,0,0,0.5);">
+                <i class="fas fa-biohazard"></i> PROTOKOLÜ BAŞLAT
+            </button>
+        </div>
+    </div>
+
+    <!-- KAPSAMLI YÖNETİCİ (ADMIN) PANELİ EKRANI -->
+    <div id="adminPanelScreen"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 0, 5, 0.98); z-index: 5000; overflow-y: auto; padding: 40px 20px;">
+        <div style="max-width: 1000px; margin: 0 auto;">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid red; padding-bottom: 20px; margin-bottom: 30px;">
+                <h1
+                    style="font-family: 'Orbitron'; color: red; margin: 0; text-shadow: 0 0 15px red; letter-spacing: 2px;">
+                    <i class="fas fa-skull-crossbones"></i> MERKEZİ KONTROL AĞI
+                </h1>
+                <button id="closeAdminPanelBtn" class="cyber-button outline small"
+                    style="border-color: red; color: red;">
+                    <i class="fas fa-arrow-left"></i> SİSTEME DÖN
+                </button>
+            </div>
+
+            <div
+                style="background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.3); padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                <div class="input-group" style="margin-bottom: 0;">
+                    <i class="fas fa-search" style="color: red;"></i>
+                    <input type="text" id="adminSearchInput" class="cyber-input"
+                        style="border-color: rgba(255, 0, 0, 0.5);" placeholder="Kullanıcı rumuzu ara...">
+                </div>
+            </div>
+
+            <h3 style="font-family: 'Orbitron'; color: white; margin-bottom: 15px;">SİSTEMDEKİ DÜĞÜMLER (KULLANICILAR)
+            </h3>
+            <div id="adminUserList" style="display: grid; gap: 15px; margin-bottom: 40px;">
+                <div style="text-align: center; color: red; font-family: 'Orbitron'; padding: 20px;">[ VERİLER
+                    ÇEKİLİYOR... ]</div>
+            </div>
+
+            <!-- SİNYAL İSTİHBARATI (CONTENT INTELLIGENCE) -->
+            <div style="border-top: 1px solid rgba(255, 0, 0, 0.3); padding-top: 30px; margin-bottom: 40px;">
+                <h2
+                    style="font-family: 'Orbitron'; color: var(--hot-pink); margin-bottom: 15px; text-shadow: 0 0 10px var(--hot-pink);">
+                    <i class="fas fa-satellite-dish"></i> SİNYAL İSTİHBARATI (PAYLAŞIM KONTROLÜ)
+                </h2>
+                <div
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; @media (max-width: 768px) { grid-template-columns: 1fr; }">
+                    <div
+                        style="background: rgba(0, 243, 255, 0.05); border: 1px solid var(--cyber-cyan); padding: 15px; border-radius: 10px; max-height: 400px; overflow-y: auto;">
+                        <h4
+                            style="color: var(--cyber-cyan); font-family: 'Orbitron'; margin-top: 0; text-align: center;">
+                            GLOBAL AKIŞ</h4>
+                        <div id="adminGlobalFeedList" style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="text-align: center; color: #555;">[ SİNYALLER ARANIYOR... ]</div>
+                        </div>
+                    </div>
+                    <div
+                        style="background: rgba(255, 0, 0, 0.05); border: 1px solid var(--blood-red); padding: 15px; border-radius: 10px; max-height: 400px; overflow-y: auto;">
+                        <h4
+                            style="color: var(--blood-red); font-family: 'Orbitron'; margin-top: 0; text-align: center;">
+                            NSFW (18+) AKIŞ</h4>
+                        <div id="adminNsfwFeedList" style="display: flex; flex-direction: column; gap: 10px;">
+                            <div style="text-align: center; color: #555;">[ GÜNAHLAR ARANIYOR... ]</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HUD ALERT (SİSTEM ANONSU) -->
+            <div style="border-top: 1px solid rgba(255, 0, 0, 0.3); padding-top: 30px;">
+                <h2
+                    style="font-family: 'Orbitron'; color: #ffaa00; margin-bottom: 15px; text-shadow: 0 0 10px #ffaa00;">
+                    <i class="fas fa-bullhorn"></i> HUD ALERT (SİSTEM ANONSU)
+                </h2>
+                <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Tüm kullanıcıların ekranında belirecek
+                    anlık bir sistem mesajı yayınla.</p>
+                <div style="display: flex; gap: 10px; align-items: stretch;">
+                    <input type="text" id="adminHudAlertInput" class="cyber-input"
+                        style="border-color: #ffaa00; flex: 1; padding-left: 15px; color: #fff;"
+                        placeholder="Duyuru metni (Max 100 karakter)...">
+                    <button id="adminSendHudAlertBtn" class="cyber-button outline"
+                        style="border-color: #ffaa00; color: #ffaa00; width: auto; margin-top: 0; padding: 0 30px; flex-shrink: 0;">YAYINLA</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ADMIN ROZET YÖNETİM MODALI -->
+    <div id="adminBadgeModal" class="login-modal" style="z-index: 6000;">
+        <div class="modal-content" style="border-color: var(--cyber-cyan); max-width: 500px;">
+            <span class="close-btn" id="closeBadgeModalBtn" style="color: var(--cyber-cyan);">&times;</span>
+            <div class="terminal-header" style="font-size: 1.5rem; margin-bottom: 20px; color: var(--cyber-cyan);">ROZET
+                <span>YÖNETİMİ</span>
+            </div>
+            <p style="color: #aaa; margin-bottom: 20px;">Hedef düğüm: <strong id="badgeTargetAlias"
+                    style="color: white;">---</strong></p>
+
+            <input type="hidden" id="badgeTargetId">
+
+            <div class="input-group" style="margin-bottom: 10px;">
+                <label style="color: var(--cyber-cyan);">Rozet Sınıfı (Renk & Tehlike)</label>
+                <i class="fas fa-palette" style="color: var(--cyber-cyan);"></i>
+                <select id="newBadgeTierInput" class="cyber-select" style="border-color: rgba(0, 243, 255, 0.5);">
+                    <option value="hot-pink">Neon Pembe (Varsayılan)</option>
+                    <option value="red">Kırmızı (Tehlikeli / İzleniyor)</option>
+                    <option value="gold">Altın (VIP / Sponsor)</option>
+                    <option value="cyber-cyan">Siber Mavi (Sistem Mühendisi)</option>
+                </select>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 10px;">
+                <label style="color: var(--cyber-cyan);">Rozet İkonu</label>
+                <i class="fas fa-icons" style="color: var(--cyber-cyan);"></i>
+                <select id="newBadgeIconInput" class="cyber-select" style="border-color: rgba(0, 243, 255, 0.5);">
+                    <option value="fa-gem">Elmas (Gem)</option>
+                    <option value="fa-skull">Kurukafa (Skull)</option>
+                    <option value="fa-crown">Kral Tacı (Crown)</option>
+                    <option value="fa-eye">Gizli Göz (Eye)</option>
+                    <option value="fa-shield-alt">Kalkan (Shield)</option>
+                    <option value="fa-star">Yıldız (Star)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label style="color: var(--cyber-cyan);">Rozet Metni</label>
+                <i class="fas fa-medal" style="color: var(--cyber-cyan);"></i>
+                <input type="text" id="newBadgeTextInput" class="cyber-input" placeholder="Örn: TEHLİKELİ MADDE"
+                    style="border-color: rgba(0, 243, 255, 0.5);" autocomplete="off">
+            </div>
+            <button id="addBadgeBtn" class="cyber-button" style="background: var(--cyber-cyan); color: black;">
+                ROZET İŞLE
+            </button>
+
+            <h4 style="font-family: 'Orbitron'; color: var(--hot-pink); margin-top: 30px; margin-bottom: 15px;">MEVCUT
+                ROZETLER</h4>
+            <div id="currentBadgesList" style="display: flex; flex-wrap: wrap; gap: 10px;">
+                <!-- DB'den Gelecek -->
             </div>
         </div>
     </div>
@@ -2379,14 +2626,20 @@
         }
 
         const userCache = {};
+        const shadowbanCache = {}; // Hızlı kontrol için s-ban cache
+
         window.getUserAvatar = async function (alias) {
             if (userCache[alias]) return userCache[alias];
             try {
                 const q = query(collection(db, "preRegistrations"), where("alias", "==", alias));
                 const snap = await getDocs(q);
-                if (!snap.empty && snap.docs[0].data().avatar) {
-                    userCache[alias] = snap.docs[0].data().avatar;
-                    return userCache[alias];
+                if (!snap.empty) {
+                    const data = snap.docs[0].data();
+                    if (data.isShadowbanned) shadowbanCache[alias] = true;
+                    if (data.avatar) {
+                        userCache[alias] = data.avatar;
+                        return userCache[alias];
+                    }
                 }
             } catch (e) { }
             userCache[alias] = "default";
@@ -2542,6 +2795,41 @@
                             const firstTag = profileTagsDiv.querySelector(".p-tag:not(.dark)");
                             if (firstTag) firstTag.style.display = "inline-block";
                         }
+
+                        // HIT DRAGON Rozeti Kontrolü
+                        const existingHitDragonBadge = profileTagsDiv.querySelector(".hit-dragon-badge");
+                        if (existingHitDragonBadge) existingHitDragonBadge.remove();
+
+                        // Eğer boost sayısı veya gönderi sayısı belirli bir seviyenin üzerindeyse
+                        const totalBoosts = data.boostCount || 0;
+                        const postCount = data.postCount || 0;
+                        if (totalBoosts >= 50 || postCount >= 10) {
+                            const hitDragonBadge = document.createElement("span");
+                            hitDragonBadge.className = "p-tag hit-dragon-badge";
+                            hitDragonBadge.style = "background: linear-gradient(45deg, #ffaa00, #ff003c); color: #fff; box-shadow: 0 0 15px #ffaa00;";
+                            hitDragonBadge.innerHTML = '<i class="fas fa-dragon"></i> HIT DRAGON';
+                            profileTagsDiv.appendChild(hitDragonBadge);
+                        }
+
+                        // Custom (Özel) Rozetlerin Enjeksiyonu
+                        if (data.customBadges && Array.isArray(data.customBadges)) {
+                            // Önce eski özel rozetleri temizleyelim (Aynı elementi tekrar çağırdığımızda üst üste binmesin)
+                            const existingCustomBadges = profileTagsDiv.querySelectorAll(".custom-admin-badge");
+                            existingCustomBadges.forEach(b => b.remove());
+
+                            data.customBadges.forEach(badgeObj => {
+                                // Object kontrolü (Eski stringleri engellemek ya da parse etmek için)
+                                const bText = badgeObj.text || badgeObj;
+                                const bTier = badgeObj.tier || "hot-pink";
+                                const bIcon = badgeObj.icon || "fa-gem";
+
+                                const customBadge = document.createElement("span");
+                                customBadge.className = "p-tag custom-admin-badge";
+                                customBadge.style = `background: transparent; border: 1px solid var(--${bTier}); color: #fff; box-shadow: 0 0 10px var(--${bTier}); font-style: italic;`;
+                                customBadge.innerHTML = `<i class="fas ${bIcon}" style="color: var(--${bTier});"></i> ${bText}`;
+                                profileTagsDiv.appendChild(customBadge);
+                            });
+                        }
                     }
 
                     if (data.avatar) {
@@ -2673,6 +2961,24 @@
                             const firstTag = myTagsDiv.querySelector(".p-tag:not(.dark)");
                             if (firstTag) firstTag.style.display = "inline-block";
                         }
+
+                        // Custom (Özel) Rozetlerin Kendi Profilinde Enjeksiyonu
+                        if (userData.customBadges && Array.isArray(userData.customBadges)) {
+                            const existingCustomBadges = myTagsDiv.querySelectorAll(".custom-admin-badge");
+                            existingCustomBadges.forEach(b => b.remove());
+
+                            userData.customBadges.forEach(badgeObj => {
+                                const bText = badgeObj.text || badgeObj;
+                                const bTier = badgeObj.tier || "hot-pink";
+                                const bIcon = badgeObj.icon || "fa-gem";
+
+                                const customBadge = document.createElement("span");
+                                customBadge.className = "p-tag custom-admin-badge";
+                                customBadge.style = `background: transparent; border: 1px solid var(--${bTier}); color: #fff; box-shadow: 0 0 10px var(--${bTier}); font-style: italic;`;
+                                customBadge.innerHTML = `<i class="fas ${bIcon}" style="color: var(--${bTier});"></i> ${bText}`;
+                                myTagsDiv.appendChild(customBadge);
+                            });
+                        }
                     }
 
                     if (userData.avatar) {
@@ -2682,6 +2988,421 @@
                 }
             } catch (error) { console.error("Profil çekilemedi: ", error); }
         }
+
+        // --- YÖNETİCİ (ADMIN) PANELİ JS ---
+        const adminPanelBtn = document.getElementById("adminPanelBtn");
+        const adminPasswordModal = document.getElementById("adminPasswordModal");
+        const closeAdminPasswordBtn = document.getElementById("closeAdminPasswordBtn");
+        const verifyAdminBtn = document.getElementById("verifyAdminBtn");
+        const adminPanelScreen = document.getElementById("adminPanelScreen");
+        const closeAdminPanelBtn = document.getElementById("closeAdminPanelBtn");
+
+        // Admin Rozet Yönetimi Modal Elemanları
+        const adminBadgeModal = document.getElementById("adminBadgeModal");
+        const closeBadgeModalBtn = document.getElementById("closeBadgeModalBtn");
+        const addBadgeBtn = document.getElementById("addBadgeBtn");
+        const badgeTargetAlias = document.getElementById("badgeTargetAlias");
+        const badgeTargetId = document.getElementById("badgeTargetId");
+        const newBadgeInput = document.getElementById("newBadgeInput");
+        const currentBadgesList = document.getElementById("currentBadgesList");
+        const adminSearchInput = document.getElementById("adminSearchInput");
+        let allAdminUsers = []; // Arama için önbellek
+
+        // Modalleri kapatma
+        closeAdminPasswordBtn.addEventListener("click", () => adminPasswordModal.style.display = 'none');
+        closeAdminPanelBtn.addEventListener("click", () => adminPanelScreen.style.display = 'none');
+        closeBadgeModalBtn.addEventListener("click", () => adminBadgeModal.style.display = 'none');
+
+        // Admin Buton Tıklaması (Şifre Sorma)
+        if (adminPanelBtn) {
+            adminPanelBtn.addEventListener("click", () => {
+                adminPasswordModal.style.display = "flex";
+                document.getElementById('adminPasswordInput').value = ""; // Her girişte sıfırla
+            });
+        }
+
+        // Şifre Doğrulama (Backend Destekli)
+        verifyAdminBtn.addEventListener("click", async () => {
+            const pass = document.getElementById('adminPasswordInput').value;
+            verifyAdminBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> DOĞRULANIYOR...';
+
+            try {
+                const settingDoc = await getDoc(doc(db, "systemSettings", "adminKeys"));
+                if (settingDoc.exists() && settingDoc.data().adminPassword === pass) {
+                    adminPasswordModal.style.display = 'none';
+                    adminPanelScreen.style.display = 'block';
+                    loadAdminUsers(); // Verileri Çek
+                    loadAdminGlobalFeeds(); // Global gönderileri çek
+                    loadAdminNsfwFeeds(); // NSFW gönderileri çek
+                } else {
+                    alert("SİSTEM REDDİ: Yetkisiz Erişim Girişimi Veya Şifre Hatalı!");
+                    document.getElementById('adminPasswordInput').value = "";
+                }
+            } catch (e) {
+                console.error("Şifre doğrulama hatası", e);
+                alert("Veritabanı bağlantı hatası!");
+            } finally {
+                verifyAdminBtn.innerHTML = '<i class="fas fa-biohazard"></i> PROTOKOLÜ BAŞLAT';
+            }
+        });
+
+        // Tüm Kullanıcıları Çek ve Listele
+        async function loadAdminUsers() {
+            const adminUserList = document.getElementById("adminUserList");
+            adminUserList.innerHTML = `<div style="text-align: center; color: red; font-family: 'Orbitron'; padding: 20px;"><i class="fas fa-spinner fa-spin"></i> BAĞLANTILAR TARANIYOR...</div>`;
+
+            try {
+                const q = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"));
+                const querySnapshot = await getDocs(q);
+                allAdminUsers = []; // Listeyi temizle
+
+                querySnapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    data.id = docSnap.id; // Belge ID'sini ekle
+                    allAdminUsers.push(data);
+                });
+
+                renderAdminUserList(allAdminUsers);
+            } catch (error) {
+                console.error("Yönetici kullanıcıları çekemedi:", error);
+                adminUserList.innerHTML = `<div style="text-align: center; color: red; font-family: 'Orbitron'; padding: 20px;">SİSTEM HATASI! VERİTABANI BAĞLANTISI KOPTU.</div>`;
+            }
+        }
+
+        // Listeyi Çizen Ana Fonksiyon
+        function renderAdminUserList(usersList) {
+            const adminUserList = document.getElementById("adminUserList");
+            adminUserList.innerHTML = "";
+
+            if (usersList.length === 0) {
+                adminUserList.innerHTML = `<div style="text-align: center; color: #888; font-family: 'Orbitron'; padding: 20px;">KAYIT BULUNAMADI.</div>`;
+                return;
+            }
+
+            usersList.forEach(user => {
+                const isSueyda = user.alias.toLowerCase() === "sueyda";
+                const isBanned = user.isShadowbanned === true;
+
+                const deleteBtnHtml = isSueyda
+                    ? `<button class="cyber-button small outline" style="border-color: #555; color: #555; cursor: not-allowed;" title="Kurucu Silinemez" disabled><i class="fas fa-ban"></i> SİL</button>`
+                    : `<button onclick="window.adminDeleteUser('${user.id}', '${user.alias}')" class="cyber-button small outline" style="border-color: red; color: red;"><i class="fas fa-trash"></i> SİL</button>`;
+
+                const shadowbanBtnHtml = isSueyda
+                    ? `` // Sueyda banlanamaz
+                    : isBanned
+                        ? `<button onclick="window.adminToggleShadowban('${user.id}', '${user.alias}', false)" class="cyber-button small outline" style="border-color: #ffaa00; color: #ffaa00;"><i class="fas fa-sun"></i> BAN KALDIR</button>`
+                        : `<button onclick="window.adminToggleShadowban('${user.id}', '${user.alias}', true)" class="cyber-button small outline" style="border-color: #555; color: #aaa;"><i class="fas fa-ghost"></i> GÖLGE BAN</button>`;
+
+
+                const customBadgesCount = user.customBadges ? user.customBadges.length : 0;
+                const banStatusText = isBanned ? `<span style="color: #ffaa00; font-size: 0.8rem; margin-left:10px;"><i class="fas fa-ghost"></i> SHADOWBANNED</span>` : "";
+
+                adminUserList.innerHTML += `
+                    <div style="background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.3); padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <strong style="color: white; font-family: 'Orbitron'; font-size: 1.1rem; text-transform: uppercase;">@${user.alias}</strong>${banStatusText}
+                            <div style="font-size: 0.8rem; color: #aaa; margin-top: 5px;"><i class="fas fa-envelope"></i> ${user.email}</div>
+                            <div style="font-size: 0.8rem; color: var(--hot-pink); margin-top: 5px;"><i class="fas fa-medal"></i> ${customBadgesCount} Özel Rozet</div>
+                        </div>
+                        <div style="display: flex; gap: 10px;">
+                            ${shadowbanBtnHtml}
+                            <button onclick="window.adminManageBadges('${user.id}', '${user.alias}')" class="cyber-button small outline" style="border-color: var(--cyber-cyan); color: var(--cyber-cyan);"><i class="fas fa-medal"></i> ROZETLER</button>
+                            ${deleteBtnHtml}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // Admin Arama Kutusu
+        adminSearchInput.addEventListener("input", (e) => {
+            const term = e.target.value.toLowerCase().trim();
+            if (!term) {
+                renderAdminUserList(allAdminUsers);
+                return;
+            }
+            const filteredUsers = allAdminUsers.filter(user =>
+                (user.alias && user.alias.toLowerCase().includes(term)) ||
+                (user.email && user.email.toLowerCase().includes(term))
+            );
+            renderAdminUserList(filteredUsers);
+        });
+
+        // Yönetici - Kullanıcı Silme Fonksiyonu
+        window.adminDeleteUser = async function (docId, alias) {
+            if (confirm(`KRİTİK UYARI: @${alias} kalıcı olarak sistemden silinecek! Onaylıyor musun?`)) {
+                try {
+                    await deleteDoc(doc(db, "preRegistrations", docId));
+                    // Global Feed ve NsfwFeed vb duracak ancak login olamayacak/profili yüklenmeyecek.
+                    alert(`SİSTEM RAPORU: @${alias} yeraltı ağından kazındı.`);
+                    loadAdminUsers(); // Listeyi yenile
+                } catch (e) {
+                    console.error("Silme hatası", e);
+                    alert("Kullanıcı silinirken bir engel oluştu.");
+                }
+            }
+        };
+
+        // Yönetici - Shadowban (Gölge Ban) Fonksiyonu
+        window.adminToggleShadowban = async function (docId, alias, banStatus) {
+            const actionText = banStatus ? "Gizli boyutlara hapsedilecek (Shadowban)" : "Sisteme geri döndürülecek";
+            if (confirm(`@${alias} ${actionText}. Emin misin?`)) {
+                try {
+                    await updateDoc(doc(db, "preRegistrations", docId), {
+                        isShadowbanned: banStatus
+                    });
+                    loadAdminUsers(); // Listeyi yenileyip buton state'lerini update edelim
+                } catch (e) {
+                    console.error("Shadowban toggle hatası", e);
+                    alert("İşlem sırasında sunucuda hata oluştu.");
+                }
+            }
+        };
+
+        // --- SİNYAL İSTİHBARATI (Admin Feed Kontrolü) JS ---
+        async function loadAdminGlobalFeeds() {
+            const globalList = document.getElementById("adminGlobalFeedList");
+            globalList.innerHTML = `<div style="text-align: center; color: var(--cyber-cyan); font-family: 'Orbitron';"><i class="fas fa-spinner fa-spin"></i> ARANIYOR...</div>`;
+            try {
+                const q = query(collection(db, "globalFeed"), orderBy("timestamp", "desc"), limit(50));
+                const snap = await getDocs(q);
+                globalList.innerHTML = "";
+                if (snap.empty) {
+                    globalList.innerHTML = `<div style="text-align: center; color: #555;">[ BOŞ ]</div>`;
+                    return;
+                }
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const textContent = data.content ? `"${data.content.substring(0, 50)}${data.content.length > 50 ? '...' : ''}"` : "[Medya]";
+                    const dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString() : "";
+                    globalList.innerHTML += `
+                        <div style="background: rgba(0, 243, 255, 0.1); border-left: 3px solid var(--cyber-cyan); padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="color: var(--cyber-cyan);">@${data.author}</strong>
+                                <div style="font-size: 0.9rem; color: #ccc; margin-top: 5px;">${textContent}</div>
+                                <div style="font-size: 0.7rem; color: #888; margin-top: 5px;">${dateStr}</div>
+                            </div>
+                            <button onclick="window.adminDeleteGlobalFeed('${docSnap.id}')" class="cyber-button small outline" style="border-color: #ff003c; color: #ff003c; padding: 5px 10px;"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                console.error("Admin Global Feed hatası", e);
+            }
+        }
+
+        async function loadAdminNsfwFeeds() {
+            const nsfwList = document.getElementById("adminNsfwFeedList");
+            nsfwList.innerHTML = `<div style="text-align: center; color: var(--blood-red); font-family: 'Orbitron';"><i class="fas fa-spinner fa-spin"></i> ARANIYOR...</div>`;
+            try {
+                const q = query(collection(db, "globalNsfwFeed"), orderBy("timestamp", "desc"), limit(50));
+                const snap = await getDocs(q);
+                nsfwList.innerHTML = "";
+                if (snap.empty) {
+                    nsfwList.innerHTML = `<div style="text-align: center; color: #555;">[ BOŞ ]</div>`;
+                    return;
+                }
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const textContent = data.content ? `"${data.content.substring(0, 50)}${data.content.length > 50 ? '...' : ''}"` : "[Medya]";
+                    const dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString() : "";
+                    nsfwList.innerHTML += `
+                        <div style="background: rgba(255, 0, 0, 0.1); border-left: 3px solid var(--blood-red); padding: 10px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <strong style="color: var(--blood-red);">@${data.author}</strong>
+                                <div style="font-size: 0.9rem; color: #ccc; margin-top: 5px;">${textContent}</div>
+                                <div style="font-size: 0.7rem; color: #888; margin-top: 5px;">${dateStr}</div>
+                            </div>
+                            <button onclick="window.adminDeleteNsfwFeed('${docSnap.id}')" class="cyber-button small outline" style="border-color: #ffaa00; color: #ffaa00; padding: 5px 10px;"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                console.error("Admin NSFW Feed hatası", e);
+            }
+        }
+
+        window.adminDeleteGlobalFeed = async function (id) {
+            if (confirm("Bu global gönderiyi kalıcı olarak silmek istiyor musunuz?")) {
+                await deleteDoc(doc(db, "globalFeed", id));
+                loadAdminGlobalFeeds();
+            }
+        };
+
+        window.adminDeleteNsfwFeed = async function (id) {
+            if (confirm("Bu NSFW gönderiyi kalıcı olarak silmek istiyor musunuz?")) {
+                await deleteDoc(doc(db, "globalNsfwFeed", id));
+                loadAdminNsfwFeeds();
+            }
+        };
+
+        // --- HUD ALERT JS ---
+        const adminSendHudAlertBtn = document.getElementById("adminSendHudAlertBtn");
+        if (adminSendHudAlertBtn) {
+            adminSendHudAlertBtn.addEventListener("click", async () => {
+                const message = document.getElementById("adminHudAlertInput").value.trim();
+                const alias = localStorage.getItem("hotdragons_alias");
+
+                if (!message) return alert("Mesaj boş olamaz!");
+                if (alias !== "sueyda") return alert("Yetkisiz işlem.");
+
+                adminSendHudAlertBtn.innerText = "YAYINLANIYOR...";
+                try {
+                    await updateDoc(doc(db, "systemSettings", "hudAlert"), {
+                        message: message,
+                        timestamp: serverTimestamp(),
+                        active: true
+                    });
+                    document.getElementById("adminHudAlertInput").value = "";
+                    alert("Sistem anonsu başarıyla yayınlandı.");
+                } catch (e) {
+                    console.error("HUD Alert hatası", e);
+                    alert("Anons yayınlanırken hata oluştu. Document oluşturulmamış olabilir.");
+
+                    // Eğer dokuman yoksa oluşturmayı deneyelim:
+                    try {
+                        const setDoc = (await import("https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js")).setDoc;
+                        await setDoc(doc(db, "systemSettings", "hudAlert"), {
+                            message: message,
+                            timestamp: serverTimestamp(),
+                            active: true
+                        });
+                        alert("Sistem anonsu altyapısı kurularak başarıyla yayınlandı.");
+                    } catch (innerE) {
+                        console.error("Fallback HUD alert hatası", innerE);
+                    }
+                } finally {
+                    adminSendHudAlertBtn.innerText = "YAYINLA";
+                }
+            });
+        }
+
+        // Genel dinleyici: HUD Alert değişikliklerini herkes dinlesin
+        onSnapshot(doc(db, "systemSettings", "hudAlert"), (docSnap) => {
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                const alertEl = document.getElementById("hudAlert");
+                if (data.active && data.message) {
+                    alertEl.innerHTML = `<i class="fas fa-bullhorn"></i> SİSTEM ANONSU: ${data.message}`;
+                    // Sadece anons varken kırmızı ve görünür yapalım
+                    alertEl.style.display = "inline-block";
+                    alertEl.style.background = "rgba(255, 170, 0, 0.2)";
+                    alertEl.style.color = "#ffaa00";
+                    alertEl.style.border = "1px solid #ffaa00";
+                    alertEl.style.animation = "blink 1s infinite";
+                } else {
+                    alertEl.style.display = "none";
+                }
+            }
+        });
+
+        // Yönetici - Rozet Yönetimi Modalı
+        window.adminManageBadges = async function (docId, alias) {
+            adminBadgeModal.style.display = "flex";
+            badgeTargetAlias.innerText = "@" + alias.toUpperCase();
+            badgeTargetId.value = docId;
+            newBadgeInput.value = "";
+            loadUserBadgesToModal(docId);
+        };
+
+        // Seçili kullanıcının mevcut rozetlerini DB'den çek
+        async function loadUserBadgesToModal(docId) {
+            currentBadgesList.innerHTML = `<div style="color: #aaa; font-size: 0.8rem;">Rozetler taranıyor...</div>`;
+            try {
+                const userDoc = await getDoc(doc(db, "preRegistrations", docId));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const badges = data.customBadges || [];
+
+                    if (badges.length === 0) {
+                        currentBadgesList.innerHTML = `<div style="color: #aaa; font-size: 0.8rem;">Atanmış özel rozet bulunmamaktadır.</div>`;
+                        return;
+                    }
+
+                    currentBadgesList.innerHTML = "";
+                    badges.forEach(badgeObj => {
+                        const bText = badgeObj.text || badgeObj; // Eski array string ise
+                        const bTier = badgeObj.tier || "hot-pink";
+                        const bIcon = badgeObj.icon || "fa-gem";
+                        // Obje verisini string olarak butona aktararak silme işleminde kullanacağız
+                        const safeObjStr = encodeURIComponent(JSON.stringify({ text: bText, tier: bTier, icon: bIcon }));
+
+                        currentBadgesList.innerHTML += `
+                            <div style="background: rgba(255, 0, 127, 0.1); border: 1px solid var(--${bTier}); padding: 5px 10px; border-radius: 3px; display: flex; align-items: center; gap: 10px;">
+                                <i class="fas ${bIcon}" style="color: var(--${bTier});"></i>
+                                <span style="font-family: 'Orbitron'; font-size: 0.8rem; color: #fff; text-shadow: 0 0 5px var(--${bTier});">${bText}</span>
+                                <i class="fas fa-times" style="color: red; cursor: pointer; font-size: 0.9rem;" onclick="window.adminRemoveBadge('${docId}', '${safeObjStr}')"></i>
+                            </div>
+                        `;
+                    });
+                }
+            } catch (e) {
+                console.error("Rozetler çekilemedi", e);
+                currentBadgesList.innerHTML = `<div style="color: red; font-size: 0.8rem;">Rozetler yüklenirken hata oluştu.</div>`;
+            }
+        }
+
+        // Yeni Rozet Ekleme Butonu (Sadece Admin Ekranında)
+        addBadgeBtn.addEventListener("click", async () => {
+            const badgeTextInput = document.getElementById("newBadgeTextInput").value.trim().toUpperCase();
+            const badgeTier = document.getElementById("newBadgeTierInput").value;
+            const badgeIcon = document.getElementById("newBadgeIconInput").value;
+
+            const docId = badgeTargetId.value;
+
+            if (!badgeTextInput) return alert("Rozet metni boş olamaz.");
+
+            const newBadgeObj = {
+                text: badgeTextInput,
+                tier: badgeTier,
+                icon: badgeIcon
+            };
+
+            addBadgeBtn.innerText = "İşleniyor...";
+            try {
+                await updateDoc(doc(db, "preRegistrations", docId), {
+                    customBadges: arrayUnion(newBadgeObj)
+                });
+                document.getElementById("newBadgeTextInput").value = "";
+                loadUserBadgesToModal(docId); // Listeyi Tazele
+
+                // Arka plandaki admin listesini tazele (İstatistiklerin gözükmesi için)
+                const userInList = allAdminUsers.find(u => u.id === docId);
+                if (userInList) {
+                    if (!userInList.customBadges) userInList.customBadges = [];
+                    // Aynı rozet texti var mı kontrol (basit obje check)
+                    const exists = userInList.customBadges.some(b => b.text === badgeTextInput || b === badgeTextInput);
+                    if (!exists) userInList.customBadges.push(newBadgeObj);
+                    renderAdminUserList(allAdminUsers);
+                }
+            } catch (error) {
+                console.error("Rozet ekleme hatası", error);
+                alert("Sistemsel Hata: Rozet eklenemedi.");
+            } finally {
+                addBadgeBtn.innerText = "ROZET İŞLE";
+            }
+        });
+
+        // Mevcut Rozeti Sil
+        window.adminRemoveBadge = async function (docId, safeObjStr) {
+            const badgeObj = JSON.parse(decodeURIComponent(safeObjStr));
+            if (confirm(`"${badgeObj.text}" rozetini bu siber kimlikten sökmek istediğine emin misin?`)) {
+                try {
+                    await updateDoc(doc(db, "preRegistrations", docId), {
+                        customBadges: arrayRemove(badgeObj)
+                    });
+                    loadUserBadgesToModal(docId);
+
+                    const userInList = allAdminUsers.find(u => u.id === docId);
+                    if (userInList && userInList.customBadges) {
+                        userInList.customBadges = userInList.customBadges.filter(b => b.text !== badgeObj.text);
+                        renderAdminUserList(allAdminUsers);
+                    }
+                } catch (e) {
+                    console.error("Rozet sökme hatası", e);
+                }
+            }
+        };
 
         const qList = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"));
         onSnapshot(qList, (snapshot) => {
@@ -2699,7 +3420,7 @@
                 newItem.className = 'node-item';
 
                 newItem.addEventListener('click', () => {
-                    window.location.hash = `#public-profile/${rumuz}`;
+                    window.showMiniProfile(rumuz);
                 });
 
                 const isLatest = (count === 1) ? 'style="background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);"' : '';
@@ -2715,9 +3436,11 @@
             if (savedAlias && docId) {
                 topLoginBtn.style.display = "none";
 
-                // Eğer yönetici (sueyda) giriş yaptıysa Update Log giriş ekranını göster
+                // Eğer yönetici (sueyda) giriş yaptıysa ilgili panel butonlarını göster
                 if (savedAlias.toLowerCase() === "sueyda") {
                     document.getElementById("adminUpdateInputArea").style.display = "block";
+                    // Admin paneli butonunu Profil Dashboard'da etkinleştir
+                    if (adminPanelBtn) adminPanelBtn.style.display = "inline-block";
                 }
             }
 
@@ -2875,6 +3598,21 @@
         let isFetchingFeed = false;
         let hasMoreFeeds = true;
 
+        // Belli bir kullanıcının Shadowban durumunu hızlıca öğrenme
+        async function checkShadowbanStatus(alias) {
+            if (shadowbanCache[alias] !== undefined) return shadowbanCache[alias];
+            try {
+                const q = query(collection(db, "preRegistrations"), where("alias", "==", alias));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    const isBanned = snap.docs[0].data().isShadowbanned === true;
+                    shadowbanCache[alias] = isBanned;
+                    return isBanned;
+                }
+            } catch (e) { }
+            return false; // Default olarak banlı değil farz et
+        }
+
         async function fetchInitialFeeds() {
             const feedArea = document.getElementById("feedContentArea");
             document.getElementById("feedLoadingText").style.display = "block";
@@ -2901,9 +3639,12 @@
                 }
 
                 lastVisibleFeed = snap.docs[snap.docs.length - 1];
-                snap.forEach(docSnap => {
-                    renderFeedItem(docSnap.id, docSnap.data());
-                });
+                for (const docSnap of snap.docs) {
+                    const data = docSnap.data();
+                    const isBanned = await checkShadowbanStatus(data.author);
+                    if (isBanned && data.author !== myAlias && myAlias !== "sueyda") continue;
+                    renderFeedItem(docSnap.id, data);
+                }
 
                 window.observeNewVideos();
 
@@ -2929,9 +3670,13 @@
                     document.getElementById("feedContentArea").innerHTML += `<div style="padding:40px; text-align:center; color:#555; font-family:'Orbitron'; scroll-snap-align: start; width:100%;">[ AĞIN SONUNA ULAŞILDINIZ ]</div>`;
                 } else {
                     lastVisibleFeed = nextSnap.docs[nextSnap.docs.length - 1];
-                    nextSnap.forEach(docSnap => {
-                        renderFeedItem(docSnap.id, docSnap.data());
-                    });
+                    const myAlias = localStorage.getItem("hotdragons_alias");
+                    for (const docSnap of nextSnap.docs) {
+                        const data = docSnap.data();
+                        const isBanned = await checkShadowbanStatus(data.author);
+                        if (isBanned && data.author !== myAlias && myAlias !== "sueyda") continue;
+                        renderFeedItem(docSnap.id, data);
+                    }
 
                     window.observeNewVideos();
                 }
@@ -3133,7 +3878,7 @@
             }
 
             const itemHTML = `
-            <div class="feed-item" style="${bgStyle} position: relative;">
+            <div class="feed-item" ondblclick="window.boostPost('${id}')" style="${bgStyle} position: relative;">
                 ${mediaHtml}
                 ${contentHtml}
                 ${authorActionsHtml}
@@ -3284,9 +4029,12 @@
                 }
 
                 lastVisibleNsfwFeed = snap.docs[snap.docs.length - 1];
-                snap.forEach(docSnap => {
-                    renderNsfwFeedItem(docSnap.id, docSnap.data());
-                });
+                for (const docSnap of snap.docs) {
+                    const data = docSnap.data();
+                    const isBanned = await checkShadowbanStatus(data.author);
+                    if (isBanned && data.author !== myAlias && myAlias !== "sueyda") continue;
+                    renderNsfwFeedItem(docSnap.id, data);
+                }
 
                 window.observeNewVideos();
 
@@ -3312,9 +4060,13 @@
                     document.getElementById("nsfwFeedContentArea").innerHTML += `<div style="padding:40px; text-align:center; color:#550000; font-family:'Orbitron'; scroll-snap-align: start; width:100%;">[ CEHENNEMİN DİBİNE ULAŞTINIZ ]</div>`;
                 } else {
                     lastVisibleNsfwFeed = nextSnap.docs[nextSnap.docs.length - 1];
-                    nextSnap.forEach(docSnap => {
-                        renderNsfwFeedItem(docSnap.id, docSnap.data());
-                    });
+                    const myAlias = localStorage.getItem("hotdragons_alias");
+                    for (const docSnap of nextSnap.docs) {
+                        const data = docSnap.data();
+                        const isBanned = await checkShadowbanStatus(data.author);
+                        if (isBanned && data.author !== myAlias && myAlias !== "sueyda") continue;
+                        renderNsfwFeedItem(docSnap.id, data);
+                    }
 
                     window.observeNewVideos();
                 }
@@ -3389,7 +4141,7 @@
             }
 
             const itemHTML = `
-            <div class="feed-item" style="${bgStyle} border: 1px solid var(--blood-red); position: relative;">
+            <div class="feed-item" ondblclick="window.boostNsfwPost('${id}')" style="${bgStyle} border: 1px solid var(--blood-red); position: relative;">
                 ${mediaHtml}
                 ${contentHtml}
                 ${authorActionsHtml}
@@ -3818,7 +4570,7 @@
                     const friendAlias = data.sender === myAlias ? data.receiver : data.sender;
                     listContainer.innerHTML += `
                 <div class="active-uplink-item">
-                    <span class="active-uplink-alias" onclick="window.location.hash='#public-profile/${friendAlias}'">@${friendAlias}</span>
+                    <span class="active-uplink-alias" onclick="window.showMiniProfile('${friendAlias}')">@${friendAlias}</span>
                     <button class="remove-uplink-btn" onclick="removeUplink('${id}')"><i class="fas fa-unlink"></i> KOPAR</button>
                 </div>
             `;
@@ -3941,6 +4693,85 @@
                     setTimeout(() => {
                         resetSubmitBtn.innerText = originalText;
                         resetSubmitBtn.disabled = false;
+                    }, 3000);
+                }
+            });
+        }
+
+        // --- HATA RAPORLAMA (BUG REPORT) SİSTEMİ JS ---
+        const bugReportBtn = document.getElementById('bugReportBtn');
+        const bugReportModal = document.getElementById('bugReportModal');
+        const closeBugModalBtn = document.getElementById('closeBugModalBtn');
+        const bugReportForm = document.getElementById('bugReportForm');
+        const bugSubmitBtn = document.getElementById('bugSubmitBtn');
+
+        // Modalı Aç
+        if (bugReportBtn) {
+            bugReportBtn.addEventListener('click', () => {
+                bugReportModal.style.display = 'flex';
+                // Kullanıcı giriş yapmışsa mailini otomatik doldur
+                const savedAlias = localStorage.getItem("hotdragons_alias");
+                if (savedAlias) {
+                    const profileEmail = document.getElementById("profileEmailDisplay").innerText;
+                    if (profileEmail && profileEmail !== "veri.yok@sistem.net") {
+                        document.getElementById('bugEmailInput').value = profileEmail;
+                    }
+                }
+            });
+        }
+
+        // Modalı Kapat
+        if (closeBugModalBtn) {
+            closeBugModalBtn.addEventListener('click', () => {
+                bugReportModal.style.display = 'none';
+            });
+        }
+
+        // Form Gönderimi (EmailJS Tetikleyici)
+        if (bugReportForm) {
+            bugReportForm.addEventListener('submit', async function (e) {
+                e.preventDefault();
+
+                const bugEmail = document.getElementById('bugEmailInput').value.trim();
+                const bugDesc = document.getElementById('bugDescInput').value.trim();
+                const userAlias = localStorage.getItem("hotdragons_alias") || "Anonim_Gözetleyen";
+
+                const originalText = bugSubmitBtn.innerText;
+                bugSubmitBtn.innerText = "SİNYAL ŞİFRELENİYOR...";
+                bugSubmitBtn.disabled = true;
+
+                try {
+                    // DİKKAT: Senin doğru Template ID'n eklendi (template_4a39nv2)
+                    await emailjs.send("service_wx6t1ub", "template_4a39nv2", {
+                        to_email: bugEmail,
+                        bug_details: bugDesc,
+                        user_alias: userAlias
+                    });
+
+                    bugSubmitBtn.innerText = "RAPOR AĞA İLETİLDİ!";
+                    bugSubmitBtn.style.background = "#00ff88";
+                    bugSubmitBtn.style.color = "#000";
+
+                    setTimeout(() => {
+                        bugReportModal.style.display = 'none';
+                        bugSubmitBtn.innerText = originalText;
+                        bugSubmitBtn.style = "background: linear-gradient(45deg, #7a0000, var(--blood-red)); border: 1px solid var(--blood-red); box-shadow: 0 10px 20px rgba(255, 0, 60, 0.5); color: #fff; text-shadow: 0 0 5px #fff;";
+                        bugSubmitBtn.disabled = false;
+                        bugReportForm.reset();
+                    }, 3000);
+
+                } catch (error) {
+                    console.error("Hata Raporu Gönderilemedi:", error);
+                    bugSubmitBtn.innerText = "SİSTEM REDDİ (BAĞLANTI HATASI)";
+                    bugSubmitBtn.style.background = "transparent";
+                    bugSubmitBtn.style.border = "2px solid red";
+                    bugSubmitBtn.style.color = "red";
+
+                    setTimeout(() => {
+                        bugSubmitBtn.innerText = originalText;
+                        bugSubmitBtn.style = "background: linear-gradient(45deg, #7a0000, var(--blood-red)); border: 1px solid var(--blood-red); box-shadow: 0 10px 20px rgba(255, 0, 60, 0.5); color: #fff; text-shadow: 0 0 5px #fff;";
+                        bugSubmitBtn.disabled = false;
+                        bugSubmitBtn.style.border = "none";
                     }, 3000);
                 }
             });
