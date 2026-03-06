@@ -27,6 +27,8 @@
             --deep-magenta: #7a003c;
             --electric-purple: #7b00ff;
             --cyber-cyan: #00f3ff;
+            --gold: #ffaa00;
+            --white: #ffffff;
             --void-bg: #030005;
             --panel-dark: rgba(15, 0, 10, 0.65);
             --text-glow: #ffb6e6;
@@ -58,6 +60,20 @@
             background: var(--hot-pink);
             color: #fff;
             text-shadow: none;
+        }
+
+        /* Rozetlerin daha iyi görünmesi için genel bir stil */
+        .custom-admin-badge {
+            font-size: 0.7rem !important;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 5px;
+            border: 1px solid;
+            padding: 4px 8px;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
         }
 
         body {
@@ -1036,8 +1052,8 @@
         /* --- BİLEŞEN: SİBER AKIŞ (VERTICAL FEED) --- */
         #feedScreen {
             display: none;
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            height: 100%;
             position: fixed;
             top: 0;
             left: 0;
@@ -2313,6 +2329,8 @@
                     <option value="red">Kırmızı (Tehlikeli / İzleniyor)</option>
                     <option value="gold">Altın (VIP / Sponsor)</option>
                     <option value="cyber-cyan">Siber Mavi (Sistem Mühendisi)</option>
+                    <option value="electric-purple">Elektrik Mor (Sanal İdol)</option>
+                    <option value="white">Beyaz (Void Walker)</option>
                 </select>
             </div>
 
@@ -2364,6 +2382,36 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const storage = getStorage(app);
+
+        // OTOMATİK ROZET SİSTEMİ YAPILANDIRMASI (CONFIG)
+        const BADGE_SYSTEM = {
+            DATA_SCRAPER: { text: "DATA_SCRAPER", icon: "fa-user-secret", tier: "cyber-cyan" },
+            SIGNAL_BOOSTER: { text: "SIGNAL_BOOSTER", icon: "fa-wifi", tier: "hot-pink" },
+            VIRTUAL_IDOL: { text: "VIRTUAL_IDOL", icon: "fa-star", tier: "electric-purple" },
+            VOID_WALKER: { text: "VOID_WALKER", icon: "fa-ghost", tier: "white" },
+            CYBER_DRAGON: { text: "CYBER_DRAGON", icon: "fa-dragon", tier: "gold" },
+            NET_OVERLORD: { text: "NET_OVERLORD", icon: "fa-crown", tier: "blood-red" }
+        };
+
+        // OTOMATİK ROZET KARAR MEKANİZMASI (LOGIC)
+        function getAutomaticBadges(userData) {
+            let badges = [];
+            const postCount = userData.postCount || 0;
+            const boostCount = userData.boostCount || 0;
+
+            // Seviye 1
+            if (postCount >= 1) badges.push(BADGE_SYSTEM.DATA_SCRAPER);
+            if (boostCount >= 20) badges.push(BADGE_SYSTEM.SIGNAL_BOOSTER);
+
+            // Seviye 2
+            if (boostCount >= 100) badges.push(BADGE_SYSTEM.VIRTUAL_IDOL);
+            if (postCount >= 15 && boostCount >= 50) badges.push(BADGE_SYSTEM.VOID_WALKER);
+
+            // Seviye 3
+            if (boostCount >= 500) badges.push(BADGE_SYSTEM.CYBER_DRAGON);
+
+            return badges;
+        }
 
         const formContainer = document.getElementById("formContainer");
         const profileDashboard = document.getElementById("profileDashboard");
@@ -2885,6 +2933,16 @@
                                 profileTagsDiv.appendChild(customBadge);
                             });
                         }
+
+                        // Otomatik Rozetleri Ekle
+                        const autoBadges = getAutomaticBadges(data);
+                        autoBadges.forEach(badge => {
+                            const badgeSpan = document.createElement("span");
+                            badgeSpan.className = "p-tag custom-admin-badge";
+                            badgeSpan.style = `background: transparent; border-color: var(--${badge.tier}); color: #fff; box-shadow: 0 0 10px var(--${badge.tier}); font-style: italic;`;
+                            badgeSpan.innerHTML = `<i class="fas ${badge.icon}" style="color: var(--${badge.tier});"></i> ${badge.text}`;
+                            profileTagsDiv.appendChild(badgeSpan);
+                        });
                     }
 
                     if (data.avatar) {
@@ -3034,6 +3092,16 @@
                                 myTagsDiv.appendChild(customBadge);
                             });
                         }
+
+                        // Kendi profilimizde Otomatik Rozetleri Ekle
+                        const autoBadges = getAutomaticBadges(userData);
+                        autoBadges.forEach(badge => {
+                            const badgeSpan = document.createElement("span");
+                            badgeSpan.className = "p-tag custom-admin-badge";
+                            badgeSpan.style = `background: transparent; border-color: var(--${badge.tier}); color: #fff; box-shadow: 0 0 10px var(--${badge.tier}); font-style: italic;`;
+                            badgeSpan.innerHTML = `<i class="fas ${badge.icon}" style="color: var(--${badge.tier});"></i> ${badge.text}`;
+                            myTagsDiv.appendChild(badgeSpan);
+                        });
                     }
 
                     if (userData.avatar) {
