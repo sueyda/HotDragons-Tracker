@@ -3436,7 +3436,7 @@
                 });
             } catch (e) {
                 console.error("Admin Bug listeleme hatası", e);
-                bugsList.innerHTML = `<div style="color: red; padding: 10px;">Sistem Hatası: Bug raporları çekilemedi.</div>`;
+                bugsList.innerHTML = `<div style="color: red; padding: 10px; border: 1px solid red;"><b>Sistem Hatası:</b> Bug raporları çekilemedi.<br><span style="font-size: 0.8rem; color: #ff8888;">[FIREBASE LOG]: ${e.message}</span></div>`;
             }
         }
 
@@ -5049,6 +5049,7 @@
                     bugSubmitBtn.style.background = "transparent";
                     bugSubmitBtn.style.border = "2px solid red";
                     bugSubmitBtn.style.color = "red";
+                    alert("Firebase Hatası: " + error.message);
 
                     setTimeout(() => {
                         bugSubmitBtn.innerText = originalText;
