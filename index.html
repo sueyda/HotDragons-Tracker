@@ -3404,15 +3404,24 @@
             if (!bugsList) return;
             bugsList.innerHTML = `<div style="text-align: center; color: var(--blood-red); font-family: 'Orbitron';"><i class="fas fa-spinner fa-spin"></i> RAPORLAR ÇEKİLİYOR...</div>`;
             try {
-                const q = query(collection(db, "bugReports"), orderBy("timestamp", "desc"));
-                const snap = await getDocs(q);
+                const snap = await getDocs(collection(db, "bugReports"));
                 bugsList.innerHTML = "";
                 if (snap.empty) {
                     bugsList.innerHTML = `<div style="text-align: center; color: #555;">[ TARAMA TEMİZ - ANOMALİ YOK ]</div>`;
                     return;
                 }
-                snap.forEach(docSnap => {
-                    const data = docSnap.data();
+
+                let bugsArray = [];
+                snap.forEach(docSnap => bugsArray.push({ id: docSnap.id, ...docSnap.data() }));
+
+                // Firestore üzerinde indexleme hatası (Missing Index) almamak için veriyi local ortamda tarihe göre tersten (en yeni üstte) sıralıyoruz.
+                bugsArray.sort((a, b) => {
+                    const tA = a.timestamp ? a.timestamp.toMillis() : 0;
+                    const tB = b.timestamp ? b.timestamp.toMillis() : 0;
+                    return tB - tA;
+                });
+
+                bugsArray.forEach(data => {
                     const dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString('tr-TR') : "";
                     const imgHtml = data.imageUrl ? `<a href="${data.imageUrl}" target="_blank" style="display:block; margin-top:10px;"><img src="${data.imageUrl}" style="max-height: 100px; border: 1px solid var(--blood-red); border-radius: 5px;"></a>` : `<div style="color: #666; font-size: 0.8rem; margin-top:5px;">[Kanıt Görseli Yok]</div>`;
                     bugsList.innerHTML += `
