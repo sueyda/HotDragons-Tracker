@@ -2200,6 +2200,18 @@
                         style="border-color: rgba(255, 0, 60, 0.3); color: #fff; background: rgba(0, 0, 0, 0.6);"
                         placeholder="Anomali detayları..." rows="4" required></textarea>
                 </div>
+                <div class="input-group">
+                    <label style="color: var(--blood-red); font-size: 0.8rem;">KANIT YÜKLE (GÖRSEL)</label>
+                    <div class="file-input-wrapper" style="width: 100%;">
+                        <div class="file-input-btn" id="bugFileLabel"
+                            style="font-size: 0.85rem; padding: 10px; border-color: var(--blood-red); color: var(--blood-red);">
+                            <i class="fas fa-camera"></i> EKRAN GÖRÜNTÜSÜ SEÇ
+                        </div>
+                        <input type="file" id="bugImageInput" accept="image/*"
+                            style="opacity: 0; position: absolute; top:0; left: 0; width: 100%; height: 100%; cursor: pointer;">
+                    </div>
+                    <input type="hidden" id="bugImageUrl">
+                </div>
                 <button type="submit" id="bugSubmitBtn" class="cyber-button"
                     style="background: linear-gradient(45deg, #7a0000, var(--blood-red)); border: 1px solid var(--blood-red); box-shadow: 0 10px 20px rgba(255, 0, 60, 0.5); color: #fff; text-shadow: 0 0 5px #fff;">
                     SİNYALİ AĞA İLET
@@ -2254,6 +2266,8 @@
                     İSTİHBARAT</button>
                 <button class="admin-tab-btn" onclick="switchAdminTab('systemTab')"><i class="fas fa-cogs"></i>
                     SİSTEM</button>
+                <button class="admin-tab-btn" onclick="switchAdminTab('bugsTab')"><i class="fas fa-bug"></i>
+                    HATA RAPORLARI</button>
             </div>
 
             <div id="usersTab" class="admin-tab-content active">
@@ -2295,7 +2309,7 @@
                         <i class="fas fa-bullhorn"></i> HUD ALERT (SİSTEM ANONSU)
                     </h2>
                     <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 15px;">Tüm kullanıcıların ekranında
-                        belirecek anlık bir sistem mesajı yayınla.</p>
+                        belirecek anlık bir sistem mesajı yayınla (Otomatik olarak 10dk sonra yok olur).</p>
                     <div style="display: flex; gap: 10px; align-items: stretch;">
                         <input type="text" id="adminHudAlertInput" class="cyber-input"
                             style="border-color: #ffaa00; flex: 1; padding-left: 15px; color: #fff;"
@@ -2304,6 +2318,14 @@
                             style="border-color: #ffaa00; color: #ffaa00; width: auto; margin-top: 0; padding: 0 30px; flex-shrink: 0;">YAYINLA</button>
                     </div>
                 </div>
+            </div>
+
+            <div id="bugsTab" class="admin-tab-content">
+                <h2
+                    style="font-family: 'Orbitron'; color: var(--blood-red); margin-top:0; margin-bottom: 15px; text-shadow: 0 0 10px var(--blood-red);">
+                    <i class="fas fa-biohazard"></i> SİSTEM ANOMALİLERİ (BUG RAPORLARI)
+                </h2>
+                <div id="adminBugsList" style="display: flex; flex-direction: column; gap: 15px;"></div>
             </div>
 
         </div>
@@ -3157,6 +3179,7 @@
                     loadAdminUsers(); // Verileri Çek
                     loadAdminGlobalFeeds(); // Global gönderileri çek
                     loadAdminNsfwFeeds(); // NSFW gönderileri çek
+                    loadAdminBugs(); // Hata raporlarını çek
                 } else {
                     alert("SİSTEM REDDİ: Yetkisiz Erişim Girişimi Veya Şifre Hatalı!");
                     document.getElementById('adminPasswordInput').value = "";
@@ -3375,6 +3398,46 @@
             }
         };
 
+        // --- BUG Raporları (Admin Feed Kontrolü) JS ---
+        async function loadAdminBugs() {
+            const bugsList = document.getElementById("adminBugsList");
+            if (!bugsList) return;
+            bugsList.innerHTML = `<div style="text-align: center; color: var(--blood-red); font-family: 'Orbitron';"><i class="fas fa-spinner fa-spin"></i> RAPORLAR ÇEKİLİYOR...</div>`;
+            try {
+                const q = query(collection(db, "bugReports"), orderBy("timestamp", "desc"));
+                const snap = await getDocs(q);
+                bugsList.innerHTML = "";
+                if (snap.empty) {
+                    bugsList.innerHTML = `<div style="text-align: center; color: #555;">[ TARAMA TEMİZ - ANOMALİ YOK ]</div>`;
+                    return;
+                }
+                snap.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString('tr-TR') : "";
+                    const imgHtml = data.imageUrl ? `<a href="${data.imageUrl}" target="_blank" style="display:block; margin-top:10px;"><img src="${data.imageUrl}" style="max-height: 100px; border: 1px solid var(--blood-red); border-radius: 5px;"></a>` : `<div style="color: #666; font-size: 0.8rem; margin-top:5px;">[Kanıt Görseli Yok]</div>`;
+                    bugsList.innerHTML += `
+                        <div style="background: rgba(255, 0, 0, 0.05); border: 1px solid var(--blood-red); padding: 15px; border-radius: 5px; position: relative;">
+                            <button onclick="window.adminDeleteBug('${docSnap.id}')" class="cyber-button small outline" style="position: absolute; top: 15px; right: 15px; border-color: #ffaa00; color: #ffaa00; padding: 5px 10px;"><i class="fas fa-trash"></i></button>
+                            <h3 style="color: var(--blood-red); margin-top: 0; font-family: 'Orbitron';">@${data.author} <span style="font-size: 10px; color: #888;">(${data.email})</span></h3>
+                            <div style="font-size: 0.7rem; color: #888; margin-bottom: 10px;">${dateStr}</div>
+                            <p style="color: #ccc; line-height: 1.4; background: rgba(0,0,0,0.5); padding: 10px; border-radius: 5px;">${data.desc}</p>
+                            ${imgHtml}
+                        </div>
+                    `;
+                });
+            } catch (e) {
+                console.error("Admin Bug listeleme hatası", e);
+                bugsList.innerHTML = `<div style="color: red; padding: 10px;">Sistem Hatası: Bug raporları çekilemedi.</div>`;
+            }
+        }
+
+        window.adminDeleteBug = async function (id) {
+            if (confirm("Bu anomali raporunu sistemden kalıcı olarak temizlemek istediğine emin misin?")) {
+                await deleteDoc(doc(db, "bugReports", id));
+                loadAdminBugs();
+            }
+        };
+
         // --- HUD ALERT JS ---
         const adminSendHudAlertBtn = document.getElementById("adminSendHudAlertBtn");
         if (adminSendHudAlertBtn) {
@@ -3417,18 +3480,39 @@
         }
 
         // Genel dinleyici: HUD Alert değişikliklerini herkes dinlesin
+        let hudTimeoutTracker = null;
         onSnapshot(doc(db, "systemSettings", "hudAlert"), (docSnap) => {
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 const alertEl = document.getElementById("hudAlert");
-                if (data.active && data.message) {
+
+                if (data.active && data.message && data.timestamp) {
+                    const now = new Date();
+                    const alertDate = data.timestamp.toDate();
+                    const diffMins = Math.floor((now - alertDate) / 60000);
+
+                    // 10 dakika dolmuş mu kontrolü
+                    if (diffMins >= 10) {
+                        alertEl.style.display = "none";
+                        return;
+                    }
+
                     alertEl.innerHTML = `<i class="fas fa-bullhorn"></i> SİSTEM ANONSU: ${data.message}`;
-                    // Sadece anons varken kırmızı ve görünür yapalım
                     alertEl.style.display = "inline-block";
                     alertEl.style.background = "rgba(255, 170, 0, 0.2)";
                     alertEl.style.color = "#ffaa00";
                     alertEl.style.border = "1px solid #ffaa00";
                     alertEl.style.animation = "blink 1s infinite";
+
+                    // Kalan saniye hesaplanıp timeout kuruluyor
+                    const kalanMs = (10 * 60000) - (now - alertDate);
+                    if (hudTimeoutTracker) clearTimeout(hudTimeoutTracker);
+
+                    hudTimeoutTracker = setTimeout(() => {
+                        alertEl.style.display = "none";
+                        // Sadece ekrandan kaldırıyoruz, veritabanını meşgul etmeye gerek yok
+                    }, kalanMs > 0 ? kalanMs : 0);
+
                 } else {
                     alertEl.style.display = "none";
                 }
@@ -4030,7 +4114,7 @@
                     </div>
                 </div>
 
-                <div class="feed-info" style="z-index: 10; display: flex; align-items: center; gap: 10px;">
+                <div class="feed-info" style="z-index: 10; display: flex; align-items: center; gap: 10px; bottom: ${data.content ? '140px' : '40px'};">
                     <div class="feed-avatar-wrapper" style="color: var(--cyber-cyan);" onclick="window.showMiniProfile('${data.author}')">
                         <div class="feed-avatar" id="avatar_feed_${id}"><i class="fas fa-user-ninja"></i></div>
                         <div class="feed-alias-tooltip">@${data.author}</div>
@@ -4293,7 +4377,7 @@
                     </div>
                 </div>
 
-                <div class="feed-info" style="z-index: 10; display: flex; align-items: center; gap: 10px;">
+                <div class="feed-info" style="z-index: 10; display: flex; align-items: center; gap: 10px; bottom: ${data.content ? '140px' : '40px'};">
                     <div class="feed-avatar-wrapper" style="color: var(--blood-red);" onclick="window.showMiniProfile('${data.author}')">
                         <div class="feed-avatar" id="avatar_nsfw_${id}"><i class="fas fa-fire"></i></div>
                         <div class="feed-alias-tooltip" style="border-color: var(--blood-red); background: rgba(255,0,0,0.1);">@${data.author}</div>
@@ -4866,13 +4950,48 @@
             });
         }
 
-        // Form Gönderimi (EmailJS Tetikleyici)
+        // Bug Report Görsel Yükleme Dinleyicisi
+        document.getElementById('bugImageInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 2 * 1024 * 1024) { // 2MB Limit
+                alert("Sistem Reddi: Rapor görseli çok büyük. Maksimum 2MB.");
+                this.value = '';
+                return;
+            }
+
+            const storageRef = ref(storage, 'bug_reports/' + Date.now() + '_' + file.name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            const label = document.getElementById('bugFileLabel');
+
+            label.innerText = "YÜKLENİYOR...";
+
+            uploadTask.on('state_changed',
+                null,
+                (error) => {
+                    alert("Görsel yüklenemedi.");
+                    label.innerHTML = '<i class="fas fa-camera"></i> TEKRAR DENE';
+                },
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    document.getElementById('bugImageUrl').value = downloadURL; // Gizli inputa yaz
+                    label.innerHTML = '<i class="fas fa-check"></i> KANIT EKLENDİ';
+                    label.style.color = "var(--cyber-cyan)";
+                    label.style.borderColor = "var(--cyber-cyan)";
+                    label.style.textShadow = "0 0 10px var(--cyber-cyan)";
+                }
+            );
+        });
+
+        // Form Gönderimi (EmailJS Tetikleyici & Firestore Kayıt)
         if (bugReportForm) {
             bugReportForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
 
                 const bugEmail = document.getElementById('bugEmailInput').value.trim();
                 const bugDesc = document.getElementById('bugDescInput').value.trim();
+                const bugImage = document.getElementById('bugImageUrl').value;
                 const userAlias = localStorage.getItem("hotdragons_alias") || "Anonim_Gözetleyen";
 
                 const originalText = bugSubmitBtn.innerText;
@@ -4880,11 +4999,21 @@
                 bugSubmitBtn.disabled = true;
 
                 try {
-                    // DİKKAT: Senin doğru Template ID'n eklendi (template_4a39nv2)
+                    // 1. EmailJS ile gönderim
                     await emailjs.send("service_wx6t1ub", "template_4a39nv2", {
                         to_email: bugEmail,
                         bug_details: bugDesc,
-                        user_alias: userAlias
+                        user_alias: userAlias,
+                        screenshot_url: bugImage || "Görsel Eklenmedi"
+                    });
+
+                    // 2. Ayrıca Veritabanı "bugReports" koleksiyonuna ekle (Admin Panelinde listelemek için)
+                    await addDoc(collection(db, "bugReports"), {
+                        email: bugEmail,
+                        desc: bugDesc,
+                        imageUrl: bugImage || null,
+                        author: userAlias,
+                        timestamp: serverTimestamp()
                     });
 
                     bugSubmitBtn.innerText = "RAPOR AĞA İLETİLDİ!";
@@ -4897,6 +5026,12 @@
                         bugSubmitBtn.style = "background: linear-gradient(45deg, #7a0000, var(--blood-red)); border: 1px solid var(--blood-red); box-shadow: 0 10px 20px rgba(255, 0, 60, 0.5); color: #fff; text-shadow: 0 0 5px #fff;";
                         bugSubmitBtn.disabled = false;
                         bugReportForm.reset();
+                        document.getElementById('bugImageUrl').value = "";
+                        const bugLabel = document.getElementById('bugFileLabel');
+                        bugLabel.innerHTML = '<i class="fas fa-camera"></i> EKRAN GÖRÜNTÜSÜ SEÇ';
+                        bugLabel.style.color = "var(--blood-red)";
+                        bugLabel.style.borderColor = "var(--blood-red)";
+                        bugLabel.style.textShadow = "none";
                     }, 3000);
 
                 } catch (error) {
