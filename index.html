@@ -977,6 +977,28 @@
             flex-shrink: 0;
         }
 
+        /* YENİ EKLENEN: Ağa Sızanlar Avatar Tasarımı */
+        .node-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+            margin-right: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .node-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
         .node-name {
             color: #ddd;
             font-weight: 600;
@@ -3824,20 +3846,31 @@
                     const newItem = document.createElement('li');
                     newItem.className = 'node-item';
                     newItem.addEventListener('click', () => { window.showMiniProfile(rumuz); });
-                    const isLatestStyle = isFirst ? 'style="background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);"' : '';
 
                     const avatarId = `n-av-${elIndex}`;
-                    newItem.innerHTML = `<div id="${avatarId}" class="node-status" ${isLatestStyle}></div><span class="node-name" style="font-size: 1.15rem; opacity: 1;">${rumuz}</span><span class="node-time" style="font-size: 0.9rem;">${timeString}</span>`;
 
+                    // En yeni giren kişiye kırmızı, diğerlerine pembe parlama efekti veriyoruz
+                    const borderColor = isFirst ? "var(--blood-red)" : "var(--hot-pink)";
+                    const shadowColor = isFirst ? "rgba(255, 0, 60, 0.6)" : "rgba(255, 0, 127, 0.3)";
+                    const iconColor = isFirst ? "var(--blood-red)" : "var(--hot-pink)";
+
+                    // HTML Taslağı: Başlangıçta Ninja ikonu (Varsayılan Profil) gösterilir
+                    newItem.innerHTML = `
+                        <div id="${avatarId}" class="node-avatar" style="border: 2px solid ${borderColor}; box-shadow: 0 0 10px ${shadowColor}; color: ${iconColor};">
+                            <i class="fas fa-user-ninja"></i>
+                        </div>
+                        <span class="node-name" style="font-size: 1.15rem; opacity: 1;">${rumuz}</span>
+                        <span class="node-time" style="font-size: 0.9rem;">${timeString}</span>
+                    `;
+
+                    // Eğer veritabanında kullanıcının avatarı varsa ninja ikonunu resimle değiştir
                     if (window.getUserAvatar) {
                         window.getUserAvatar(rumuz).then(url => {
-                            if (url) {
+                            if (url && url !== "default") {
                                 const avDiv = newItem.querySelector(`#${avatarId}`);
                                 if (avDiv) {
                                     avDiv.style.background = 'transparent';
-                                    avDiv.style.boxShadow = isFirst ? '0 0 10px var(--blood-red)' : '0 0 5px var(--hot-pink)';
-                                    avDiv.style.border = isFirst ? '2px solid var(--blood-red)' : '1px solid var(--hot-pink)';
-                                    avDiv.innerHTML = `<img src="${url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+                                    avDiv.innerHTML = `<img src="${url}">`;
                                 }
                             }
                         });
@@ -3859,14 +3892,15 @@
                 const clonedLi = cloneFragment.childNodes[cloneIdx];
                 if (clonedLi) {
                     clonedLi.addEventListener('click', () => { window.showMiniProfile(rumuz); });
-                    const avDiv = clonedLi.querySelector('.node-status');
+
+                    // Eski .node-status yerine yeni .node-avatar'ı arıyoruz
+                    const avDiv = clonedLi.querySelector('.node-avatar');
                     if (avDiv && window.getUserAvatar) {
                         window.getUserAvatar(rumuz).then(url => {
-                            if (url) {
+                            // "default" değer dönmediğinden ve URL olduğundan emin oluyoruz
+                            if (url && url !== "default") {
                                 avDiv.style.background = 'transparent';
-                                avDiv.style.boxShadow = (cloneIdx === 0) ? '0 0 10px var(--blood-red)' : '0 0 5px var(--hot-pink)';
-                                avDiv.style.border = (cloneIdx === 0) ? '2px solid var(--blood-red)' : '1px solid var(--hot-pink)';
-                                avDiv.innerHTML = `<img src="${url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+                                avDiv.innerHTML = `<img src="${url}">`;
                             }
                         });
                     }
