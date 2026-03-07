@@ -1521,6 +1521,11 @@
                                 required autocomplete="off">
                         </div>
                         <div class="input-group">
+                            <label>Dünyaya İniş (Doğum Tarihi)</label>
+                            <i class="fas fa-calendar-alt"></i>
+                            <input type="date" id="dobInput" class="cyber-input" required>
+                        </div>
+                        <div class="input-group">
                             <label>Ağ Kilidi (Şifre)</label>
                             <i class="fas fa-lock"></i>
                             <input type="password" id="passwordInput" class="cyber-input" placeholder="••••••••••••"
@@ -3173,6 +3178,12 @@
                             myTagsDiv.appendChild(badgeSpan);
                         });
                     }
+                    // NSFW Ban Kontrolü - Bireysel
+                    window.isCurrentUserNsfwBanned = userData.isNsfwBanned === true;
+                    const enterNsfwBtn = document.getElementById("enterNsfwFeedBtn");
+                    if (enterNsfwBtn && window.isCurrentUserNsfwBanned) {
+                        enterNsfwBtn.style.display = "none";
+                    }
 
                     if (userData.avatar) {
                         myAvatar.innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
@@ -3288,8 +3299,16 @@
                         ? `<button onclick="window.adminToggleShadowban('${user.id}', '${user.alias}', false)" class="cyber-button small outline" style="border-color: #ffaa00; color: #ffaa00;"><i class="fas fa-sun"></i> BAN KALDIR</button>`
                         : `<button onclick="window.adminToggleShadowban('${user.id}', '${user.alias}', true)" class="cyber-button small outline" style="border-color: #555; color: #aaa;"><i class="fas fa-ghost"></i> GÖLGE BAN</button>`;
 
+                const isNsfwBanned = user.isNsfwBanned === true;
+                const nsfwBanBtnHtml = isSueyda
+                    ? ``
+                    : isNsfwBanned
+                        ? `<button onclick="window.adminToggleNsfwBan('${user.id}', '${user.alias}', false)" class="cyber-button small outline" style="border-color: #00ffaa; color: #00ffaa;"><i class="fas fa-check"></i> NSFW AÇ</button>`
+                        : `<button onclick="window.adminToggleNsfwBan('${user.id}', '${user.alias}', true)" class="cyber-button small outline" style="border-color: #ff003c; color: #ff003c;"><i class="fas fa-ban"></i> NSFW BAN</button>`;
+
                 const customBadgesCount = user.customBadges ? user.customBadges.length : 0;
-                const banStatusText = isBanned ? `<span style="color: #ffaa00; font-size: 0.8rem; margin-left:10px;"><i class="fas fa-ghost"></i> SHADOWBANNED</span>` : "";
+                let banStatusText = isBanned ? `<span style="color: #ffaa00; font-size: 0.8rem; margin-left:10px;"><i class="fas fa-ghost"></i> SHADOWBANNED</span>` : "";
+                if (isNsfwBanned) banStatusText += `<span style="color: #ff003c; font-size: 0.8rem; margin-left:10px;"><i class="fas fa-ban"></i> NSFW BANLI</span>`;
 
                 // finalHTML içine ekleme yapıyoruz, DOM'a dokunmuyoruz!
                 finalHTML += `
@@ -3301,6 +3320,7 @@
                         </div>
                         <div style="display: flex; gap: 10px;">
                             ${shadowbanBtnHtml}
+                            ${nsfwBanBtnHtml}
                             <button onclick="window.adminManageBadges('${user.id}', '${user.alias}')" class="cyber-button small outline" style="border-color: var(--cyber-cyan); color: var(--cyber-cyan);"><i class="fas fa-medal"></i> ROZETLER</button>
                             ${deleteBtnHtml}
                         </div>
@@ -3353,7 +3373,23 @@
             }
         };
 
-        // Yönetici - Shadowban (Gölge Ban) Fonksiyonu
+        // Yönetici - NSFW Banlama Fonksiyonu
+        window.adminToggleNsfwBan = async function (docId, alias, banStatus) {
+            const actionText = banStatus ? "18+ akışından BANLANACAK (Uzaklaştırılacak)" : "18+ akışı TEKRAR AÇILACAK";
+            if (confirm(`KRİTİK UYARI: @${alias} kişisi ${actionText}. Onaylıyor musun?`)) {
+                try {
+                    await updateDoc(doc(db, "preRegistrations", docId), {
+                        isNsfwBanned: banStatus
+                    });
+                    loadAdminUsers();
+                } catch (e) {
+                    console.error("NSFW Ban hatası:", e);
+                    alert("Ban işlemi başarısız.");
+                }
+            }
+        };
+
+        // Yönetici - Gölge Ban (Shadowban) Fonksiyonu
         window.adminToggleShadowban = async function (docId, alias, banStatus) {
             const actionText = banStatus ? "Gizli boyutlara hapsedilecek (Shadowban)" : "Sisteme geri döndürülecek";
             if (confirm(`@${alias} ${actionText}. Emin misin?`)) {
@@ -3634,7 +3670,7 @@
 
             // ENTER NSFW BTN TOGGLE
             if (enterNsfwFeedBtnForAdmin) {
-                if (isEnabled) {
+                if (isEnabled && !window.isCurrentUserNsfwBanned) {
                     enterNsfwFeedBtnForAdmin.style.display = ""; // default inline-block behavior
                 } else {
                     enterNsfwFeedBtnForAdmin.style.display = "none";
@@ -3784,16 +3820,33 @@
                 }
 
                 // Helper to generate a node element
-                const createNodeEl = (isFirst) => {
+                const createNodeEl = (isFirst, elIndex) => {
                     const newItem = document.createElement('li');
                     newItem.className = 'node-item';
                     newItem.addEventListener('click', () => { window.showMiniProfile(rumuz); });
                     const isLatestStyle = isFirst ? 'style="background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);"' : '';
-                    newItem.innerHTML = `<div class="node-status" ${isLatestStyle}></div><span class="node-name" style="font-size: 1.15rem; opacity: 1;">${rumuz}</span><span class="node-time" style="font-size: 0.9rem;">${timeString}</span>`;
+
+                    const avatarId = `n-av-${elIndex}`;
+                    newItem.innerHTML = `<div id="${avatarId}" class="node-status" ${isLatestStyle}></div><span class="node-name" style="font-size: 1.15rem; opacity: 1;">${rumuz}</span><span class="node-time" style="font-size: 0.9rem;">${timeString}</span>`;
+
+                    if (window.getUserAvatar) {
+                        window.getUserAvatar(rumuz).then(url => {
+                            if (url) {
+                                const avDiv = newItem.querySelector(`#${avatarId}`);
+                                if (avDiv) {
+                                    avDiv.style.background = 'transparent';
+                                    avDiv.style.boxShadow = isFirst ? '0 0 10px var(--blood-red)' : '0 0 5px var(--hot-pink)';
+                                    avDiv.style.border = isFirst ? '2px solid var(--blood-red)' : '1px solid var(--hot-pink)';
+                                    avDiv.innerHTML = `<img src="${url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+                                }
+                            }
+                        });
+                    }
+
                     return newItem;
                 };
 
-                fragment.appendChild(createNodeEl(count === 1));
+                fragment.appendChild(createNodeEl(count === 1, `orig-${count}`));
             });
 
             // Kesintisiz loop için tüm listenin birebir klonunu ekliyoruz
@@ -3806,6 +3859,17 @@
                 const clonedLi = cloneFragment.childNodes[cloneIdx];
                 if (clonedLi) {
                     clonedLi.addEventListener('click', () => { window.showMiniProfile(rumuz); });
+                    const avDiv = clonedLi.querySelector('.node-status');
+                    if (avDiv && window.getUserAvatar) {
+                        window.getUserAvatar(rumuz).then(url => {
+                            if (url) {
+                                avDiv.style.background = 'transparent';
+                                avDiv.style.boxShadow = (cloneIdx === 0) ? '0 0 10px var(--blood-red)' : '0 0 5px var(--hot-pink)';
+                                avDiv.style.border = (cloneIdx === 0) ? '2px solid var(--blood-red)' : '1px solid var(--hot-pink)';
+                                avDiv.innerHTML = `<img src="${url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+                            }
+                        });
+                    }
                 }
                 cloneIdx++;
             });
@@ -4916,6 +4980,7 @@
             const alias = document.getElementById('aliasInput').value;
             const email = document.getElementById('emailInput').value;
             const password = document.getElementById('passwordInput').value;
+            const dob = document.getElementById('dobInput').value;
 
             const btn = this.querySelector('.cyber-button');
             const originalText = btn.innerText;
@@ -4954,9 +5019,17 @@
                 }
 
                 btn.innerText = "KİLİT KIRILIYOR...";
+
+                // Yaş & NSFW Ban Kontrolü
+                const birthDate = new Date(dob);
+                const ageDate = new Date(Date.now() - birthDate.getTime());
+                const age = Math.abs(ageDate.getUTCFullYear() - 1970);
+                const isNsfwBanned = age < 18 ? true : false;
+
                 const docRef = await addDoc(collection(db, "preRegistrations"), {
-                    alias: alias, email: email, password: password, gender: "Gizli", bio: "", dob: "", avatar: "",
-                    themeColor: "#ff003c", socialLink: "", timestamp: serverTimestamp(), lastSeen: serverTimestamp()
+                    alias: alias, email: email, password: password, gender: "Gizli", bio: "", dob: dob, avatar: "",
+                    themeColor: "#ff003c", socialLink: "", timestamp: serverTimestamp(), lastSeen: serverTimestamp(),
+                    isNsfwBanned: isNsfwBanned
                 });
 
                 localStorage.setItem("hotdragons_alias", alias); localStorage.setItem("hotdragons_doc_id", docRef.id);
