@@ -243,8 +243,16 @@
             letter-spacing: 5px;
             /* 8px'den düşürüldü, yatay taşmayı engeller */
             background: linear-gradient(to bottom, #fff, var(--hot-pink), var(--blood-red));
+
+            /* --- DÜZELTİLEN KISIM BAŞLANGICI --- */
             -webkit-background-clip: text;
+            background-clip: text;
+            /* Editörün beklediği standart kod */
             -webkit-text-fill-color: transparent;
+            color: transparent;
+            /* Safari dışı tarayıcılar için yedek kod */
+            /* --- DÜZELTİLEN KISIM BİTİŞİ --- */
+
             filter: drop-shadow(0 0 25px var(--blood-red));
             animation: textGlitch 2.5s infinite alternate;
             position: relative;
@@ -935,15 +943,15 @@
             align-items: center;
             padding: 12px 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            animation: slideIn 0.5s ease-out;
             cursor: pointer;
             transition: 0.2s;
             border-radius: 5px;
         }
 
         .node-item:hover {
-            background: rgba(255, 0, 127, 0.1);
-            transform: translateX(5px);
+            background: rgba(255, 0, 127, 0.05);
+            /* Hover daha hafif renklendirme */
+            /* transform: translateX(5px); -- Sağa kayma kaldırıldı */
         }
 
         @keyframes slideIn {
@@ -1707,11 +1715,28 @@
                 <div class="nodes-header"><span>Ağa Sızanlar</span><i class="fas fa-eye"
                         style="color: var(--blood-red);"></i></div>
                 <div style="font-size: 0.8rem; color: #888; margin-bottom: 10px; font-style: italic;">Gözetlemek için
-                    bir isme tıkla...</div>
-                <ul class="node-list" id="nodeList">
+                    bir isme tıkla... (Sarmal Akış)</div>
+                <!-- auto loop için max-height eklendi -->
+                <ul class="node-list" id="nodeList"
+                    style="max-height: 500px; overflow-y: auto; scrollbar-width: none; mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);">
                     <li class="node-item" style="justify-content: center; opacity: 0.5;"><span>Ağ Bekleniyor...</span>
                     </li>
                 </ul>
+
+                <!-- ARKADAŞ EKLE (HIZLI ARAMA KUTUSU) -->
+                <div id="addFriendContainer"
+                    style="position: relative; margin-top: 15px; padding: 12px 15px; background: rgba(0, 243, 255, 0.05); border: 1px solid var(--cyber-cyan); border-radius: 8px; display: flex; align-items: center; gap: 12px; box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);">
+                    <i class="fas fa-search" style="color: var(--cyber-cyan); font-size: 1rem;"></i>
+                    <input type="text" id="addFriendInput" placeholder="Ağa sızan birini ara..." autocomplete="off"
+                        style="background: rgba(0,0,0,0.5); border: 1px solid rgba(0, 243, 255, 0.3); border-radius: 4px; color: #fff; font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; outline: none; width: 100%; padding: 8px 12px;">
+                    <button id="addFriendBtn" title="Hızlı Gözlem"
+                        style="background: transparent; border: none; color: var(--hot-pink); cursor: pointer; font-size: 1.3rem; transition: 0.3s;"><i
+                            class="fas fa-crosshairs"></i></button>
+                    <!-- Tahmin Sonuçları -->
+                    <div id="addFriendSuggestions"
+                        style="display: none; position: absolute; width: calc(100% - 2px); box-sizing: border-box; top: calc(100% + 5px); left: 0; background: rgba(10, 0, 15, 0.95); border: 1px solid var(--cyber-cyan); border-radius: 5px; max-height: 250px; overflow-y: auto; z-index: 100; box-shadow: 0 15px 30px rgba(0, 0, 0, 0.9); scrollbar-width: none;">
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -1766,7 +1791,8 @@
                         class="fas fa-upload"></i> SİSTEME LOG İŞLE</button>
             </div>
 
-            <div id="updateLogsContainer">
+            <div id="updateLogsContainer"
+                style="max-height: 400px; overflow-y: auto; overflow-x: hidden; padding-right: 5px; margin-top: 15px;">
                 <div style="text-align: center; color: #555; font-family: 'Orbitron'; padding: 20px;">[ LOG KAYITLARI
                     YÜKLENİYOR... ]</div>
             </div>
@@ -2318,6 +2344,28 @@
                             style="border-color: #ffaa00; color: #ffaa00; width: auto; margin-top: 0; padding: 0 30px; flex-shrink: 0;">YAYINLA</button>
                     </div>
                 </div>
+
+                <div
+                    style="background: rgba(255, 0, 60, 0.05); border: 1px solid var(--blood-red); padding: 20px; border-radius: 10px; margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <h2
+                                style="font-family: 'Orbitron'; color: var(--blood-red); margin-top:0; margin-bottom: 5px; text-shadow: 0 0 10px var(--blood-red);">
+                                <i class="fas fa-exclamation-triangle"></i> NSFW (18+) AKIŞ KONTROLÜ
+                            </h2>
+                            <p style="color: #aaa; font-size: 0.9rem; margin-bottom: 0;">Sistem genelinde NSFW akışına
+                                erişimi açıp kapatın.</p>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-family: 'Orbitron'; color: #fff; margin-bottom: 10px; font-size: 1.2rem;">
+                                DURUM: <span id="adminNsfwStatusText"
+                                    style="color: var(--cyber-cyan); text-shadow: 0 0 10px var(--cyber-cyan);">AÇIK</span>
+                            </div>
+                            <button id="adminToggleNsfwBtn" class="cyber-button"
+                                style="padding: 10px 30px; width: auto; font-size: 1rem; margin: 0;">KAPAT</button>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div id="bugsTab" class="admin-tab-content">
@@ -2389,7 +2437,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, startAfter, where, getDocs, updateDoc, doc, deleteDoc, increment, arrayUnion, arrayRemove, getDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, startAfter, where, getDocs, updateDoc, doc, deleteDoc, increment, arrayUnion, arrayRemove, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -3528,6 +3576,80 @@
             }
         });
 
+        // --- NSFW (18+) GLOBAL TOGGLE KONTROLÜ ---
+        const adminToggleNsfwBtn = document.getElementById("adminToggleNsfwBtn");
+        const adminNsfwStatusText = document.getElementById("adminNsfwStatusText");
+        const enterNsfwFeedBtnForAdmin = document.getElementById("enterNsfwFeedBtn");
+
+        if (adminToggleNsfwBtn) {
+            adminToggleNsfwBtn.addEventListener("click", async () => {
+                const alias = localStorage.getItem("hotdragons_alias");
+                if (alias !== "sueyda") return alert("Yetkisiz işlem.");
+
+                adminToggleNsfwBtn.innerText = "...";
+                try {
+                    const docSnap = await getDoc(doc(db, "systemSettings", "nsfwSettings"));
+                    let isEnabled = true; // default true
+                    if (docSnap.exists()) {
+                        isEnabled = docSnap.data().enabled !== false;
+                    }
+
+                    await setDoc(doc(db, "systemSettings", "nsfwSettings"), {
+                        enabled: !isEnabled,
+                        updatedAt: serverTimestamp(),
+                        updatedBy: alias
+                    }, { merge: true });
+
+                } catch (e) {
+                    console.error("NSFW Toggle Hatası", e);
+                    alert("Ayar değiştirilirken hata oluştu!");
+                    adminToggleNsfwBtn.innerText = "HATA";
+                }
+            });
+        }
+
+        onSnapshot(doc(db, "systemSettings", "nsfwSettings"), (docSnap) => {
+            let isEnabled = true;
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                isEnabled = data.enabled !== false;
+            }
+
+            // ADMIN PANEL STATUS UPDATE
+            if (adminNsfwStatusText && adminToggleNsfwBtn) {
+                if (isEnabled) {
+                    adminNsfwStatusText.innerText = "AÇIK";
+                    adminNsfwStatusText.style.color = "var(--cyber-cyan)";
+                    adminNsfwStatusText.style.textShadow = "0 0 10px var(--cyber-cyan)";
+                    adminToggleNsfwBtn.innerText = "KAPAT";
+                    adminToggleNsfwBtn.style.background = "";
+                } else {
+                    adminNsfwStatusText.innerText = "KAPALI";
+                    adminNsfwStatusText.style.color = "#ffaa00";
+                    adminNsfwStatusText.style.textShadow = "0 0 10px #ffaa00";
+                    adminToggleNsfwBtn.innerText = "AÇ";
+                    adminToggleNsfwBtn.style.background = "linear-gradient(45deg, #4a0000, #ff003c)";
+                }
+            }
+
+            // ENTER NSFW BTN TOGGLE
+            if (enterNsfwFeedBtnForAdmin) {
+                if (isEnabled) {
+                    enterNsfwFeedBtnForAdmin.style.display = ""; // default inline-block behavior
+                } else {
+                    enterNsfwFeedBtnForAdmin.style.display = "none";
+                }
+            }
+
+            // ACTIVE NSFW FEED EVICTION
+            const theFeedScreenNsfw = document.getElementById("feedScreenNsfw");
+            if (!isEnabled && theFeedScreenNsfw && theFeedScreenNsfw.style.display === "block") {
+                theFeedScreenNsfw.style.display = "none";
+                window.location.hash = "#dashboard";
+                alert("Uyarı: Sistem Yöneticisi NSFW (18+) Akışını geçici olarak erişime kapattı.");
+            }
+        });
+
         // Yönetici - Rozet Yönetimi Modalı
         window.adminManageBadges = async function (docId, alias) {
             adminBadgeModal.style.display = "flex";
@@ -3636,31 +3758,193 @@
             }
         };
 
+        // GLOBAL DÜĞÜM ÖNBELLEĞİ (Arama tahminleri için)
+        // Yönetici dahil herkesin arama yapabilmesi için genel bir cache tutuyoruz
+        let globalNodesCache = [];
+
         const qList = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"));
+        let nodeScrollAnimFrame;
+        let isNodeScrollPaused = false;
+        let nodeScrollResetTimeout;
+
         onSnapshot(qList, (snapshot) => {
             const nodeList = document.getElementById('nodeList');
             nodeList.innerHTML = ''; let count = 0;
+            const fragment = document.createDocumentFragment();
+            globalNodesCache = []; // Önbelleği temizle
 
             snapshot.forEach((docSnap) => {
-                count++; const data = docSnap.data(); const rumuz = data.alias || "Gizli_Düğüm";
+                count++;
+                const data = docSnap.data(); const rumuz = data.alias || "Gizli_Düğüm";
+                globalNodesCache.push({ alias: rumuz.toLowerCase(), originalAlias: rumuz });
                 let timeString = "Az önce";
                 if (data.timestamp) {
                     const now = new Date(); const past = data.timestamp.toDate(); const diffMins = Math.floor((now - past) / 60000);
                     if (diffMins > 0 && diffMins < 60) timeString = `${diffMins} dk`; else if (diffMins >= 60) timeString = `${Math.floor(diffMins / 60)} sa`;
                 }
-                const newItem = document.createElement('li');
-                newItem.className = 'node-item';
 
-                newItem.addEventListener('click', () => {
-                    window.showMiniProfile(rumuz);
-                });
+                // Helper to generate a node element
+                const createNodeEl = (isFirst) => {
+                    const newItem = document.createElement('li');
+                    newItem.className = 'node-item';
+                    newItem.addEventListener('click', () => { window.showMiniProfile(rumuz); });
+                    const isLatestStyle = isFirst ? 'style="background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);"' : '';
+                    newItem.innerHTML = `<div class="node-status" ${isLatestStyle}></div><span class="node-name" style="font-size: 1.15rem; opacity: 1;">${rumuz}</span><span class="node-time" style="font-size: 0.9rem;">${timeString}</span>`;
+                    return newItem;
+                };
 
-                const isLatest = (count === 1) ? 'style="background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);"' : '';
-                newItem.innerHTML = `<div class="node-status" ${isLatest}></div><span class="node-name">${rumuz}</span><span class="node-time">${timeString}</span>`;
-                nodeList.appendChild(newItem);
+                fragment.appendChild(createNodeEl(count === 1));
             });
+
+            // Kesintisiz loop için tüm listenin birebir klonunu ekliyoruz
+            const cloneFragment = fragment.cloneNode(true);
+
+            // Event listenerları klonlara yeniden bağla çünkü cloneNode elemanlardaki listenerları kopyalamaz
+            let cloneIdx = 0;
+            snapshot.forEach((docSnap) => {
+                const rumuz = docSnap.data().alias || "Gizli_Düğüm";
+                const clonedLi = cloneFragment.childNodes[cloneIdx];
+                if (clonedLi) {
+                    clonedLi.addEventListener('click', () => { window.showMiniProfile(rumuz); });
+                }
+                cloneIdx++;
+            });
+
+            nodeList.appendChild(fragment);
+            nodeList.appendChild(cloneFragment);
+
             if (count > 0) document.getElementById('userCount').innerText = count * 14;
+
+            // --- Auto-scroll (Loop) Logic ---
+            if (nodeScrollAnimFrame) cancelAnimationFrame(nodeScrollAnimFrame);
+
+            const startNodeScrollLoop = () => {
+                nodeScrollAnimFrame = requestAnimationFrame(() => {
+                    if (!isNodeScrollPaused && nodeList.scrollHeight > nodeList.clientHeight) {
+                        nodeList.scrollTop += 0.5; // Kayan hız
+
+                        // Tam ortasına gelince görünmez şekilde sıfırla (Loop)
+                        if (nodeList.scrollTop >= nodeList.scrollHeight / 2) {
+                            nodeList.scrollTop = 0;
+                        }
+                    }
+                    startNodeScrollLoop();
+                });
+            };
+
+            const pauseScroll = () => {
+                isNodeScrollPaused = true;
+                clearTimeout(nodeScrollResetTimeout);
+            };
+
+            const resumeScroll = () => {
+                clearTimeout(nodeScrollResetTimeout);
+                // Kullanıcı bıraktıktan 1.5s sonra devam etsin
+                nodeScrollResetTimeout = setTimeout(() => {
+                    isNodeScrollPaused = false;
+                }, 1500);
+            };
+
+            // Etkileşim dinleyicileri
+            nodeList.addEventListener('mouseenter', pauseScroll);
+            nodeList.addEventListener('mouseleave', resumeScroll);
+            nodeList.addEventListener('touchstart', pauseScroll, { passive: true });
+            nodeList.addEventListener('touchend', resumeScroll);
+            nodeList.addEventListener('wheel', () => {
+                pauseScroll();
+                resumeScroll(); // wheel bitince trigger edilecek
+            }, { passive: true });
+
+            startNodeScrollLoop();
         });
+
+        // --- ARKADAŞ EKLE / HIZLI ARAMA (FUZZY SEARCH) ---
+        const addFriendInput = document.getElementById('addFriendInput');
+        const addFriendSuggestions = document.getElementById('addFriendSuggestions');
+        const addFriendBtn = document.getElementById('addFriendBtn');
+
+        if (addFriendInput) {
+            // Basit bir levenshtein / str_contains benzeri fuzzy fonksiyon yerine
+            // includes ile pratik bir arama yapıyoruz.
+            addFriendInput.addEventListener('input', (e) => {
+                const term = e.target.value.toLowerCase().trim();
+
+                if (term.length < 1) {
+                    addFriendSuggestions.style.display = 'none';
+                    return;
+                }
+
+                // Bulunanları eşleştir (en fazla 5 sonuç)
+                const matches = globalNodesCache
+                    .filter(node => node.alias.includes(term))
+                    .slice(0, 5);
+
+                if (matches.length > 0) {
+                    addFriendSuggestions.innerHTML = '';
+                    matches.forEach(async match => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion-item';
+                        // Add inline aesthetic padding for more luxurious look
+                        div.style.padding = "12px 15px";
+                        div.style.fontSize = "1rem";
+                        div.style.display = "flex"; // Ensure flex for avatar and text alignment
+                        div.style.alignItems = "center";
+                        div.style.gap = "10px";
+
+                        // Default loading structure
+                        div.innerHTML = `<div style="width: 30px; height: 30px; border-radius: 50%; overflow: hidden; border: 1px solid var(--cyber-cyan); display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); font-size: 0.8rem; color: var(--cyber-cyan); flex-shrink: 0;"><i class="fas fa-user-ninja"></i></div> <span>${match.originalAlias}</span>`;
+
+                        div.addEventListener('click', () => {
+                            addFriendInput.value = match.originalAlias;
+                            addFriendSuggestions.style.display = 'none';
+                            // Tıklandığında direkt mini profili aç
+                            window.showMiniProfile(match.originalAlias);
+                            addFriendInput.value = ""; // hedefi vurduktan sonra temizle
+                        });
+                        addFriendSuggestions.appendChild(div);
+
+                        // Asynchronously find profile pic and inject it
+                        try {
+                            const avatarURL = await window.getUserAvatar(match.originalAlias);
+                            if (avatarURL && avatarURL !== "default") {
+                                div.innerHTML = `<div style="width: 30px; height: 30px; border-radius: 50%; overflow: hidden; border: 1px solid var(--cyber-cyan); flex-shrink: 0;"><img src="${avatarURL}" style="width: 100%; height: 100%; object-fit: cover;"></div> <span>${match.originalAlias}</span>`;
+                            }
+                        } catch (e) {
+                            console.error("Avatar check failed for suggestion", e);
+                        }
+                    });
+                    addFriendSuggestions.style.display = 'block';
+                } else {
+                    addFriendSuggestions.innerHTML = `<div class="suggestion-item" style="color: #666; justify-content: center; cursor: default; padding: 15px; font-size: 1rem;">[ SİNYAL YOK ]</div>`;
+                    addFriendSuggestions.style.display = 'block';
+                }
+            });
+
+            // Disari tiklandiginda kapanmasi icin
+            document.addEventListener('click', (e) => {
+                const isClickInside = addFriendInput.contains(e.target) || addFriendSuggestions.contains(e.target);
+                if (!isClickInside) {
+                    addFriendSuggestions.style.display = 'none';
+                }
+            });
+
+            // Butona basildiginda input'takini zorla arama / gosterme
+            if (addFriendBtn) {
+                addFriendBtn.addEventListener('click', () => {
+                    const term = addFriendInput.value.trim();
+                    if (term) {
+                        const exactMatch = globalNodesCache.find(n => n.alias === term.toLowerCase());
+                        if (exactMatch) {
+                            window.showMiniProfile(exactMatch.originalAlias);
+                            addFriendInput.value = "";
+                            addFriendSuggestions.style.display = 'none';
+                        } else {
+                            alert("Hedef düğüm bulunamadı! Tahminleri kontrol et.");
+                        }
+                    }
+                });
+            }
+        }
 
         window.onload = async function () {
             const savedAlias = localStorage.getItem("hotdragons_alias");
@@ -3673,6 +3957,18 @@
                     document.getElementById("adminUpdateInputArea").style.display = "block";
                     // Admin paneli butonunu Profil Dashboard'da etkinleştir
                     if (adminPanelBtn) adminPanelBtn.style.display = "inline-block";
+                }
+
+                // --- DİNAMİK YÜKSEKLİK: Oturum Varsa Ufak Liste ---
+                const nodeListEl = document.getElementById("nodeList");
+                if (nodeListEl) {
+                    nodeListEl.style.maxHeight = "800px"; /* Profilli Hali: Boyutlandırıldı */
+                }
+            } else {
+                // --- DİNAMİK YÜKSEKLİK: Oturum Yoksa Büyük Liste ---
+                const nodeListEl = document.getElementById("nodeList");
+                if (nodeListEl) {
+                    nodeListEl.style.maxHeight = "380px"; /* Profilsiz Hali: Komple Uzatıldı */
                 }
             }
 
