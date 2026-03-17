@@ -96,18 +96,6 @@
             padding-bottom: 50px;
         }
 
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: repeating-linear-gradient(0deg, rgba(255, 0, 60, 0.03) 0px, rgba(255, 0, 60, 0.03) 1px, transparent 1px, transparent 3px);
-            pointer-events: none;
-            z-index: 10;
-        }
-
         /* --- SİSTEM HUD --- */
         .system-hud {
             position: fixed;
@@ -660,25 +648,29 @@
         /* BANNER */
         .profile-banner {
             width: 100%;
-            height: 280px;
+            min-height: 150px; /* Boşken çok küçülmemesi için */
+            max-height: 450px; /* Dev ekranları bozmaması için sınır */
             border-radius: 10px 10px 0 0;
             background: linear-gradient(45deg, rgba(0, 0, 0, 0.8) 10%, var(--blood-red) 100%);
-            background-size: cover;
-            background-position: center;
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
             position: relative;
             overflow: hidden;
             transition: all 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .profile-banner::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* Banner Görsel Sabitleme */
+        /* Banner Görsel/Video Sabitleme */
+        .profile-banner video, .profile-banner img {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            height: auto; /* Orjinal en-boy oranını koruyarak kutuyu iter */
+            max-height: 450px; /* Kutu sınırı ile aynı */
+            object-fit: cover;
+            position: relative; /* Absolute'u kaldırdık ki kutuyu büyütebilsin */
+            z-index: 0;
+            display: block;
         }
 
         /* AVATAR */
@@ -1323,7 +1315,9 @@
             }
 
             .profile-banner {
-                height: 90px;
+                min-height: 90px;
+                max-height: 250px;
+                height: auto;
             }
 
             .feed-info {
@@ -1428,6 +1422,7 @@
         }
 
         /* --- DM / GROUP CHAT SİSTEMİ STİLLERİ --- */
+        /* DM Ekranı Tam Kaplama */
         #dmScreen {
             display: none;
             position: fixed;
@@ -1435,14 +1430,19 @@
             left: 0;
             width: 100vw;
             height: 100vh;
+            /* Ekranı tam kapla */
             background: rgba(5, 0, 10, 0.98);
             backdrop-filter: blur(15px);
             z-index: 5000;
             flex-direction: row;
+            overflow: hidden;
+            /* Dışarı taşmayı engelle */
         }
 
         .chat-sidebar {
-            width: 300px;
+            width: 350px;
+            /* Biraz genişletildi */
+            height: 100%;
             background: rgba(10, 0, 15, 0.85);
             border-right: 2px solid var(--cyber-cyan);
             display: flex;
@@ -1542,8 +1542,10 @@
 
         .chat-area {
             flex-grow: 1;
+            /* Kalan tüm alanı doldur */
             display: flex;
             flex-direction: column;
+            height: 100%;
             background: radial-gradient(circle at center, rgba(0, 243, 255, 0.05) 0%, transparent 100%);
             position: relative;
         }
@@ -1557,8 +1559,10 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
         }
 
+        /* Mesaj listesinin uzaması için */
         .chat-messages {
-            flex-grow: 1;
+            flex: 1;
+            /* Form ve header dışında kalan tüm boşluğu al */
             padding: 20px;
             overflow-y: auto;
             display: flex;
@@ -3735,14 +3739,15 @@
                     if (data.bannerUrl) {
                         if (data.bannerType === 'video') {
                             publicBanner.innerHTML = `<video src="${data.bannerUrl}" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 0;"></video>`;
-                            publicBanner.style.background = `none`;
                         } else {
-                            publicBanner.innerHTML = '';
-                            publicBanner.style.background = `url('${data.bannerUrl}') center/cover no-repeat`;
+                            // Artık background değil, direkt <img> basıyoruz ki kutu büyüsün
+                            publicBanner.innerHTML = `<img src="${data.bannerUrl}" alt="Banner">`;
                         }
+                        publicBanner.style.background = `none`;
                     } else {
                         publicBanner.innerHTML = '';
                         publicBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                        publicBanner.style.minHeight = "200px"; // Eğer görsel yoksa düz renk biraz yer kaplasın
                     }
 
                     publicAvatar.style.borderColor = themeColor;
@@ -3935,16 +3940,17 @@
                     if (userData.bannerUrl) {
                         if (userData.bannerType === 'video') {
                             myBanner.innerHTML = `<video src="${userData.bannerUrl}" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 0;"></video>`;
-                            myBanner.style.background = `none`;
                         } else {
-                            myBanner.innerHTML = '';
-                            myBanner.style.background = `url('${userData.bannerUrl}') center/cover no-repeat`;
+                            // Artık background değil, direkt <img> basıyoruz ki kutu büyüsün
+                            myBanner.innerHTML = `<img src="${userData.bannerUrl}" alt="Banner">`;
                         }
+                        myBanner.style.background = `none`;
                         document.getElementById('editBannerUrl').value = userData.bannerUrl;
                         document.getElementById('editBannerType').value = userData.bannerType;
                     } else {
                         myBanner.innerHTML = '';
                         myBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                        myBanner.style.minHeight = "200px"; // Eğer görsel yoksa düz renk biraz yer kaplasın
                     }
 
                     myAvatar.style.borderColor = themeColor;
@@ -5948,21 +5954,63 @@
 
         document.getElementById('editProfileForm').addEventListener('submit', async function (e) {
             e.preventDefault();
-            const btn = document.getElementById('saveEditBtn'); btn.innerText = "SİSTEME İŞLENİYOR...";
+            const btn = document.getElementById('saveEditBtn');
+            const originalText = btn.innerText;
+            btn.innerText = "SİSTEME İŞLENİYOR...";
+
+            const newBio = document.getElementById('editBio').value;
+            const newGender = document.getElementById('editGender').value;
+            const newDob = document.getElementById('editDob').value;
+            const newThemeColor = document.getElementById('editThemeColor').value;
+            const newSocialLink = document.getElementById('editSocialLink').value;
+            const newAvatar = document.getElementById('editAvatarUrl').value;
+            const newBannerType = document.getElementById('editBannerType').value;
+            const newBannerUrl = document.getElementById('editBannerUrl').value; // Sadece boş değilse okuyacağız
+
+            const docId = localStorage.getItem("hotdragons_doc_id");
+            if (!docId) { alert("Kimlik bulunamadı."); return; }
+
             try {
-                await updateDoc(doc(db, "preRegistrations", localStorage.getItem("hotdragons_doc_id")), {
-                    bio: document.getElementById('editBio').value,
-                    gender: document.getElementById('editGender').value,
-                    dob: document.getElementById('editDob').value,
-                    themeColor: document.getElementById('editThemeColor').value,
-                    socialLink: document.getElementById('editSocialLink').value,
-                    avatar: document.getElementById('editAvatarUrl').value,
-                    bannerUrl: document.getElementById('editBannerUrl').value,
-                    bannerType: document.getElementById('editBannerType').value
-                });
-                btn.innerText = "KİMLİK GÜNCELLENDİ"; btn.style.background = "#00ff88"; btn.style.color = "#000";
+                // 1. Gönderilecek verileri bir nesnede toplayın
+                let updateData = {
+                    bio: newBio,
+                    gender: newGender,
+                    dob: newDob,
+                    themeColor: newThemeColor,
+                    socialLink: newSocialLink
+                };
+
+                // 2. Avatar sadece kullanıcı yeni bir şey girdiyse güncellenecek
+                if (newAvatar.trim() !== "") {
+                    updateData.avatar = newAvatar;
+                }
+
+                // 3. Banner Ayarları (Burası silinmeyi engelleyecek)
+                if (newBannerType === "video" || newBannerType === "image") {
+                    updateData.bannerType = newBannerType;
+                    // SADECE url kutusu doluysa güncelleyeceğiz. Boşsa mevcudu koruyacak.
+                    if (newBannerUrl.trim() !== "") {
+                        updateData.bannerUrl = newBannerUrl;
+                    }
+                } else if (newBannerType === "none") {
+                    // Kullanıcı bilerek "YOK" seçtiyse sıfırlanmasına izin veriyoruz
+                    updateData.bannerType = "none";
+                    updateData.bannerUrl = "";
+                }
+
+                // 4. updateDoc ile sadece değişmesi gerekenleri gönderin!
+                await updateDoc(doc(db, "preRegistrations", docId), updateData);
+
+                btn.innerText = "KİMLİK GÜNCELLENDİ";
+                btn.style.background = "#00ff88";
+                btn.style.color = "#000";
                 setTimeout(() => window.location.reload(), 1000);
-            } catch (error) { btn.innerText = "HATA OLUŞTU"; }
+            } catch (error) {
+                console.error("Güncelleme hatası:", error);
+                btn.innerText = "HATA OLUŞTU";
+                btn.style.background = "red";
+                setTimeout(() => { btn.innerText = originalText; btn.style.background = "transparent"; }, 2000);
+            }
         });
 
         async function fetchLocation() {
