@@ -1426,6 +1426,308 @@
             color: #fff;
             box-shadow: 0 0 10px var(--blood-red);
         }
+
+        /* --- DM / GROUP CHAT SİSTEMİ STİLLERİ --- */
+        #dmScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 0, 10, 0.98);
+            backdrop-filter: blur(15px);
+            z-index: 5000;
+            flex-direction: row;
+        }
+
+        .chat-sidebar {
+            width: 300px;
+            background: rgba(10, 0, 15, 0.85);
+            border-right: 2px solid var(--cyber-cyan);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(5px);
+        }
+
+        .chat-sidebar-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+            text-align: center;
+        }
+
+        .chat-sidebar-header h3 {
+            font-family: 'Orbitron';
+            color: var(--cyber-cyan);
+            margin: 0 0 15px 0;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--cyber-cyan);
+        }
+
+        .chat-list {
+            flex-grow: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+        }
+
+        .chat-list-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-list-item:hover {
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        .chat-list-item.active {
+            background: rgba(0, 243, 255, 0.2);
+            border-left: 4px solid var(--cyber-cyan);
+        }
+
+        .chat-list-item.unread .chat-title {
+            font-weight: bold;
+            color: #fff !important;
+            text-shadow: 0 0 10px var(--blood-red);
+        }
+
+        .chat-list-item.unread::after {
+            content: '🔴';
+            font-size: 0.6rem;
+            margin-left: auto;
+            align-self: center;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #000;
+            border: 2px solid var(--cyber-cyan);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            overflow: hidden;
+            color: var(--cyber-cyan);
+        }
+
+        .chat-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .chat-title {
+            color: #fff;
+            font-family: 'Orbitron';
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 5px;
+        }
+
+        .chat-last-message {
+            color: #888;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chat-area {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.05) 0%, transparent 100%);
+            position: relative;
+        }
+
+        .chat-header {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid var(--cyber-cyan);
+            display: flex;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .discord-msg {
+            display: flex;
+            gap: 15px;
+            padding: 10px 20px;
+            transition: background 0.2s;
+            position: relative;
+        }
+
+        .discord-msg:hover {
+            background: rgba(0, 243, 255, 0.05);
+        }
+
+        .msg-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid #333;
+            background: #000;
+            overflow: hidden;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: 0.3s;
+        }
+
+        .msg-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .discord-msg.is-me .msg-avatar {
+            border-color: var(--cyber-cyan);
+            color: var(--cyber-cyan);
+            box-shadow: 0 0 10px rgba(0,243,255,0.3);
+        }
+
+        .discord-msg:not(.is-me) .msg-avatar {
+            border-color: var(--hot-pink);
+            color: var(--hot-pink);
+            box-shadow: 0 0 10px rgba(255,0,127,0.3);
+        }
+
+        .msg-content {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .msg-header {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .msg-sender {
+            font-family: 'Orbitron';
+            font-size: 1rem;
+            cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        .discord-msg.is-me .msg-sender {
+            color: var(--cyber-cyan);
+        }
+
+        .discord-msg:not(.is-me) .msg-sender {
+            color: var(--hot-pink);
+        }
+
+        .msg-time {
+            font-size: 0.75rem;
+            color: #888;
+            font-family: 'Rajdhani';
+        }
+
+        .msg-text {
+            font-size: 1.1rem;
+            color: #ddd;
+            line-height: 1.5;
+            word-break: break-word;
+            font-family: 'Rajdhani';
+        }
+
+        .chat-input-bar {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-top: 1px solid var(--cyber-cyan);
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .discord-msg .msg-delete-btn {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: transparent;
+            color: var(--blood-red);
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .discord-msg.is-me:hover .msg-delete-btn {
+            display: block;
+        }
+
+        .discord-msg .msg-delete-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .chat-no-selection {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            flex-direction: column;
+            color: #555;
+            font-family: 'Orbitron';
+        }
+
+        .chat-no-selection i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: rgba(0, 243, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            #dmScreen {
+                flex-direction: column;
+            }
+
+            .chat-sidebar {
+                width: 100%;
+                height: 100%;
+                border-right: none;
+                border-bottom: none;
+            }
+
+            .chat-area {
+                width: 100%;
+                height: 100%;
+            }
+            
+            #dmScreen.chat-active .chat-sidebar {
+                display: none;
+            }
+            
+            #dmScreen:not(.chat-active) .chat-area {
+                display: none;
+            }
+
+            #backToChatListBtn {
+                display: inline-block !important;
+            }
+        }
     </style>
 </head>
 
@@ -1600,6 +1902,11 @@
                         <i class="fas fa-exclamation-triangle"></i> NSFW (18+) AKIŞA GİR
                     </button>
 
+                    <button id="enterDmBtn" class="cyber-button outline"
+                        style="margin-bottom: 15px; border-color: var(--hot-pink); color: var(--hot-pink); text-shadow: 0 0 5px var(--hot-pink);">
+                        <i class="fas fa-comments"></i> SİNYAL AĞI (DM)
+                    </button>
+
                     <button id="showEditFormBtn" class="cyber-button" style="margin-bottom: 15px;"><i
                             class="fas fa-pen"></i> KİMLİĞİ DÜZENLE</button>
                     <div id="uplinkRequestsArea" style="margin-bottom: 20px; display:none;">
@@ -1639,6 +1946,18 @@
                                     accept="image/png, image/jpeg, image/gif, image/webp">
                             </div>
                             <input type="hidden" id="editAvatarUrl">
+                        </div>
+
+                        <div class="input-group">
+                            <label>Arka Plan Sinyali (Kapak/Banner)</label>
+                            <div class="file-input-wrapper">
+                                <div class="file-input-btn" id="bannerInputLabel"><i class="fas fa-image"></i> KAPAK
+                                    YÜKLE (Max 50MB)</div>
+                                <input type="file" id="editBanner"
+                                    accept="image/png, image/jpeg, image/gif, image/webp, video/mp4, video/webm">
+                            </div>
+                            <input type="hidden" id="editBannerUrl">
+                            <input type="hidden" id="editBannerType">
                         </div>
 
                         <div class="input-group">
@@ -1972,6 +2291,134 @@
             <div id="nsfwFeedLoader"
                 style="display: none; text-align: center; padding: 30px; color: var(--blood-red); font-family: 'Orbitron'; animation: blink 1s infinite;">
                 [ DAHA FAZLA GÜNAH ÇEKİLİYOR... ]</div>
+        </div>
+    </div>
+
+    <!-- DM / SİNYAL AĞI EKRANI -->
+    <div id="dmScreen">
+        <!-- SOL PANEL: SOHBET LİSTESİ -->
+        <div class="chat-sidebar">
+            <div class="chat-sidebar-header">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                    <h3 style="margin:0;">SİNYAL AĞI</h3>
+                    <button id="closeDmSidebarBtn" style="background:transparent; border:none; color:var(--blood-red); font-size:1.5rem; cursor:pointer;" title="Kapat"><i class="fas fa-times"></i></button>
+                </div>
+                <button id="newChatBtn" class="cyber-button small outline" style="width:100%;"><i class="fas fa-plus"></i> YENİ SİNYAL BAŞLAT</button>
+            </div>
+            <div class="chat-list" id="dmChatList">
+                <div style="text-align:center; padding: 20px; color:#888; font-family:'Orbitron'; font-size:0.8rem;">YÜKLENİYOR...</div>
+            </div>
+        </div>
+
+        <!-- SAĞ PANEL: MESAJLAŞMA ALANI -->
+        <div class="chat-area" id="dmChatArea">
+            <div class="chat-no-selection" id="dmNoSelection">
+                <i class="fas fa-satellite-dish"></i>
+                <p>Güvenli Ağ Uzayındasın.</p>
+                <p style="font-size:0.8rem; color:#888;">Başlamak için sol taraftan bir sinyal seç veya yeni başlat.</p>
+                <button id="backToDashFromDmBtn" class="cyber-button small outline" style="margin-top:20px; width:auto;"><i class="fas fa-arrow-left"></i> AĞA DÖN</button>
+            </div>
+            
+            <div id="dmActiveChatContainer" style="display:none; flex-direction:column; height: 100%;">
+                <div class="chat-header">
+                    <button id="backToChatListBtn" class="cyber-button small outline" style="margin-right:15px; border:none; padding:10px; display:none;"><i class="fas fa-arrow-left"></i></button>
+                    <div class="chat-avatar" id="activeChatAvatar"><i class="fas fa-user-ninja"></i></div>
+                    <div class="chat-info">
+                        <div class="chat-title" id="activeChatTitle" style="font-size:1.1rem; color:var(--cyber-cyan); text-shadow:0 0 10px var(--cyber-cyan);">...</div>
+                        <div class="chat-last-message" id="activeChatSubtitle">Şifrelenmiş Bağlantı</div>
+                    </div>
+                    <button id="chatInfoBtn" class="cyber-button small outline" style="margin-left:auto; border-color:var(--hot-pink); color:var(--hot-pink); display:none;" title="Ağ Bilgisi"><i class="fas fa-users"></i></button>
+                </div>
+
+                <div class="chat-messages" id="dmMessagesList">
+                    <!-- Dinamik mesajlar -->
+                </div>
+
+                <div class="chat-input-bar">
+                    <div class="file-input-wrapper" style="width:auto; margin-right:10px;">
+                        <button class="cyber-button small outline" style="width:50px; height:50px; padding:0; border-color:var(--deep-magenta); color:var(--deep-magenta);" title="Medya Ekle" id="dmMediaBtnLabel"><i class="fas fa-paperclip"></i></button>
+                        <input type="file" id="dmMediaInput" accept="image/*, video/mp4, video/webm" style="opacity:0; position:absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;">
+                        <button id="dmMediaCancelBtn" style="display:none; position:absolute; top:-10px; right:-10px; background:var(--blood-red); color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;"><i class="fas fa-times"></i></button>
+                    </div>
+                    <textarea id="dmMessageInput" class="cyber-textarea" style="min-height:50px; height:50px; font-size:1rem; padding:12px; background:rgba(0,0,0,0.6); flex-grow:1; border-color:var(--deep-magenta);" placeholder="Mesajını şifrele ve gönder..."></textarea>
+                    <button id="dmSendBtn" class="cyber-button small" style="width:auto; height:50px; background:var(--cyber-cyan); color:#000;"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- YENİ SİNYAL MODALI -->
+    <div id="newChatModal" class="login-modal" style="z-index: 4000;">
+        <div class="modal-content" style="border-color: var(--cyber-cyan);">
+            <span class="close-btn" id="closeNewChatModalBtn" style="color: var(--cyber-cyan);">&times;</span>
+            <div class="terminal-header" style="font-size: 1.5rem; margin-bottom: 20px; color: var(--cyber-cyan);">YENİ <span>SİNYAL</span></div>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">Sadece aktif "Uplink" bağlantısı kurduğun hedeflere şifreli sinyal gönderebilirsin.</p>
+            
+            <div class="admin-tab-container" style="border-bottom-color: var(--cyber-cyan);">
+                <button class="admin-tab-btn active" id="tabDirectChatBtn" style="color:var(--cyber-cyan); border-bottom-color:var(--cyber-cyan); flex:1;">BİREBİR (DM)</button>
+                <button class="admin-tab-btn" id="tabGroupChatBtn" style="color:#888; border-bottom:none; flex:1;">GRUP AĞI</button>
+            </div>
+
+            <!-- BİREBİR CHAT SEÇİMİ -->
+            <div id="directChatSelectionArea" class="admin-tab-content active">
+                <div id="newChatFriendsList" style="max-height: 250px; overflow-y:auto; border-top:1px solid rgba(0,243,255,0.2);">
+                    <div style="text-align:center; padding: 20px; color:#888; font-family:'Orbitron'; font-size:0.8rem;">Düğümler Taranıyor...</div>
+                </div>
+            </div>
+
+            <!-- GRUP CHAT SEÇİMİ -->
+            <div id="groupChatSelectionArea" class="admin-tab-content">
+                <div class="input-group" style="margin-bottom: 15px;">
+                    <label style="color:var(--hot-pink);">Grup Ağının Adı</label>
+                    <input type="text" id="newGroupNameInput" class="cyber-input" style="border-color:var(--hot-pink); padding-left:15px;" placeholder="Örn: Yeraltı Konseyi" autocomplete="off">
+                </div>
+                <label style="font-family:'Orbitron'; color:var(--hot-pink); display:block; margin-bottom:10px; font-size:0.85rem;">Hedefleri Seç</label>
+                <div id="newGroupFriendsList" style="max-height: 200px; overflow-y:auto; border-top:1px solid rgba(255,0,127,0.2);">
+                    <div style="text-align:center; padding: 20px; color:#888; font-family:'Orbitron'; font-size:0.8rem;">Düğümler Taranıyor...</div>
+                </div>
+                <button id="createGroupBtn" class="cyber-button small" style="margin-top:15px; background:var(--hot-pink); width:100%;">GRUBU OLUŞTUR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GRUP DETAY MODALI -->
+    <div id="groupInfoModal" class="login-modal" style="z-index: 5500;">
+        <div class="modal-content" style="border-color: var(--hot-pink); box-shadow: 0 0 30px rgba(255, 0, 127, 0.3);">
+            <span class="close-btn" id="closeGroupInfoModalBtn" style="color: var(--hot-pink);">&times;</span>
+            <div class="terminal-header" style="font-size: 1.5rem; margin-bottom: 20px; color: var(--hot-pink);">AĞ <span>DÜĞÜMLERİ</span></div>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">Bu şifreli gruba bağlı tüm anonim düğümler (katılımcılar):</p>
+            
+            <div id="groupInfoMembersList" style="max-height: 250px; overflow-y:auto; border-top:1px solid rgba(255,0,127,0.2); padding-top:15px; display:flex; flex-direction:column; gap:10px; margin-bottom:15px;">
+                <!-- Dinamik Doldurulacak -->
+            </div>
+            <div id="groupAdminControls" style="display:none; flex-direction:column; gap:10px; border-top:1px dashed var(--hot-pink); padding-top:15px;">
+                <label style="color:var(--hot-pink); font-size:0.8rem; font-family:'Orbitron';">YÖNETİCİ KONTROLLERİ</label>
+                
+                <button id="inviteToGroupBtn" class="cyber-button small outline" style="border-color:var(--cyber-cyan); color:var(--cyber-cyan); width:100%;"><i class="fas fa-user-plus"></i> YENİ DÜĞÜM DAVET ET</button>
+                
+                <div class="file-input-wrapper" style="width:100%;">
+                    <div class="file-input-btn" id="groupAvatarUploadLabel" style="width:100%; border-color:var(--hot-pink); color:var(--hot-pink); font-size:0.85rem; padding:10px;">
+                        <i class="fas fa-camera"></i> GRUP FOTOĞRAFI YÜKLE
+                    </div>
+                    <input type="file" id="groupAvatarInput" accept="image/*" style="opacity:0; position:absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;">
+                </div>
+                <button id="deleteGroupBtn" class="cyber-button small" style="background:transparent; color:var(--blood-red); border-color:var(--blood-red); width:100%;"><i class="fas fa-trash-alt"></i> GRUBU DAĞIT (SİL)</button>
+            </div>
+            
+            <button id="leaveGroupBtn" class="cyber-button small" style="background:transparent; color:#ffaa00; border-color:#ffaa00; width:100%; margin-top:15px; display:none;"><i class="fas fa-sign-out-alt"></i> AĞDAN AYRIL (ÇIK)</button>
+        </div>
+    </div>
+
+    <!-- GRUBA DAVET MODALI -->
+    <div id="inviteMemberModal" class="login-modal" style="z-index: 6000;">
+        <div class="modal-content" style="border-color: var(--cyber-cyan); box-shadow: 0 0 30px rgba(0, 243, 255, 0.3);">
+            <span class="close-btn" id="closeInviteMemberModalBtn" style="color: var(--cyber-cyan);">&times;</span>
+            <div class="terminal-header" style="font-size: 1.5rem; margin-bottom: 20px; color: var(--cyber-cyan);">AĞA <span>DAVET ET</span></div>
+            <p style="color: #aaa; margin-bottom: 20px; font-size: 0.9rem;">Gruba yeni bir düğüm (katılımcı) ekle:</p>
+            
+            <div id="inviteFriendsList" style="max-height: 300px; overflow-y:auto; border-top:1px solid rgba(0,243,255,0.2); padding-top:15px; display:flex; flex-direction:column; gap:10px;">
+                <!-- Dinamik Doldurulacak -->
+            </div>
         </div>
     </div>
 
@@ -2464,7 +2911,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, startAfter, where, getDocs, updateDoc, doc, deleteDoc, increment, arrayUnion, arrayRemove, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, limitToLast, startAfter, where, getDocs, updateDoc, doc, deleteDoc, increment, arrayUnion, arrayRemove, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-storage.js";
 
         const firebaseConfig = {
@@ -2691,7 +3138,7 @@
         window.addEventListener('hashchange', handleRouting);
 
         // FOTOĞRAF YÜKLEME VE BASE64 ÇEVİRİCİ
-        // YÜKSEK KALİTE FOTOĞRAF YÜKLEME (FIREBASE STORAGE)
+        // YÜKSEK KALİTE FOTOGRAF YÜKLEME (FIREBASE STORAGE)
         document.getElementById('editAvatar').addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (!file) return;
@@ -2725,6 +3172,48 @@
                     const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                     document.getElementById('editAvatarUrl').value = downloadURL;
                     labelBtn.innerHTML = '<i class="fas fa-check"></i> GÖRSEL AĞA İŞLENDİ';
+                    labelBtn.style.color = "var(--cyber-cyan)";
+                    labelBtn.style.borderColor = "var(--cyber-cyan)";
+                    labelBtn.style.textShadow = "0 0 10px var(--cyber-cyan)";
+                }
+            );
+        });
+
+        // BANNER (ARKA PLAN) YÜKLEME
+        document.getElementById('editBanner').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 50 * 1024 * 1024) {
+                alert("Sistem Reddi: Medya çok büyük. Maksimum 50MB yükleyebilirsin.");
+                this.value = '';
+                return;
+            }
+
+            const isVideo = file.type.startsWith('video/');
+            const typeStr = isVideo ? 'video' : 'image';
+            document.getElementById('editBannerType').value = typeStr;
+
+            const storageRef = ref(storage, 'banners/' + Date.now() + '_' + file.name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            const labelBtn = document.getElementById('bannerInputLabel');
+            labelBtn.innerHTML = "YÜKLENİYOR... %0";
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    labelBtn.innerHTML = `YÜKLENİYOR... %${Math.round(progress)}`;
+                },
+                (error) => {
+                    console.error("Banner yükleme hatası", error);
+                    alert("Sistem Reddi: Medya sunucuya iletilemedi.");
+                    labelBtn.innerHTML = '<i class="fas fa-image"></i> TEKRAR DENE';
+                },
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    document.getElementById('editBannerUrl').value = downloadURL;
+                    labelBtn.innerHTML = '<i class="fas fa-check"></i> ' + (isVideo ? 'VİDEO' : 'GÖRSEL') + ' ÇEKİRDEĞE İŞLENDİ';
                     labelBtn.style.color = "var(--cyber-cyan)";
                     labelBtn.style.borderColor = "var(--cyber-cyan)";
                     labelBtn.style.textShadow = "0 0 10px var(--cyber-cyan)";
@@ -2930,6 +3419,7 @@
             publicAvatar.innerHTML = '<i class="fas fa-eye"></i>';
 
             // Temizleme işlemi
+            publicBanner.innerHTML = '';
             publicBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, var(--blood-red) 100%)`;
             publicAvatar.style.borderColor = "var(--cyber-cyan)";
             publicAvatar.style.boxShadow = "0 0 25px rgba(0, 243, 255, 0.6)";
@@ -2969,7 +3459,20 @@
                     }
 
                     const themeColor = data.themeColor || "#ff003c";
-                    publicBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                    
+                    if (data.bannerUrl) {
+                        if (data.bannerType === 'video') {
+                            publicBanner.innerHTML = `<video src="${data.bannerUrl}" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 0;"></video>`;
+                            publicBanner.style.background = `none`;
+                        } else {
+                            publicBanner.innerHTML = '';
+                            publicBanner.style.background = `url('${data.bannerUrl}') center/cover no-repeat`;
+                        }
+                    } else {
+                        publicBanner.innerHTML = '';
+                        publicBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                    }
+
                     publicAvatar.style.borderColor = themeColor;
                     publicAvatar.style.boxShadow = `0 0 25px ${themeColor}80`;
                     document.getElementById("publicAliasDisplay").style.color = themeColor;
@@ -3147,7 +3650,21 @@
                     const myBanner = document.getElementById("myBanner");
                     const myAvatar = document.getElementById("myAvatar");
 
-                    myBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                    if (userData.bannerUrl) {
+                        if (userData.bannerType === 'video') {
+                            myBanner.innerHTML = `<video src="${userData.bannerUrl}" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 0;"></video>`;
+                            myBanner.style.background = `none`;
+                        } else {
+                            myBanner.innerHTML = '';
+                            myBanner.style.background = `url('${userData.bannerUrl}') center/cover no-repeat`;
+                        }
+                        document.getElementById('editBannerUrl').value = userData.bannerUrl;
+                        document.getElementById('editBannerType').value = userData.bannerType;
+                    } else {
+                        myBanner.innerHTML = '';
+                        myBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                    }
+
                     myAvatar.style.borderColor = themeColor;
                     myAvatar.style.boxShadow = `0 0 25px ${themeColor}80`;
 
@@ -5090,7 +5607,9 @@
                     dob: document.getElementById('editDob').value,
                     themeColor: document.getElementById('editThemeColor').value,
                     socialLink: document.getElementById('editSocialLink').value,
-                    avatar: document.getElementById('editAvatarUrl').value // <-- DÜZELTİLDİ
+                    avatar: document.getElementById('editAvatarUrl').value,
+                    bannerUrl: document.getElementById('editBannerUrl').value,
+                    bannerType: document.getElementById('editBannerType').value
                 });
                 btn.innerText = "KİMLİK GÜNCELLENDİ"; btn.style.background = "#00ff88"; btn.style.color = "#000";
                 setTimeout(() => window.location.reload(), 1000);
@@ -5462,6 +5981,793 @@
                     }, 3000);
                 }
             });
+        // --- DM / GROUP CHAT SİSTEMİ JS ---
+        const dmScreen = document.getElementById('dmScreen');
+        const enterDmBtn = document.getElementById('enterDmBtn');
+        const backToDashFromDmBtn = document.getElementById('backToDashFromDmBtn');
+        const closeDmSidebarBtn = document.getElementById('closeDmSidebarBtn');
+        const dmChatList = document.getElementById('dmChatList');
+        const dmMessagesList = document.getElementById('dmMessagesList');
+        const dmMessageInput = document.getElementById('dmMessageInput');
+        const dmSendBtn = document.getElementById('dmSendBtn');
+        const dmActiveChatContainer = document.getElementById('dmActiveChatContainer');
+        const dmNoSelection = document.getElementById('dmNoSelection');
+        const activeChatTitle = document.getElementById('activeChatTitle');
+        const activeChatSubtitle = document.getElementById('activeChatSubtitle');
+        const backToChatListBtn = document.getElementById('backToChatListBtn');
+        
+        let currentActiveChatId = null;
+        let currentChatParticipants = [];
+        let messagesUnsubscribe = null;
+        let myChatsUnsubscribe = null;
+
+        // Ekrana geçiş
+        if(enterDmBtn) {
+            enterDmBtn.addEventListener('click', () => {
+                document.getElementById('profileDashboard').style.display = 'none';
+                dmScreen.style.display = 'flex';
+                listenToMyChats();
+            });
+        }
+        if(backToDashFromDmBtn) {
+            backToDashFromDmBtn.addEventListener('click', () => {
+                dmScreen.style.display = 'none';
+                document.getElementById('profileDashboard').style.display = 'block';
+                if(myChatsUnsubscribe) myChatsUnsubscribe();
+            });
+        }
+        if(backToChatListBtn) {
+            backToChatListBtn.addEventListener('click', () => {
+                dmScreen.classList.remove('chat-active');
+                currentActiveChatId = null;
+                if(messagesUnsubscribe) messagesUnsubscribe();
+                dmActiveChatContainer.style.display = 'none';
+                dmNoSelection.style.display = 'flex';
+            });
+        }
+        if(closeDmSidebarBtn) {
+            closeDmSidebarBtn.addEventListener('click', () => {
+                dmScreen.style.display = 'none';
+                document.getElementById('profileDashboard').style.display = 'block';
+                if(myChatsUnsubscribe) myChatsUnsubscribe();
+                dmScreen.classList.remove('chat-active');
+                currentActiveChatId = null;
+                if(messagesUnsubscribe) messagesUnsubscribe();
+                dmActiveChatContainer.style.display = 'none';
+                dmNoSelection.style.display = 'flex';
+            });
+        }
+
+        // Yeni Sinyal (Chat) Oluşturma Modalı
+        const newChatBtn = document.getElementById('newChatBtn');
+        const newChatModal = document.getElementById('newChatModal');
+        const closeNewChatModalBtn = document.getElementById('closeNewChatModalBtn');
+        const tabDirectChatBtn = document.getElementById('tabDirectChatBtn');
+        const tabGroupChatBtn = document.getElementById('tabGroupChatBtn');
+        const directChatSelectionArea = document.getElementById('directChatSelectionArea');
+        const groupChatSelectionArea = document.getElementById('groupChatSelectionArea');
+        const createGroupBtn = document.getElementById('createGroupBtn');
+
+        if(newChatBtn) {
+            newChatBtn.addEventListener('click', () => {
+                newChatModal.style.display = 'flex';
+                loadFriendsForNewChat();
+            });
+        }
+        if(closeNewChatModalBtn) {
+            closeNewChatModalBtn.addEventListener('click', () => {
+                newChatModal.style.display = 'none';
+            });
+        }
+        
+        if(tabDirectChatBtn) {
+            tabDirectChatBtn.addEventListener('click', () => {
+                tabDirectChatBtn.classList.add('active'); tabDirectChatBtn.style.color = "var(--cyber-cyan)"; tabDirectChatBtn.style.borderBottomColor = "var(--cyber-cyan)";
+                tabGroupChatBtn.classList.remove('active'); tabGroupChatBtn.style.color = "#888"; tabGroupChatBtn.style.borderBottomColor = "transparent";
+                directChatSelectionArea.style.display = 'block';
+                groupChatSelectionArea.style.display = 'none';
+            });
+        }
+        if(tabGroupChatBtn) {
+            tabGroupChatBtn.addEventListener('click', () => {
+                tabGroupChatBtn.classList.add('active'); tabGroupChatBtn.style.color = "var(--hot-pink)"; tabGroupChatBtn.style.borderBottomColor = "var(--hot-pink)";
+                tabDirectChatBtn.classList.remove('active'); tabDirectChatBtn.style.color = "#888"; tabDirectChatBtn.style.borderBottomColor = "transparent";
+                directChatSelectionArea.style.display = 'none';
+                groupChatSelectionArea.style.display = 'block';
+            });
+        }
+
+        // Arkadaşları (Established Uplinks) Getir
+        async function loadFriendsForNewChat() {
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            if(!myAlias) return;
+
+            const directList = document.getElementById('newChatFriendsList');
+            const groupList = document.getElementById('newGroupFriendsList');
+            directList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888;">Düğümler Taranıyor...</div>`;
+            groupList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888;">Düğümler Taranıyor...</div>`;
+
+            try {
+                const friendsSet = new Set();
+                const q1 = query(collection(db, "uplinks"), where("sender", "==", myAlias), where("status", "==", "established"));
+                const snap1 = await getDocs(q1);
+                snap1.forEach(doc => friendsSet.add(doc.data().receiver));
+
+                const q2 = query(collection(db, "uplinks"), where("receiver", "==", myAlias), where("status", "==", "established"));
+                const snap2 = await getDocs(q2);
+                snap2.forEach(doc => friendsSet.add(doc.data().sender));
+
+                if(friendsSet.size === 0) {
+                    directList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888;">Henüz aktif bir Uplink bağlantın yok.</div>`;
+                    groupList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888;">Henüz aktif bir Uplink bağlantın yok.</div>`;
+                    return;
+                }
+
+                let finalDirectListHtml = "";
+                let finalGroupListHtml = "";
+
+                friendsSet.forEach(friend => {
+                    // Direct form item
+                    finalDirectListHtml += `
+                        <div class="chat-list-item" onclick="startDirectChat('${friend}')">
+                            <div class="chat-avatar"><i class="fas fa-user-ninja"></i></div>
+                            <div class="chat-info">
+                                <div class="chat-title" style="color:var(--cyber-cyan);">@${friend}</div>
+                            </div>
+                            <i class="fas fa-comment" style="color:#888;"></i>
+                        </div>
+                    `;
+                    // Group form item
+                    finalGroupListHtml += `
+                        <div class="chat-list-item" style="border-bottom: 1px solid rgba(255,0,127,0.2);">
+                            <input type="checkbox" value="${friend}" class="group-friend-checkbox" style="margin-right:15px; transform:scale(1.5); accent-color:var(--hot-pink);">
+                            <div class="chat-info">
+                                <div class="chat-title" style="color:var(--hot-pink);">@${friend}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                directList.innerHTML = finalDirectListHtml;
+                groupList.innerHTML = finalGroupListHtml;
+            } catch(e) {
+                console.error("Uplinks çekilemedi:", e);
+                directList.innerHTML = `<div style="text-align:center; padding: 20px; color:red;">Bağlantı Hatası</div>`;
+            }
+        }
+
+        // Birebir Chat Başlat / Varolanı Aç
+        window.startDirectChat = async function(targetAlias) {
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            if(!myAlias) return;
+
+            newChatModal.style.display = 'none';
+
+            // Check if chat already exists
+            try {
+                const q1 = query(collection(db, "chats"), where("type", "==", "direct"), where("participants", "array-contains", myAlias));
+                const snap1 = await getDocs(q1);
+                let existingChatId = null;
+                snap1.forEach(doc => {
+                    const parts = doc.data().participants;
+                    if(parts.includes(targetAlias)) {
+                        existingChatId = doc.id;
+                    }
+                });
+
+                if(existingChatId) {
+                    openChat(existingChatId, targetAlias, "direct");
+                } else {
+                    // Create new
+                    const newChatRef = await addDoc(collection(db, "chats"), {
+                        type: "direct",
+                        participants: [myAlias, targetAlias],
+                        lastMessage: "Sinyal bağlantısı kuruldu.",
+                        lastMessageTime: serverTimestamp()
+                    });
+                    openChat(newChatRef.id, targetAlias, "direct");
+                }
+            } catch(e) { console.error("Chat başlatılamadı:", e); }
+        };
+
+        // Grup Oluştur
+        if(createGroupBtn) {
+            createGroupBtn.addEventListener('click', async () => {
+                const myAlias = localStorage.getItem("hotdragons_alias");
+                const groupName = document.getElementById('newGroupNameInput').value.trim();
+                const checkboxes = document.querySelectorAll('.group-friend-checkbox:checked');
+                
+                if(!groupName) return alert("Grup ağının adını belirt.");
+                if(checkboxes.length === 0) return alert("Gruba en az 1 hedef seçmelisin.");
+
+                const participants = [myAlias];
+                checkboxes.forEach(cb => participants.push(cb.value));
+
+                createGroupBtn.innerText = "YARATILIYOR...";
+                createGroupBtn.disabled = true;
+
+                try {
+                    const newChatRef = await addDoc(collection(db, "chats"), {
+                        type: "group",
+                        groupName: groupName,
+                        participants: participants,
+                        admin: myAlias,
+                        lastMessage: "Grup ağı kuruldu.",
+                        lastMessageTime: serverTimestamp()
+                    });
+                    newChatModal.style.display = 'none';
+                    document.getElementById('newGroupNameInput').value = "";
+                    checkboxes.forEach(cb => cb.checked = false);
+                    openChat(newChatRef.id, groupName, "group");
+                } catch(e) {
+                    console.error("Grup oluşturulamadı:", e);
+                }
+
+                createGroupBtn.innerText = "GRUBU OLUŞTUR";
+                createGroupBtn.disabled = false;
+            });
+        }
+
+        // Chat Listesini Dinle
+        function listenToMyChats() {
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            if(!myAlias) return;
+
+            if(myChatsUnsubscribe) myChatsUnsubscribe();
+
+            // DİKKAT: orderBy'ı kaldırdık. Index hatasına düşmeden tüm mesajlarımızı çekeceğiz.
+            const q = query(collection(db, "chats"), where("participants", "array-contains", myAlias));
+            
+            // Hata yakalayıcıyı (error callback) ekledik
+            myChatsUnsubscribe = onSnapshot(q, (snapshot) => {
+                if(snapshot.empty) {
+                    dmChatList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888; font-family:'Orbitron'; font-size:0.8rem;">Hiçbir sinyal kaydı yok.</div>`;
+                    return;
+                }
+
+                // 1. Gelen verileri bir diziye (array) aktarıyoruz
+                let chatsArray = [];
+                snapshot.forEach(docSnap => {
+                    chatsArray.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                // 2. Sıralamayı (En yeni mesaj en üstte) burada biz yapıyoruz
+                chatsArray.sort((a, b) => {
+                    const tA = a.lastMessageTime ? a.lastMessageTime.toMillis() : 0;
+                    const tB = b.lastMessageTime ? b.lastMessageTime.toMillis() : 0;
+                    return tB - tA; // Azalan sıralama (Yeni -> Eski)
+                });
+
+                // 3. Tüm listeyi tek bir metin değişkeninde topluyoruz (Hızı x100 artırır)
+                let finalHTML = "";
+
+                chatsArray.forEach(data => {
+                    const id = data.id;
+                    let displayTitle = "";
+                    let iconHtml = "";
+
+                    if(data.type === "group") {
+                        displayTitle = data.groupName;
+                        if(data.avatarUrl) {
+                            iconHtml = `<img src="${data.avatarUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                        } else {
+                            iconHtml = '<i class="fas fa-users" style="color:var(--hot-pink);"></i>';
+                        }
+                    } else {
+                        displayTitle = data.participants.find(p => p !== myAlias) || data.participants[0];
+                        iconHtml = '<i class="fas fa-user-secret"></i>';
+                    }
+
+                    let timeStr = "";
+                    if(data.lastMessageTime) {
+                         const d = data.lastMessageTime.toDate();
+                         timeStr = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+                    }
+
+                    const isUnread = data.unreadMembers && data.unreadMembers.includes(myAlias);
+                    const activeClass = (id === currentActiveChatId) ? "active" : "";
+                    const unreadClass = isUnread ? "unread" : "";
+                    const partsStr = data.participants ? data.participants.join(',') : '';
+                    const groupAvatarTag = data.avatarUrl ? data.avatarUrl : '';
+
+                    // Ekrana değil, değişkene yazdırıyoruz
+                    finalHTML += `
+                        <div class="chat-list-item ${activeClass} ${unreadClass}" id="chatObj_${id}" onclick="openChat('${id}', '${displayTitle}', '${data.type}', '${partsStr}', '${data.admin || ''}', '${groupAvatarTag}')">
+                            <div class="chat-avatar" style="${data.type==='group' ? 'border-color:var(--hot-pink); color:var(--hot-pink);' : ''}">${iconHtml}</div>
+                            <div class="chat-info">
+                                <div class="chat-title" style="${data.type==='group' ? 'color:var(--hot-pink);' : 'color:var(--cyber-cyan);'}">${data.type==='group'?'':'@'}${displayTitle}</div>
+                                <div class="chat-last-message">${data.lastMessage || '...'}</div>
+                            </div>
+                            <div style="font-size:0.6rem; color:#666; font-family:'Orbitron'; align-self:flex-start; margin-left:10px;">${timeStr}</div>
+                        </div>
+                    `;
+                });
+
+                // 4. Döngü bitti, her şeyi tek seferde ekrana basıyoruz!
+                dmChatList.innerHTML = finalHTML;
+
+            }, (error) => {
+                // Eğer veritabanı veya yetki kuralları(rules) ile ilgili bir sorun çıkarsa artık bunu görebileceğiz
+                console.error("Sohbet listesi çekilirken ölümcül hata:", error);
+                dmChatList.innerHTML = `<div style="text-align:center; padding: 20px; color:var(--blood-red); font-family:'Orbitron'; font-size:0.8rem;">AĞA ERİŞİLEMEDİ! (F12 Konsola Bak)</div>`;
+            });
+        }
+
+        let currentGroupAdmin = null;
+
+        // Chati Aç (Mesajları Dinle)
+        window.openChat = function(chatId, title, type, participantsStr, adminAliasStr, groupAvatarUrl) {
+            currentActiveChatId = chatId;
+            currentChatParticipants = participantsStr ? participantsStr.split(',') : [];
+            currentGroupAdmin = adminAliasStr;
+
+            dmScreen.classList.add('chat-active'); // Mobil için
+            dmNoSelection.style.display = 'none';
+            dmActiveChatContainer.style.display = 'flex';
+            
+            // Mark as read
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            if(myAlias && chatId) {
+                updateDoc(doc(db, "chats", chatId), {
+                    unreadMembers: arrayRemove(myAlias)
+                }).catch(e => console.error(e));
+            }
+            
+            // Aktif chat vurgusu
+            document.querySelectorAll('.chat-list-item').forEach(el => el.classList.remove('active'));
+            const activeObj = document.getElementById('chatObj_'+chatId);
+            if(activeObj) activeObj.classList.add('active');
+
+            activeChatTitle.innerText = (type==='group' ? '' : '@') + title;
+            activeChatSubtitle.innerText = type === 'group' ? 'Çoklu Ağ' : 'Şifrelenmiş Birebir Ağ';
+            
+            if(type === 'group' && groupAvatarUrl) {
+                document.getElementById('activeChatAvatar').innerHTML = `<img src="${groupAvatarUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+            } else {
+                document.getElementById('activeChatAvatar').innerHTML = type === 'group' ? '<i class="fas fa-users" style="color:var(--hot-pink);"></i>' : '<i class="fas fa-user-secret"></i>';
+            }
+            
+            document.getElementById('activeChatAvatar').style.borderColor = type === 'group' ? 'var(--hot-pink)' : 'var(--cyber-cyan)';
+            
+            const chatInfoBtn = document.getElementById('chatInfoBtn');
+            if(chatInfoBtn) chatInfoBtn.style.display = (type === 'group') ? 'block' : 'none';
+
+            if(messagesUnsubscribe) messagesUnsubscribe();
+
+            const q = query(collection(db, `chats/${chatId}/messages`), orderBy("timestamp", "asc"), limitToLast(50));
+            
+            messagesUnsubscribe = onSnapshot(q, (snapshot) => {
+                dmMessagesList.innerHTML = "";
+                if(snapshot.empty) {
+                    dmMessagesList.innerHTML = `<div style="text-align:center; padding: 20px; color:#666; font-family:'Orbitron'; font-size:0.8rem;">Bu ağda henüz iz yok...</div>`;
+                    return;
+                }
+
+                let finalHtml = ""; // DOM Reflow Optimization
+                
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    const isMe = data.sender === myAlias;
+                    let deleteBtn = isMe ? `<button class="msg-delete-btn" onclick="window.deleteMessage('${docSnap.id}')" title="Bu Sinyali Yok Et"><i class="fas fa-trash-alt"></i></button>` : '';
+                    
+                    let timeStr = "";
+                    if(data.timestamp) {
+                         const d = data.timestamp.toDate();
+                         timeStr = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+                    }
+
+                    // render media if exists
+                    let mediaHtml = "";
+                    if(data.mediaUrl) {
+                        if(data.mediaType === 'video') {
+                            mediaHtml = `<video src="${data.mediaUrl}" controls style="max-width:100%; border-radius:5px; margin-top:10px; border:1px solid var(--cyber-cyan);"></video>`;
+                        } else {
+                            mediaHtml = `<img src="${data.mediaUrl}" style="max-width:100%; border-radius:5px; margin-top:10px; border:1px solid var(--cyber-cyan); cursor:pointer;" onclick="window.open(this.src,'_blank')">`;
+                        }
+                    }
+
+                    finalHtml += `
+                        <div class="discord-msg ${isMe ? 'is-me' : ''}" id="msgRow_${docSnap.id}">
+                            ${deleteBtn}
+                            <div class="msg-avatar" id="msgAvatar_${docSnap.id}" onclick="window.showMiniProfile('${data.sender}')"><i class="fas fa-user-ninja"></i></div>
+                            <div class="msg-content">
+                                <div class="msg-header">
+                                    <span class="msg-sender" onclick="window.showMiniProfile('${data.sender}')">@${data.sender}</span>
+                                    <span class="msg-time">${timeStr}</span>
+                                </div>
+                                ${data.text ? `<div class="msg-text">${data.text}</div>` : ''}
+                                ${mediaHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                dmMessagesList.innerHTML = finalHtml;
+
+                // Async Avatar Loading after DOM paints.
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    window.getUserAvatar(data.sender).then(avUrl => {
+                        const avEl = document.getElementById("msgAvatar_" + docSnap.id);
+                        if(avEl && avUrl && avUrl !== "default") {
+                            avEl.innerHTML = `<img src="${avUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+                        }
+                    });
+                });
+
+                // Scroll to bottom
+                setTimeout(() => {
+                    dmMessagesList.scrollTop = dmMessagesList.scrollHeight;
+                }, 100);
+            });
+        };
+
+        const dmMediaInput = document.getElementById('dmMediaInput');
+        const dmMediaCancelBtn = document.getElementById('dmMediaCancelBtn');
+        const dmMediaBtnLabel = document.getElementById('dmMediaBtnLabel');
+
+        let selectedDmMediaFile = null;
+
+        if(dmMediaInput && dmMediaCancelBtn && dmMediaBtnLabel) {
+            dmMediaInput.addEventListener('change', function() {
+                if(this.files && this.files[0]) {
+                    selectedDmMediaFile = this.files[0];
+                    if(!selectedDmMediaFile.type.startsWith('image/') && !selectedDmMediaFile.type.startsWith('video/')) {
+                        alert('Lütfen geçerli bir resim veya video seçin.');
+                        this.value = '';
+                        selectedDmMediaFile = null;
+                        return;
+                    }
+                    if(selectedDmMediaFile.size > 50 * 1024 * 1024) {
+                        alert('Dosya boyutu 50MB üst sınırını aşıyor.');
+                        this.value = '';
+                        selectedDmMediaFile = null;
+                        return;
+                    }
+                    dmMediaBtnLabel.innerHTML = '<i class="fas fa-check" style="color:var(--cyber-cyan);"></i>';
+                    dmMediaCancelBtn.style.display = 'block';
+                }
+            });
+
+            dmMediaCancelBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                selectedDmMediaFile = null;
+                dmMediaInput.value = '';
+                dmMediaBtnLabel.innerHTML = '<i class="fas fa-paperclip"></i>';
+                this.style.display = 'none';
+            });
+        }
+
+        // Mesaj Gönder
+        dmSendBtn.addEventListener('click', async () => {
+            const text = dmMessageInput.value.trim();
+            const myAlias = localStorage.getItem("hotdragons_alias");
+            const fileToUpload = selectedDmMediaFile;
+            
+            if((!text && !fileToUpload) || !currentActiveChatId || !myAlias) return;
+
+            dmMessageInput.value = "";
+            dmSendBtn.disabled = true;
+            dmMessageInput.disabled = true;
+
+            let finalMediaUrl = null;
+            let finalMediaType = null;
+
+            try {
+                if (fileToUpload) {
+                    dmMessageInput.placeholder = "Medya Yükleniyor...";
+                    const fileExt = fileToUpload.name.split('.').pop();
+                    const storageRef = ref(getStorage(), `dm_media/${myAlias}_${Date.now()}.${fileExt}`);
+                    const uploadTask = await uploadBytesResumable(storageRef, fileToUpload);
+                    finalMediaUrl = await getDownloadURL(uploadTask.ref);
+                    finalMediaType = fileToUpload.type.startsWith('video/') ? 'video' : 'image';
+                    
+                    if(dmMediaCancelBtn) dmMediaCancelBtn.click();
+                }
+
+                const msgData = {
+                    sender: myAlias,
+                    text: text,
+                    timestamp: serverTimestamp()
+                };
+                
+                if (finalMediaUrl) {
+                    msgData.mediaUrl = finalMediaUrl;
+                    msgData.mediaType = finalMediaType;
+                }
+
+                // Mesajı collection'a ekle
+                await addDoc(collection(db, `chats/${currentActiveChatId}/messages`), msgData);
+
+                let displaySnippet = text;
+                if (!text && finalMediaUrl) {
+                    displaySnippet = finalMediaType === 'video' ? '[Video Mesajı]' : '[Görsel Mesajı]';
+                }
+
+                // Chat ana dökümanını lastMessage ve unread ile güncelle
+                const unreadTargets = currentChatParticipants.filter(p => p !== myAlias);
+                await updateDoc(doc(db, "chats", currentActiveChatId), {
+                    lastMessage: displaySnippet.length > 30 ? displaySnippet.substring(0,30)+"..." : displaySnippet,
+                    lastMessageTime: serverTimestamp(),
+                    unreadMembers: unreadTargets
+                });
+
+            } catch(e) { console.error("Mesaj gönderilemedi:", e); alert("Medya ağır geldi, veri aktarılamadı."); }
+            
+            dmMessageInput.placeholder = "Mesajını şifrele ve gönder...";
+            dmSendBtn.disabled = false;
+            dmMessageInput.disabled = false;
+            dmMessageInput.focus();
+        });
+
+        // Enter ile Gönder
+        dmMessageInput.addEventListener("keypress", function(e) {
+            if(e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                dmSendBtn.click();
+            }
+        });
+
+        // Group Info Modal Logic
+        const chatInfoBtnClickBlock = document.getElementById('chatInfoBtn');
+        const groupInfoModalObj = document.getElementById('groupInfoModal');
+        const closeGroupInfoModalBtnObj = document.getElementById('closeGroupInfoModalBtn');
+        const groupAdminControls = document.getElementById('groupAdminControls');
+        const leaveGroupBtn = document.getElementById('leaveGroupBtn');
+        const deleteGroupBtn = document.getElementById('deleteGroupBtn');
+        const groupAvatarInput = document.getElementById('groupAvatarInput');
+
+        if(chatInfoBtnClickBlock) {
+            chatInfoBtnClickBlock.addEventListener('click', () => {
+                const myAlias = localStorage.getItem("hotdragons_alias");
+                const list = document.getElementById('groupInfoMembersList');
+                list.innerHTML = "";
+                
+                // Set Privileges
+                if(currentGroupAdmin === myAlias) {
+                    groupAdminControls.style.display = 'flex';
+                    leaveGroupBtn.style.display = 'none'; // Admin cannot casually leave, must delete
+                } else {
+                    groupAdminControls.style.display = 'none';
+                    leaveGroupBtn.style.display = 'block';
+                }
+
+                currentChatParticipants.forEach(p => {
+                    const isAdminLabel = (p === currentGroupAdmin) ? `<span style="font-size:0.6rem; color:var(--gold); border:1px solid var(--gold); padding:2px 5px; border-radius:3px; margin-left:10px;">KURUCU</span>` : '';
+                    let kickBtnHtml = '';
+                    if (currentGroupAdmin === myAlias && p !== myAlias) {
+                        kickBtnHtml = `<button class="cyber-button small" style="background:transparent; color:var(--blood-red); border:none; padding:5px; margin-left:10px;" onclick="event.stopPropagation(); window.kickMemberFromGroup('${p}')" title="Ağdan At"><i class="fas fa-user-minus"></i></button>`;
+                    }
+
+                    list.innerHTML += `
+                        <div style="display:flex; align-items:center; gap:15px; padding:10px; background:rgba(0,0,0,0.5); border:1px solid rgba(255,0,127,0.3); border-radius:5px; cursor:pointer; transition:0.3s;" onmouseover="this.style.background='rgba(255,0,127,0.1)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'" onclick="document.getElementById('groupInfoModal').style.display='none'; window.showMiniProfile('${p}')">
+                            <div class="msg-avatar" style="width:35px;height:35px;border-color:var(--hot-pink);color:var(--hot-pink);" id="gModalAv_${p}"><i class="fas fa-user-ninja"></i></div>
+                            <div style="color:var(--hot-pink); font-family:'Orbitron'; font-size:1.1rem; flex-grow:1;">@${p} ${isAdminLabel}</div>
+                            ${kickBtnHtml}
+                        </div>
+                    `;
+                    window.getUserAvatar(p).then(avUrl => {
+                        const el = document.getElementById("gModalAv_" + p);
+                        if(el && avUrl && avUrl !== "default") {
+                            el.innerHTML = `<img src="${avUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+                        }
+                    });
+                });
+                groupInfoModalObj.style.display = 'flex';
+            });
+        }
+        if(closeGroupInfoModalBtnObj) {
+            closeGroupInfoModalBtnObj.addEventListener('click', () => {
+                groupInfoModalObj.style.display = 'none';
+            });
+        }
+
+        if(leaveGroupBtn) {
+            leaveGroupBtn.addEventListener('click', async () => {
+                if(!currentActiveChatId) return;
+                const myAlias = localStorage.getItem("hotdragons_alias");
+                if(!confirm("Ağdan çıkış yapıyorsun. Emin misin?")) return;
+                
+                try {
+                    leaveGroupBtn.disabled = true;
+                    leaveGroupBtn.innerText = "AYRILIYOR...";
+                    await updateDoc(doc(db, "chats", currentActiveChatId), {
+                        participants: arrayRemove(myAlias)
+                    });
+                    
+                    // Exit chat view
+                    groupInfoModalObj.style.display = 'none';
+                    document.getElementById('backToChatListBtn').click();
+                    
+                    // Auto-sent System message (optional but nice touch)
+                    await addDoc(collection(db, `chats/${currentActiveChatId}/messages`), {
+                        sender: "SİSTEM",
+                        text: `@${myAlias} ağdan ayrıldı.`,
+                        timestamp: serverTimestamp()
+                    });
+                    
+                } catch(e) { console.error("Gruptan çikarken hata:", e); }
+                leaveGroupBtn.disabled = false;
+                leaveGroupBtn.innerHTML = `<i class="fas fa-sign-out-alt"></i> AĞDAN AYRIL (ÇIK)`;
+            });
+        }
+
+        if(deleteGroupBtn) {
+            deleteGroupBtn.addEventListener('click', async () => {
+                if(!currentActiveChatId) return;
+                if(!confirm("DİKKAT! Tüm ağ kayıtları yok edilecek. Emin misin?")) return;
+                
+                try {
+                    deleteGroupBtn.disabled = true;
+                    deleteGroupBtn.innerText = "YOK EDİLİYOR...";
+                    
+                    // Firestore doesnt automatically cascade delete subcollections usually, 
+                    // but we will simply delete the master chat doc to hide it from lists. 
+                    await deleteDoc(doc(db, "chats", currentActiveChatId));
+                    
+                    groupInfoModalObj.style.display = 'none';
+                    document.getElementById('backToChatListBtn').click();
+                } catch(e) { console.error("Grup silinirken hata:", e); }
+                
+                deleteGroupBtn.disabled = false;
+                deleteGroupBtn.innerHTML = `<i class="fas fa-trash-alt"></i> GRUBU DAĞIT (SİL)`;
+            });
+        }
+
+        if(groupAvatarInput) {
+            groupAvatarInput.addEventListener('change', async (e) => {
+                const file = e.target.files[0];
+                if(!file || !currentActiveChatId) return;
+                if(!file.type.startsWith('image/')) return alert("Sadece görsel formatları geçerlidir.");
+
+                const labelObj = document.getElementById('groupAvatarUploadLabel');
+                labelObj.innerHTML = `<i class="fas fa-spinner fa-spin"></i> YÜKLENİYOR...`;
+
+                try {
+                    const storageRef = ref(getStorage(), `chat_avatars/${currentActiveChatId}_${Date.now()}`);
+                    const uploadTask = await uploadBytesResumable(storageRef, file);
+                    const dlUrl = await getDownloadURL(uploadTask.ref);
+
+                    await updateDoc(doc(db, "chats", currentActiveChatId), {
+                        avatarUrl: dlUrl
+                    });
+
+                    labelObj.innerHTML = `<i class="fas fa-check"></i> FOTOĞRAF GÜNCELLENDİ`;
+                    setTimeout(() => { labelObj.innerHTML = `<i class="fas fa-camera"></i> GRUP FOTOĞRAFI YÜKLE`; }, 2000);
+                    
+                    // Update active chat header avatar visually immediately
+                    document.getElementById('activeChatAvatar').innerHTML = `<img src="${dlUrl}" style="width:100%;height:100%;object-fit:cover;">`;
+                    
+                } catch(error) {
+                    console.error("Grup fotosu yükleme hatası: ", error);
+                    labelObj.innerHTML = `<i class="fas fa-times"></i> HATA OLUŞTU`;
+                }
+            });
+        }
+        
+        const inviteToGroupBtn = document.getElementById('inviteToGroupBtn');
+        const inviteMemberModal = document.getElementById('inviteMemberModal');
+        const closeInviteMemberModalBtn = document.getElementById('closeInviteMemberModalBtn');
+        const inviteFriendsList = document.getElementById('inviteFriendsList');
+
+        if(inviteToGroupBtn) {
+            inviteToGroupBtn.addEventListener('click', async () => {
+                const myAlias = localStorage.getItem("hotdragons_alias");
+                if(!myAlias) return;
+
+                inviteFriendsList.innerHTML = `<div style="text-align:center; color:var(--cyber-cyan);"><i class="fas fa-spinner fa-spin"></i> BAĞLANTILAR TARANIYOR...</div>`;
+                inviteMemberModal.style.display = 'flex';
+                groupInfoModalObj.style.display = 'none';
+
+                try {
+                    const uplinksRef = collection(db, `users/${myAlias}/uplinks`);
+                    const qUplinks = query(uplinksRef, where("status", "==", "established"));
+                    const snapU = await getDocs(qUplinks);
+                    
+                    inviteFriendsList.innerHTML = "";
+                    if(snapU.empty) {
+                        inviteFriendsList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888; font-size:0.8rem;">Ağa davet edilebilecek boşta bir sinyal yok.</div>`;
+                        return;
+                    }
+                    
+                    let hasEligible = false;
+                    snapU.forEach(d => {
+                        const targetAlias = d.id;
+                        if(!currentChatParticipants.includes(targetAlias)) {
+                            hasEligible = true;
+                            inviteFriendsList.innerHTML += `
+                                <div style="display:flex; justify-content:space-between; align-items:center; padding:10px; border-bottom:1px solid rgba(0,243,255,0.1);">
+                                    <span style="color:var(--cyber-cyan); font-family:'Orbitron';">@${targetAlias}</span>
+                                    <button class="cyber-button small" style="background:transparent; border-color:var(--deep-magenta); color:var(--deep-magenta); padding:5px 10px;" onclick="window.addGroupMember('${targetAlias}')">DAVET ET</button>
+                                </div>
+                            `;
+                        }
+                    });
+
+                    if(!hasEligible) {
+                        inviteFriendsList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888; font-size:0.8rem;">Bütün bağlantıların halihazırda bu ağda.</div>`;
+                    }
+
+                } catch(e) {
+                    console.error("Uplink hatası", e);
+                    inviteFriendsList.innerHTML = "Hata oluştu.";
+                }
+            });
+        }
+
+        if(closeInviteMemberModalBtn) {
+            closeInviteMemberModalBtn.addEventListener('click', () => {
+                inviteMemberModal.style.display = 'none';
+                groupInfoModalObj.style.display = 'flex';
+            });
+        }
+
+        window.addGroupMember = async function(targetAlias) {
+            if(!currentActiveChatId || currentGroupAdmin !== localStorage.getItem("hotdragons_alias")) return;
+            if(!confirm(`@${targetAlias} bağlantısını bu ağa dahil etmek istediğine emin misin?`)) return;
+            
+            try {
+                await updateDoc(doc(db, "chats", currentActiveChatId), {
+                    participants: arrayUnion(targetAlias)
+                });
+                
+                await addDoc(collection(db, `chats/${currentActiveChatId}/messages`), {
+                    sender: "SİSTEM",
+                    text: `@${targetAlias} ağa dahil oldu.`,
+                    timestamp: serverTimestamp()
+                });
+
+                inviteMemberModal.style.display = 'none';
+                document.getElementById('chatInfoBtn').click();
+                
+            } catch(error) {
+                console.error("Katılımcı eklerken hata: ", error);
+                alert("Katılımcı eklenemedi.");
+            }
+        };
+
+        // Admin Üye Atma (Kick) Formatı
+        window.kickMemberFromGroup = async function(targetAlias) {
+            if(!currentActiveChatId || currentGroupAdmin !== localStorage.getItem("hotdragons_alias")) return;
+            if(!confirm(`@${targetAlias} düğümünü bu ağdan kırmak (atmak) istediğine emin misin?`)) return;
+            
+            try {
+                // Katılımcılardan hedefi çıkar
+                await updateDoc(doc(db, "chats", currentActiveChatId), {
+                    participants: arrayRemove(targetAlias)
+                });
+                
+                // Sistemsel atılma mesajı yolla
+                await addDoc(collection(db, `chats/${currentActiveChatId}/messages`), {
+                    sender: "SİSTEM",
+                    text: `@${targetAlias} bağlantısı yönetici tarafından koparıldı. (Atıldı)`,
+                    timestamp: serverTimestamp()
+                });
+                
+                // UI Refresh için butona tetik verelim
+                document.getElementById('chatInfoBtn').click();
+                
+            } catch(error) {
+                console.error("Kullanıcı atılırken hata oluştu: ", error);
+                alert("Ağ bağlantısı koparılamadı.");
+            }
+        };
+
+        // Mesaj Silme Formatı
+        window.deleteMessage = async function(msgId) {
+            if(!currentActiveChatId) return;
+            if(!confirm("Kendi sinyalini ağdan tamamen yok etmek istediğine emin misin? (Karşı taraf da göremeyecek)")) return;
+            
+            try {
+                await deleteDoc(doc(db, `chats/${currentActiveChatId}/messages`, msgId));
+                // Snapshot listener automatically removes it from the screen, no need to refresh manually.
+            } catch(error) {
+                console.error("Sinyal silinirken hata:", error);
+                alert("Sinyal silinemedi.");
+            }
+        };
+
         }
     </script>
 </body>
