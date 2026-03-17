@@ -660,7 +660,7 @@
         /* BANNER */
         .profile-banner {
             width: 100%;
-            height: 180px;
+            height: 200px;
             border-radius: 10px 10px 0 0;
             background: linear-gradient(45deg, rgba(0, 0, 0, 0.8) 10%, var(--blood-red) 100%);
             background-size: cover;
@@ -1728,6 +1728,7 @@
                 display: inline-block !important;
             }
         }
+
         /* --- YENİ EKLENEN ÖZELLİK STİLLERİ --- */
 
         /* Canlı Düğüm Tespiti (Online Indicator) */
@@ -1746,8 +1747,14 @@
         }
 
         @keyframes pulseOnline {
-            0% { box-shadow: 0 0 5px #00ff00; }
-            100% { box-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00; transform: scale(1.1); }
+            0% {
+                box-shadow: 0 0 5px #00ff00;
+            }
+
+            100% {
+                box-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00;
+                transform: scale(1.1);
+            }
         }
 
         .avatar-container {
@@ -1762,8 +1769,10 @@
             width: 20px;
             height: 20px;
         }
-        
-        .post-avatar .online-indicator, .comment-avatar .online-indicator, .dm-avatar .online-indicator {
+
+        .post-avatar .online-indicator,
+        .comment-avatar .online-indicator,
+        .dm-avatar .online-indicator {
             width: 12px;
             height: 12px;
             bottom: 2px;
@@ -1796,17 +1805,31 @@
             color: var(--hot-pink);
             font-weight: bold;
         }
-        
+
         .typing-dots::after {
             content: '';
             animation: typingDots 1.5s infinite steps(4, end);
         }
 
         @keyframes typingDots {
-            0%, 20% { content: ''; }
-            40% { content: '.'; }
-            60% { content: '..'; }
-            80%, 100% { content: '...'; }
+
+            0%,
+            20% {
+                content: '';
+            }
+
+            40% {
+                content: '.';
+            }
+
+            60% {
+                content: '..';
+            }
+
+            80%,
+            100% {
+                content: '...';
+            }
         }
 
         /* @Mention Sistemi */
@@ -1824,7 +1847,7 @@
             text-shadow: 0 0 10px var(--hot-pink);
             text-decoration: underline;
         }
-        
+
         /* Görüldü - Mavi Tik Sistemi */
         .message-status {
             font-size: 0.75rem;
@@ -1841,10 +1864,17 @@
             text-shadow: 0 0 5px var(--cyber-cyan);
             animation: pulseRead 1.5s infinite alternate;
         }
-        
+
         @keyframes pulseRead {
-            0% { opacity: 0.8; text-shadow: 0 0 5px var(--cyber-cyan); }
-            100% { opacity: 1; text-shadow: 0 0 12px var(--cyber-cyan); }
+            0% {
+                opacity: 0.8;
+                text-shadow: 0 0 5px var(--cyber-cyan);
+            }
+
+            100% {
+                opacity: 1;
+                text-shadow: 0 0 12px var(--cyber-cyan);
+            }
         }
     </style>
 </head>
@@ -3099,6 +3129,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyAbm2ySNK2jeIvZKRPHkUfgD1kEv17reG0",
             authDomain: "hotdragons.firebaseapp.com",
+            databaseURL: "https://hotdragons-default-rtdb.firebaseio.com",
             projectId: "hotdragons",
             storageBucket: "hotdragons.firebasestorage.app",
             messagingSenderId: "339189439280",
@@ -3114,10 +3145,10 @@
         window.onlineUsers = {};
         onValue(rtdbRef(rtdb, 'status'), (snap) => {
             window.onlineUsers = snap.val() || {};
-            if(window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
+            if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
         });
 
-        window.updateAllOnlineIndicators = function() {
+        window.updateAllOnlineIndicators = function () {
             document.querySelectorAll('[data-online-target]').forEach(el => {
                 const alias = el.getAttribute('data-online-target');
                 const isOnline = window.onlineUsers[alias] && window.onlineUsers[alias].state === 'online';
@@ -3570,6 +3601,11 @@
 
             modal.style.display = "flex";
             mpAlias.innerText = "@" + alias;
+
+            // Online Tracker'ı bağla: Mini profil açılınca avatar radarla taranır
+            mpAvatar.setAttribute('data-online-target', alias.toLowerCase());
+            if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
+
             mpAvatar.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
             mpBio.innerText = "Bağlantı Kuruluyor...";
             mpGender.innerText = "?";
@@ -3698,6 +3734,11 @@
 
                     publicAvatar.style.borderColor = themeColor;
                     publicAvatar.style.boxShadow = `0 0 25px ${themeColor}80`;
+
+                    // Online Tracker'ı bağla: Profil açılınca avatar radarla taranır
+                    publicAvatar.setAttribute('data-online-target', targetAlias.toLowerCase());
+                    if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
+
                     document.getElementById("publicAliasDisplay").style.color = themeColor;
                     document.getElementById("publicAliasDisplay").style.textShadow = `0 0 15px ${themeColor}`;
 
@@ -4375,24 +4416,24 @@
         });
 
         // --- @MENTION SİSTEMİ VE BİLDİRİMLER (HUD ALERT) ---
-        window.formatMentions = function(text) {
-            if(!text) return text;
+        window.formatMentions = function (text) {
+            if (!text) return text;
             return text.replace(/@([a-zA-Z0-9_]+)/g, '<span class="mention-link" onclick="event.stopPropagation(); window.showMiniProfile(\'$1\')">@$1</span>');
         };
 
-        window.processMentions = async function(content, sourceId, sourceType) {
+        window.processMentions = async function (content, sourceId, sourceType) {
             const myAlias = localStorage.getItem("hotdragons_alias");
             if (!myAlias || !content) return;
             const mentionRegex = /@([a-zA-Z0-9_]+)/g;
             let match;
             const mentionedUsers = [];
             while ((match = mentionRegex.exec(content)) !== null) {
-                if(match[1].toLowerCase() !== myAlias.toLowerCase()) {
+                if (match[1].toLowerCase() !== myAlias.toLowerCase()) {
                     mentionedUsers.push(match[1].toLowerCase());
                 }
             }
             const uniqueUsers = [...new Set(mentionedUsers)];
-            for(const user of uniqueUsers) {
+            for (const user of uniqueUsers) {
                 try {
                     await addDoc(collection(db, "notifications"), {
                         targetAlias: user,
@@ -4403,7 +4444,7 @@
                         read: false,
                         timestamp: serverTimestamp()
                     });
-                } catch(e) { console.error(e); }
+                } catch (e) { console.error(e); }
             }
         };
 
@@ -4412,7 +4453,7 @@
             const qNotifs = query(collection(db, "notifications"), where("targetAlias", "==", myAliasForNotifs.toLowerCase()), where("read", "==", false));
             onSnapshot(qNotifs, (snap) => {
                 snap.docChanges().forEach(change => {
-                    if(change.type === "added") {
+                    if (change.type === "added") {
                         const data = change.doc.data();
                         const alertEl = document.getElementById("hudAlert");
                         alertEl.innerHTML = `<i class="fas fa-crosshairs fa-spin"></i> HEDEF KİLİDİ: @${data.senderAlias} // ETİKETLENDİN`;
@@ -4420,11 +4461,11 @@
                         alertEl.style.background = "rgba(0, 243, 255, 0.2)";
                         alertEl.style.color = "var(--cyber-cyan)";
                         alertEl.style.border = "1px solid var(--cyber-cyan)";
-                        
+
                         setTimeout(() => {
                             alertEl.style.display = "none";
                         }, 6000);
-                        
+
                         updateDoc(change.doc.ref, { read: true });
                     }
                 });
@@ -5400,7 +5441,7 @@
                             boosters: [], // Use boosters array instead of boostCount
                             timestamp: serverTimestamp()
                         });
-                        if(window.processMentions) window.processMentions(content, postDoc.id, 'post');
+                        if (window.processMentions) window.processMentions(content, postDoc.id, 'post');
                         sendFeedBtn.innerText = "YAYINLANDI";
                     }
 
@@ -5728,7 +5769,7 @@
                         content: content,
                         timestamp: serverTimestamp()
                     });
-                    if(window.processMentions) window.processMentions(content, commentDoc.id, 'comment');
+                    if (window.processMentions) window.processMentions(content, commentDoc.id, 'comment');
                 } catch (e) { console.error("Fısıltı hatası", e); }
             });
 
@@ -5763,7 +5804,7 @@
                             content: content, tags: tags, author: alias, mediaUrl: mediaUrl || null,
                             mediaType: mediaType || null, boostCount: 0, timestamp: serverTimestamp()
                         });
-                        if(window.processMentions) window.processMentions(content, nsfwPostDoc.id, 'nsfw_post');
+                        if (window.processMentions) window.processMentions(content, nsfwPostDoc.id, 'nsfw_post');
                         sendNsfwFeedBtn.innerText = "YAYINLANDI";
                     }
 
@@ -6654,7 +6695,7 @@
                     const typingData = snap.val() || {};
                     const currentAlias = localStorage.getItem("hotdragons_alias");
                     const typingUsers = Object.keys(typingData).filter(u => u !== currentAlias && typingData[u] === true);
-                    
+
                     let indicator = document.getElementById("globalTypingIndicator");
                     if (!indicator) {
                         indicator = document.createElement("div");
@@ -6662,7 +6703,7 @@
                         indicator.className = "typing-indicator-container";
                         document.body.appendChild(indicator);
                     }
-                    
+
                     if (typingUsers.length > 0) {
                         const nameStr = typingUsers.length > 1 ? "Birileri" : `@${typingUsers[0]}`;
                         indicator.innerHTML = `<span>${nameStr}</span> ağa veri giriyor<span class="typing-dots"></span>`;
@@ -6731,7 +6772,7 @@
                                     <span class="msg-sender" onclick="window.showMiniProfile('${data.sender}')">@${data.sender}</span>
                                     <span class="msg-time">${timeStr}${tickHtml}</span>
                                 </div>
-                                ${data.text ? `<div class="msg-text">${data.text}</div>` : ''}
+                                ${data.text ? `<div class="msg-text">${window.formatMentions ? window.formatMentions(data.text) : data.text}</div>` : ''}
                                 ${mediaHtml}
                             </div>
                         </div>
@@ -6814,7 +6855,7 @@
                     if (fileToUpload) {
                         dmMessageInput.placeholder = "Medya Yükleniyor...";
                         const fileExt = fileToUpload.name.split('.').pop();
-                        const storageRef = ref(getStorage(), `dm_media/${myAlias}_${Date.now()}.${fileExt}`);
+                        const storageRef = ref(storage, `dm_media/${myAlias}_${Date.now()}.${fileExt}`);
                         const uploadTask = await uploadBytesResumable(storageRef, fileToUpload);
                         finalMediaUrl = await getDownloadURL(uploadTask.ref);
                         finalMediaType = fileToUpload.type.startsWith('video/') ? 'video' : 'image';
@@ -6867,14 +6908,14 @@
             });
 
             let typingTimeout = null;
-            dmMessageInput.addEventListener("input", function() {
-                if(!currentActiveChatId) return;
+            dmMessageInput.addEventListener("input", function () {
+                if (!currentActiveChatId) return;
                 const myAlias = localStorage.getItem("hotdragons_alias");
-                if(!myAlias) return;
-                
+                if (!myAlias) return;
+
                 rtdbSet(rtdbRef(rtdb, `typing/${currentActiveChatId}/${myAlias}`), true);
-                
-                if(typingTimeout) clearTimeout(typingTimeout);
+
+                if (typingTimeout) clearTimeout(typingTimeout);
                 typingTimeout = setTimeout(() => {
                     rtdbSet(rtdbRef(rtdb, `typing/${currentActiveChatId}/${myAlias}`), false);
                 }, 1500);
@@ -6997,7 +7038,7 @@
                     labelObj.innerHTML = `<i class="fas fa-spinner fa-spin"></i> YÜKLENİYOR...`;
 
                     try {
-                        const storageRef = ref(getStorage(), `chat_avatars/${currentActiveChatId}_${Date.now()}`);
+                        const storageRef = ref(storage, `chat_avatars/${currentActiveChatId}_${Date.now()}`);
                         const uploadTask = await uploadBytesResumable(storageRef, file);
                         const dlUrl = await getDownloadURL(uploadTask.ref);
 
@@ -7033,19 +7074,24 @@
                     groupInfoModalObj.style.display = 'none';
 
                     try {
-                        const uplinksRef = collection(db, `users/${myAlias}/uplinks`);
-                        const qUplinks = query(uplinksRef, where("status", "==", "established"));
-                        const snapU = await getDocs(qUplinks);
+                        // DÜZELTME 1: Doğru uplinks koleksiyonunu kullan
+                        const qUplinksSender = query(collection(db, "uplinks"), where("sender", "==", myAlias), where("status", "==", "established"));
+                        const qUplinksReceiver = query(collection(db, "uplinks"), where("receiver", "==", myAlias), where("status", "==", "established"));
+
+                        const [snapS, snapR] = await Promise.all([getDocs(qUplinksSender), getDocs(qUplinksReceiver)]);
+                        const friendsSet = new Set();
+
+                        snapS.forEach(doc => friendsSet.add(doc.data().receiver));
+                        snapR.forEach(doc => friendsSet.add(doc.data().sender));
 
                         inviteFriendsList.innerHTML = "";
-                        if (snapU.empty) {
-                            inviteFriendsList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888; font-size:0.8rem;">Ağa davet edilebilecek boşta bir sinyal yok.</div>`;
+                        if (friendsSet.size === 0) {
+                            inviteFriendsList.innerHTML = `<div style="text-align:center; padding: 20px; color:#888; font-size:0.8rem;">Ağa davet edilebilecek aktif bir sinyal yok.</div>`;
                             return;
                         }
 
                         let hasEligible = false;
-                        snapU.forEach(d => {
-                            const targetAlias = d.id;
+                        friendsSet.forEach(targetAlias => {
                             if (!currentChatParticipants.includes(targetAlias)) {
                                 hasEligible = true;
                                 inviteFriendsList.innerHTML += `
@@ -7062,7 +7108,7 @@
                         }
 
                     } catch (e) {
-                        console.error("Uplink hatası", e);
+                        console.error("Davet listesi hatası", e);
                         inviteFriendsList.innerHTML = "Hata oluştu.";
                     }
                 });
