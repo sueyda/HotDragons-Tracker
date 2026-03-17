@@ -660,7 +660,7 @@
         /* BANNER */
         .profile-banner {
             width: 100%;
-            height: 200px;
+            height: 280px;
             border-radius: 10px 10px 0 0;
             background: linear-gradient(45deg, rgba(0, 0, 0, 0.8) 10%, var(--blood-red) 100%);
             background-size: cover;
@@ -3150,7 +3150,8 @@
 
         window.updateAllOnlineIndicators = function () {
             document.querySelectorAll('[data-online-target]').forEach(el => {
-                const alias = el.getAttribute('data-online-target');
+                // toLowerCase() ile tutarlı arama: "Sinner" / "sinner" farkı ortadan kalkar
+                const alias = (el.getAttribute('data-online-target') || '').toLowerCase();
                 const isOnline = window.onlineUsers[alias] && window.onlineUsers[alias].state === 'online';
                 let indicator = el.querySelector('.online-indicator');
                 if (isOnline) {
@@ -3168,7 +3169,9 @@
 
         const myPresenceAlias = localStorage.getItem("hotdragons_alias");
         if (myPresenceAlias) {
-            const myConnectionsRef = rtdbRef(rtdb, `status/${myPresenceAlias}`);
+            // toLowerCase() ile tutarlı anahtar: "Sinner" ve "sinner" aynı yola yazılır
+            const presenceKey = myPresenceAlias.toLowerCase();
+            const myConnectionsRef = rtdbRef(rtdb, `status/${presenceKey}`);
             const connectedRef = rtdbRef(rtdb, '.info/connected');
             onValue(connectedRef, (snap) => {
                 if (snap.val() === true) {
@@ -3602,11 +3605,18 @@
             modal.style.display = "flex";
             mpAlias.innerText = "@" + alias;
 
-            // Online Tracker'ı bağla: Mini profil açılınca avatar radarla taranır
+            // Online Tracker'ı bağla (Avatar içeriğini değiştirmeden önce attribute'u koy)
             mpAvatar.setAttribute('data-online-target', alias.toLowerCase());
-            if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
 
-            mpAvatar.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            // Avatar içeriğini güvenli şekilde değiştir (.online-indicator'ı korur)
+            function setAvatarContent(el, html) {
+                // Mevcut .online-indicator'ı sakla
+                const indicator = el.querySelector('.online-indicator');
+                el.innerHTML = html;
+                if (indicator) el.appendChild(indicator);
+            }
+
+            setAvatarContent(mpAvatar, '<i class="fas fa-spinner fa-spin"></i>');
             mpBio.innerText = "Bağlantı Kuruluyor...";
             mpGender.innerText = "?";
             mpAge.innerText = "?";
@@ -3623,8 +3633,11 @@
                 if (!snap.empty) {
                     const data = snap.docs[0].data();
 
-                    if (data.avatar) mpAvatar.innerHTML = `<img src="${data.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
-                    else mpAvatar.innerHTML = '<i class="fas fa-user-ninja"></i>';
+                    if (data.avatar) setAvatarContent(mpAvatar, `<img src="${data.avatar}" style="width:100%; height:100%; object-fit:cover;">`);
+                    else setAvatarContent(mpAvatar, '<i class="fas fa-user-ninja"></i>');
+
+                    // Avatar ayarlandıktan sonra online göstergeyi tetikle
+                    if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
 
                     if (data.bio) mpBio.innerText = `"${data.bio}"`;
                     else mpBio.innerText = '"Sessizliği tercih ediyor..."';
@@ -3810,8 +3823,13 @@
                     }
 
                     if (data.avatar) {
+                        // Online-indicator'ı koru: innerHTML yerine güvenli değiştirme
+                        const existingIndicator = publicAvatar.querySelector('.online-indicator');
                         publicAvatar.innerHTML = `<img src="${data.avatar}" alt="${data.alias}">`;
+                        if (existingIndicator) publicAvatar.appendChild(existingIndicator);
                     }
+                    // Avatar ayarlandıktan SİNYAL: online göstergeyi yenile
+                    if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
                 } else {
                     document.getElementById("publicAliasDisplay").innerText = "HAYALET (BULUNAMADI)";
                 }
@@ -4694,7 +4712,7 @@
 
                     // HTML Taslağı: Başlangıçta Ninja ikonu (Varsayılan Profil) gösterilir
                     newItem.innerHTML = `
-                        <div id="${avatarId}" class="node-avatar" style="border: 2px solid ${borderColor}; box-shadow: 0 0 10px ${shadowColor}; color: ${iconColor};">
+                        <div id="${avatarId}" class="node-avatar" data-online-target="${rumuz.toLowerCase()}" style="border: 2px solid ${borderColor}; box-shadow: 0 0 10px ${shadowColor}; color: ${iconColor};">
                             <i class="fas fa-user-ninja"></i>
                         </div>
                         <span class="node-name" style="font-size: 1.15rem; opacity: 1;">${rumuz}</span>
@@ -4708,7 +4726,10 @@
                                 const avDiv = newItem.querySelector(`#${avatarId}`);
                                 if (avDiv) {
                                     avDiv.style.background = 'transparent';
+                                    const indicator = avDiv.querySelector('.online-indicator');
                                     avDiv.innerHTML = `<img src="${url}">`;
+                                    if (indicator) avDiv.appendChild(indicator);
+                                    if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
                                 }
                             }
                         });
@@ -4738,7 +4759,10 @@
                             // "default" değer dönmediğinden ve URL olduğundan emin oluyoruz
                             if (url && url !== "default") {
                                 avDiv.style.background = 'transparent';
+                                const indicator = avDiv.querySelector('.online-indicator');
                                 avDiv.innerHTML = `<img src="${url}">`;
+                                if (indicator) avDiv.appendChild(indicator);
+                                if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
                             }
                         });
                     }
@@ -4748,6 +4772,7 @@
 
             nodeList.appendChild(fragment);
             nodeList.appendChild(cloneFragment);
+            if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
 
             if (count > 0) document.getElementById('userCount').innerText = count * 14;
 
