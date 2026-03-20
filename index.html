@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Syncopate:wght@700&family=Rajdhani:wght@500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -22,16 +22,28 @@
     <style>
         /* SİSTEM KÖK DEĞİŞKENLERİ */
         :root {
-            --hot-pink: #ff007f;
-            --blood-red: #ff003c;
-            --deep-magenta: #7a003c;
-            --electric-purple: #7b00ff;
-            --cyber-cyan: #00f3ff;
-            --gold: #ffaa00;
+            /* --- YENİ SİBER-TATLI RENK PALETİ --- */
+            --void-bg: #0d0118;
+            /* Çok koyu mor (Siyah yerine) */
+            --cyber-blue: #70ffff;
+            /* Daha yumuşak, turkuaz siber mavi */
+            --neon-pink: #ff85ea;
+            /* Tam bir tatlı neon pembe */
+            --mint-green: #9dffb0;
+            /* Canlılık için nane yeşili (yeni ekledik) */
+            --text-glow: #e0faff;
+            /* Hafif maviye çalan beyaz yazı */
+            --shadow-glow: rgba(255, 133, 234, 0.3);
+            /* Pembe gölge */
+
+            /* Geriye dönük uyumluluk için eski değişkenleri mapleme (ihtiyaç duyulursa) */
+            --hot-pink: var(--neon-pink);
+            --cyber-cyan: var(--cyber-blue);
+            --blood-red: #ff7a59;
+            --deep-magenta: #5c117e;
+            --electric-purple: #c129cd;
             --white: #ffffff;
-            --void-bg: #030005;
-            --panel-dark: rgba(15, 0, 10, 0.65);
-            --text-glow: #ffb6e6;
+            --panel-dark: rgba(13, 1, 24, 0.5);
         }
 
         * {
@@ -76,15 +88,46 @@
             gap: 5px;
         }
 
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--void-bg);
+        /* --- ARKA PLAN SİMLERİ (PARTICLES) --- */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: -1;
+            /* Işıkların önünde ama içeriğin arkasında */
             background-image:
-                radial-gradient(circle at 50% 30%, rgba(255, 0, 60, 0.15), transparent 60%),
-                radial-gradient(circle at 80% 80%, rgba(123, 0, 255, 0.1), transparent 50%),
-                linear-gradient(0deg, rgba(255, 0, 127, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 243, 255, 0.02) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+                radial-gradient(circle at 10% 10%, var(--neon-pink) 1px, transparent 1px),
+                radial-gradient(circle at 90% 90%, var(--cyber-blue) 1px, transparent 1px),
+                radial-gradient(circle at 50% 50%, var(--mint-green) 1px, transparent 1px);
+            background-size: 100px 100px, 150px 150px, 200px 200px;
+            /* Farklı boyutlarda ızgaralar */
+            opacity: 0.3;
+            /* Çok hafif ve zarif dursunlar */
+            animation: particleScroll 60s linear infinite;
+        }
+
+        /* Simlerin yavaşça aşağı süzülme animasyonu */
+        @keyframes particleScroll {
+            0% {
+                background-position: 0 0, 0 0, 0 0;
+            }
+
+            100% {
+                background-position: 100px 200px, -150px 300px, 200px 400px;
+            }
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--void-bg);
+            /* Sadece ince siber ızgara kalıyor, ışıkları animasyona devrediyoruz */
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
             color: var(--text-glow);
             margin: 0;
             display: flex;
@@ -94,6 +137,64 @@
             overflow-x: hidden;
             padding-top: 40px;
             padding-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* --- ARKA PLAN ORTAM IŞIKLARI (AMBIENT GLOW) --- */
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            /* Tıklamaları engellememesi için çok önemli */
+            z-index: -1;
+            /* Tüm içeriklerin en arkasında kalmasını sağlar */
+        }
+
+        /* Siber Mavi Işık - Tatlı Turkuaz */
+        body::before {
+            background: radial-gradient(circle at 20% 40%, rgba(112, 255, 255, 0.18), transparent 50%);
+            animation: floatGlow1 20s infinite ease-in-out alternate;
+        }
+
+        /* Neon Pembe Işık - Tatlı Pembe */
+        body::after {
+            background: radial-gradient(circle at 80% 60%, rgba(255, 133, 234, 0.18), transparent 50%);
+            animation: floatGlow2 25s infinite ease-in-out alternate-reverse;
+        }
+
+        /* Işıkların Süzülme Animasyonları */
+        @keyframes floatGlow1 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(8vw, -8vh) scale(1.2);
+            }
+
+            100% {
+                transform: translate(-5vw, 5vh) scale(0.9);
+            }
+        }
+
+        @keyframes floatGlow2 {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(-8vw, 8vh) scale(1.1);
+            }
+
+            100% {
+                transform: translate(5vw, -5vh) scale(1.3);
+            }
         }
 
         /* --- SİSTEM HUD --- */
@@ -223,26 +324,22 @@
         }
 
         .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            /* 4.5rem'den küçültüldü */
-            font-weight: 900;
+            font-family: 'Syncopate', sans-serif;
+            /* Daha modern ve geniş font */
+            font-size: 3rem;
             text-transform: uppercase;
             letter-spacing: 5px;
-            /* 8px'den düşürüldü, yatay taşmayı engeller */
-            background: linear-gradient(to bottom, #fff, var(--hot-pink), var(--blood-red));
-
-            /* --- DÜZELTİLEN KISIM BAŞLANGICI --- */
+            /* Tatlı-siber degrade (pembe ve mavi) */
+            background: linear-gradient(90deg, var(--neon-pink), var(--cyber-blue));
             -webkit-background-clip: text;
             background-clip: text;
-            /* Editörün beklediği standart kod */
-            -webkit-text-fill-color: transparent;
             color: transparent;
-            /* Safari dışı tarayıcılar için yedek kod */
-            /* --- DÜZELTİLEN KISIM BİTİŞİ --- */
-
-            filter: drop-shadow(0 0 25px var(--blood-red));
-            animation: textGlitch 2.5s infinite alternate;
+            /* Hem pembe hem mavi çift parlama efekti */
+            text-shadow:
+                0 0 10px var(--neon-pink),
+                0 0 20px var(--cyber-blue);
+            margin: 0;
+            margin-bottom: 10px;
             position: relative;
         }
 
@@ -295,14 +392,19 @@
 
         /* --- BİLEŞEN: ANA DEĞER KARTI --- */
         .value-card {
-            background: var(--panel-dark);
-            border-radius: 15px;
+            background: rgba(13, 1, 24, 0.5);
+            /* Saydam koyu mor */
+            /* Kenarlara çok hafif kristal ışıltısı */
+            border: 1px solid rgba(112, 255, 255, 0.1);
+            border-radius: 20px;
+            /* Daha yuvarlak, tatlı köşeler */
             padding: 40px 20px;
             text-align: center;
-            border: 1px solid rgba(255, 0, 60, 0.3);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 0, 127, 0.1);
+            /* Cam efekti (bulanıklaştırma) */
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 30px rgba(255, 133, 234, 0.1);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             overflow: hidden;
         }
@@ -367,13 +469,21 @@
         }
 
         .stat-item {
-            background: rgba(10, 0, 5, 0.7);
+            background: rgba(13, 1, 24, 0.5);
+            /* Saydam koyu mor */
+            /* Kenarlara çok hafif kristal ışıltısı */
+            border: 1px solid rgba(112, 255, 255, 0.1);
+            border-radius: 20px;
+            /* Daha yuvarlak, tatlı köşeler */
             padding: 30px 15px;
-            border-radius: 10px;
             text-align: center;
-            border-bottom: 2px solid var(--deep-magenta);
-            transition: all 0.3s ease;
+            /* Cam efekti (bulanıklaştırma) */
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--neon-pink);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
         }
 
         .stat-item:hover {
@@ -476,15 +586,17 @@
         .cyber-select,
         .cyber-textarea {
             width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 0, 127, 0.3);
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(5, 217, 232, 0.2);
+            /* Pembe yerine ince siber mavi çerçeve */
             color: #fff;
             padding: 15px 15px 15px 45px;
             font-family: 'Rajdhani', sans-serif;
             font-size: 1.2rem;
             outline: none;
             transition: all 0.3s;
-            border-radius: 5px;
+            border-radius: 8px;
+            /* Köşeleri biraz daha yumuşattık */
             box-sizing: border-box;
         }
 
@@ -496,9 +608,9 @@
         .cyber-input:focus,
         .cyber-select:focus,
         .cyber-textarea:focus {
-            border-color: var(--blood-red);
-            box-shadow: 0 0 20px rgba(255, 0, 60, 0.4);
-            background: rgba(20, 0, 5, 0.8);
+            border-color: var(--cyber-cyan);
+            box-shadow: 0 0 15px rgba(5, 217, 232, 0.3);
+            background: rgba(10, 15, 25, 0.8);
         }
 
         .cyber-select option {
@@ -648,8 +760,10 @@
         /* BANNER */
         .profile-banner {
             width: 100%;
-            min-height: 150px; /* Boşken çok küçülmemesi için */
-            max-height: 450px; /* Dev ekranları bozmaması için sınır */
+            min-height: 150px;
+            /* Boşken çok küçülmemesi için */
+            max-height: 450px;
+            /* Dev ekranları bozmaması için sınır */
             border-radius: 10px 10px 0 0;
             background: linear-gradient(45deg, rgba(0, 0, 0, 0.8) 10%, var(--blood-red) 100%);
             border-bottom: 2px solid rgba(255, 255, 255, 0.1);
@@ -663,12 +777,16 @@
 
         /* Banner Görsel Sabitleme */
         /* Banner Görsel/Video Sabitleme */
-        .profile-banner video, .profile-banner img {
+        .profile-banner video,
+        .profile-banner img {
             width: 100%;
-            height: auto; /* Orjinal en-boy oranını koruyarak kutuyu iter */
-            max-height: 450px; /* Kutu sınırı ile aynı */
+            height: auto;
+            /* Orjinal en-boy oranını koruyarak kutuyu iter */
+            max-height: 450px;
+            /* Kutu sınırı ile aynı */
             object-fit: cover;
-            position: relative; /* Absolute'u kaldırdık ki kutuyu büyütebilsin */
+            position: relative;
+            /* Absolute'u kaldırdık ki kutuyu büyütebilsin */
             z-index: 0;
             display: block;
         }
@@ -1006,69 +1124,92 @@
             font-family: 'Orbitron', sans-serif;
         }
 
-        /* --- BİLEŞEN: YOL HARİTASI --- */
-        .roadmap {
-            background: transparent;
-            padding: 20px 0;
-            position: relative;
+        /* --- LO-FI SİBER KAFE STİLLERİ --- */
+        .cyber-cafe-section {
+            background: rgba(20, 5, 30, 0.4);
+            border: 1px solid rgba(112, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 30px;
             margin-top: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(255, 133, 234, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .roadmap h2 {
+        .cafe-info h2 {
             font-family: 'Orbitron', sans-serif;
             color: #fff;
-            text-transform: uppercase;
-            margin-bottom: 40px;
-            font-size: 2rem;
-            letter-spacing: 4px;
-            border-left: 4px solid var(--blood-red);
-            padding-left: 15px;
+            text-transform: uppercase; margin: 0; font-size: 1.6rem;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .cafe-info h2 i { color: var(--mint-green); text-shadow: 0 0 15px var(--mint-green); }
+        .cafe-info p { color: #aaa; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; margin-top: 5px; }
+
+        .player-controls {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 133, 234, 0.3);
+            padding: 10px 20px;
+            border-radius: 50px;
+            display: flex; align-items: center; gap: 15px;
         }
 
-        .roadmap-item {
-            border-left: 2px solid rgba(255, 0, 127, 0.2);
-            padding-left: 30px;
-            margin-bottom: 40px;
-            position: relative;
-            margin-left: 15px;
+        .play-btn {
+            background: var(--hot-pink); color: #fff; border: none;
+            width: 45px; height: 45px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 0 15px var(--hot-pink);
         }
+        .play-btn:hover { transform: scale(1.1); background: #fff; color: var(--hot-pink); }
 
-        .roadmap-item::before {
-            content: '';
-            position: absolute;
-            left: -7px;
-            top: 5px;
-            width: 12px;
-            height: 12px;
-            background: var(--void-bg);
-            border: 2px solid var(--deep-magenta);
-            border-radius: 50%;
+        .track-info { display: flex; flex-direction: column; }
+        .track-name { font-family: 'Orbitron', sans-serif; color: var(--cyber-cyan); font-size: 0.9rem; font-weight: bold; }
+        .track-status { font-family: 'Rajdhani', sans-serif; color: #888; font-size: 0.8rem; }
+
+        .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 20px; }
+        .bar { width: 4px; background: var(--cyber-cyan); border-radius: 2px; animation: eq 1s ease-in-out infinite alternate; }
+        .bar:nth-child(2) { animation-delay: 0.2s; background: var(--hot-pink); }
+        .bar:nth-child(3) { animation-delay: 0.4s; background: var(--mint-green); }
+        .bar:nth-child(4) { animation-delay: 0.1s; background: var(--cyber-cyan); }
+        .bar:nth-child(5) { animation-delay: 0.5s; background: var(--hot-pink); }
+        @keyframes eq { 0% { height: 4px; } 100% { height: 20px; } }
+
+        .daily-reward-btn {
+            background: rgba(0,0,0,0.4); border: 1px dashed var(--mint-green);
+            color: var(--mint-green); padding: 15px 25px; border-radius: 15px;
+            font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: bold;
+            cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px;
         }
+        .daily-reward-btn:hover { background: rgba(157, 255, 176, 0.1); box-shadow: 0 0 20px rgba(157, 255, 176, 0.2); }
 
-        .roadmap-item.active {
-            border-left-color: var(--hot-pink);
+        /* --- COZY DM EKRANI MAKYAJI --- */
+        #dmScreen {
+            background: linear-gradient(to bottom, #05010a, #1a0525) !important; /* Sıcak gece mavisi/mor degrade */
         }
-
-        .roadmap-item.active::before {
-            background: var(--blood-red);
-            border-color: var(--hot-pink);
-            box-shadow: 0 0 15px var(--blood-red);
+        #dmScreen::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(circle at 50% 50%, rgba(255, 133, 234, 0.03) 0%, transparent 80%),
+                              url('https://www.transparenttextures.com/patterns/stardust.png'); /* Lo-fi noise dokusu */
+            opacity: 0.5; pointer-events: none; z-index: -1;
         }
-
-        .roadmap-item strong {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.3rem;
-            display: block;
-            margin-bottom: 8px;
-            color: var(--hot-pink);
-            letter-spacing: 1px;
+        .chat-area {
+            background: rgba(10, 2, 20, 0.4) !important; /* Arkayı hafif gösteren cam efekti */
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255,255,255,0.05) !important;
         }
-
-        .roadmap-item p {
-            color: #aaa;
-            font-size: 1.05rem;
-            line-height: 1.5;
-            margin: 0;
+        .chat-header {
+            background: rgba(0, 0, 0, 0.3) !important;
+            backdrop-filter: blur(10px);
+        }
+        .chat-input-bar {
+            background: rgba(0, 0, 0, 0.5) !important;
+            margin: 15px; border-radius: 20px; /* Kenarları yumuşatılmış input alanı */
+            border: 1px solid rgba(112, 255, 255, 0.1) !important;
+            box-shadow: 0 -5px 25px rgba(0,0,0,0.5);
         }
 
         /* --- BİLEŞEN: SİBER AKIŞ (VERTICAL FEED) --- */
@@ -1422,7 +1563,7 @@
         }
 
         /* --- DM / GROUP CHAT SİSTEMİ STİLLERİ --- */
-        /* DM Ekranı Tam Kaplama */
+        /* DM Ekranı Tam Kaplama & Cozy Yüzen Pencere Hissi */
         #dmScreen {
             display: none;
             position: fixed;
@@ -1430,63 +1571,77 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            /* Ekranı tam kapla */
-            background: rgba(5, 0, 10, 0.98);
-            backdrop-filter: blur(15px);
+            /* Lo-fi sıcak mor/gece mavisi degrade */
+            background: linear-gradient(135deg, rgba(13, 1, 24, 0.85) 0%, rgba(25, 5, 35, 0.95) 100%);
+            /* Performans katili blur düşürüldü, donanım hızlandırması eklendi */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            transform: translateZ(0);
             z-index: 5000;
             flex-direction: row;
             overflow: hidden;
-            /* Dışarı taşmayı engelle */
+            padding: 3vh 8vw;
+            box-sizing: border-box;
         }
 
         .chat-sidebar {
-            width: 350px;
-            /* Biraz genişletildi */
+            width: 340px;
             height: 100%;
-            background: rgba(10, 0, 15, 0.85);
-            border-right: 2px solid var(--cyber-cyan);
+            background: rgba(10, 0, 15, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px 0 0 20px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            backdrop-filter: blur(5px);
+            box-shadow: inset -5px 0 20px rgba(0, 0, 0, 0.3);
         }
 
         .chat-sidebar-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 25px 20px;
+            border-bottom: 1px solid rgba(255, 133, 234, 0.1);
+            background: rgba(0, 0, 0, 0.2);
             text-align: center;
         }
 
         .chat-sidebar-header h3 {
             font-family: 'Orbitron';
-            color: var(--cyber-cyan);
+            color: var(--neon-pink);
             margin: 0 0 15px 0;
             letter-spacing: 2px;
-            text-shadow: 0 0 10px var(--cyber-cyan);
+            text-shadow: 0 0 10px rgba(255, 133, 234, 0.5);
         }
 
         .chat-list {
             flex-grow: 1;
             overflow-y: auto;
             scrollbar-width: thin;
+            padding: 10px;
+            will-change: scroll-position;
         }
 
         .chat-list-item {
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 12px;
+            border-bottom: none;
             cursor: pointer;
-            transition: 0.3s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid transparent;
         }
 
         .chat-list-item:hover {
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(112, 255, 255, 0.05);
+            border-color: rgba(112, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
 
         .chat-list-item.active {
-            background: rgba(0, 243, 255, 0.2);
-            border-left: 4px solid var(--cyber-cyan);
+            background: rgba(112, 255, 255, 0.1);
+            border: 1px solid rgba(112, 255, 255, 0.3);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .chat-list-item.unread .chat-title {
@@ -1496,17 +1651,20 @@
         }
 
         .chat-list-item.unread::after {
-            content: '🔴';
-            font-size: 0.6rem;
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: var(--neon-pink);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-pink);
             margin-left: auto;
-            align-self: center;
         }
 
         .chat-avatar {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            background: #000;
+            background: rgba(0, 0, 0, 0.5);
             border: 2px solid var(--cyber-cyan);
             display: flex;
             justify-content: center;
@@ -1515,6 +1673,7 @@
             flex-shrink: 0;
             overflow: hidden;
             color: var(--cyber-cyan);
+            box-shadow: 0 0 10px rgba(112, 255, 255, 0.2);
         }
 
         .chat-info {
@@ -1525,15 +1684,15 @@
         .chat-title {
             color: #fff;
             font-family: 'Orbitron';
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
 
         .chat-last-message {
-            color: #888;
+            color: #999;
             font-size: 0.8rem;
             white-space: nowrap;
             overflow: hidden;
@@ -1542,49 +1701,52 @@
 
         .chat-area {
             flex-grow: 1;
-            /* Kalan tüm alanı doldur */
             display: flex;
             flex-direction: column;
             height: 100%;
-            background: radial-gradient(circle at center, rgba(0, 243, 255, 0.05) 0%, transparent 100%);
+            background: rgba(5, 0, 10, 0.5);
+            border-radius: 0 20px 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: none;
             position: relative;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
         }
 
         .chat-header {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            border-bottom: 1px solid var(--cyber-cyan);
+            padding: 20px 30px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
             display: flex;
             align-items: center;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            border-radius: 0 20px 0 0;
         }
 
-        /* Mesaj listesinin uzaması için */
         .chat-messages {
             flex: 1;
-            /* Form ve header dışında kalan tüm boşluğu al */
-            padding: 20px;
+            padding: 20px 30px;
             overflow-y: auto;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             gap: 15px;
+            /* Kaydırma performansını artırır */
+            will-change: scroll-position;
+            -webkit-overflow-scrolling: touch;
         }
 
+        /* --- Cozy Mesaj Baloncukları --- */
         .discord-msg {
             display: flex;
-            gap: 15px;
-            padding: 10px 20px;
-            transition: background 0.2s;
+            gap: 12px;
+            padding: 5px 0;
             position: relative;
-        }
-
-        .discord-msg:hover {
-            background: rgba(0, 243, 255, 0.05);
+            align-items: flex-end;
+            max-width: 100%;
         }
 
         .msg-avatar {
-            width: 45px;
-            height: 45px;
+            width: 35px;
+            height: 35px;
             border-radius: 50%;
             border: 2px solid #333;
             background: #000;
@@ -1595,7 +1757,7 @@
             justify-content: center;
             color: #555;
             cursor: pointer;
-            font-size: 1.5rem;
+            font-size: 1.1rem;
             transition: 0.3s;
         }
 
@@ -1603,22 +1765,60 @@
             transform: scale(1.1);
         }
 
-        .discord-msg.is-me .msg-avatar {
-            border-color: var(--cyber-cyan);
-            color: var(--cyber-cyan);
-            box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+        /* Karşı Tarafın Mesajları */
+        .discord-msg:not(.is-me) {
+            flex-direction: row;
+        }
+
+        .discord-msg:not(.is-me) .msg-content {
+            background: rgba(30, 15, 45, 0.8);
+            border: 1px solid rgba(255, 133, 234, 0.2);
+            border-radius: 18px 18px 18px 5px;
+            color: #fff;
         }
 
         .discord-msg:not(.is-me) .msg-avatar {
-            border-color: var(--hot-pink);
-            color: var(--hot-pink);
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+            box-shadow: 0 0 10px rgba(255, 133, 234, 0.3);
         }
 
+        /* Senin Mesajların */
+        .discord-msg.is-me {
+            flex-direction: row-reverse;
+        }
+
+        .discord-msg.is-me .msg-content {
+            background: rgba(10, 40, 50, 0.8);
+            border: 1px solid rgba(112, 255, 255, 0.2);
+            border-radius: 18px 18px 5px 18px;
+            color: #fff;
+            align-items: flex-end;
+        }
+
+        .discord-msg.is-me .msg-text {
+            text-align: right;
+        }
+
+        .discord-msg.is-me .msg-header {
+            flex-direction: row-reverse;
+        }
+
+        .discord-msg.is-me .msg-avatar {
+            border-color: var(--cyber-cyan);
+            color: var(--cyber-cyan);
+            box-shadow: 0 0 10px rgba(112, 255, 255, 0.3);
+        }
+
+        /* Ortak Baloncuk Ayarları */
         .msg-content {
             display: flex;
             flex-direction: column;
-            flex-grow: 1;
+            padding: 12px 18px;
+            max-width: 80%;
+            /* Biraz genişlettik */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
         .msg-header {
@@ -1630,9 +1830,10 @@
 
         .msg-sender {
             font-family: 'Orbitron';
-            font-size: 1rem;
+            font-size: 0.85rem;
             cursor: pointer;
             letter-spacing: 1px;
+            opacity: 0.8;
         }
 
         .discord-msg.is-me .msg-sender {
@@ -1640,51 +1841,114 @@
         }
 
         .discord-msg:not(.is-me) .msg-sender {
-            color: var(--hot-pink);
+            color: var(--neon-pink);
         }
 
         .msg-time {
-            font-size: 0.75rem;
-            color: #888;
+            font-size: 0.7rem;
+            color: #777;
             font-family: 'Rajdhani';
         }
 
         .msg-text {
-            font-size: 1.1rem;
-            color: #ddd;
+            font-size: 1.05rem;
             line-height: 1.5;
             word-break: break-word;
             font-family: 'Rajdhani';
         }
 
-        .chat-input-bar {
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            border-top: 1px solid var(--cyber-cyan);
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
+        /* DÜZELTME: Mesaj Silme Butonu artık baloncuğun kendi içinde gözükecek */
         .discord-msg .msg-delete-btn {
             display: none;
             position: absolute;
-            top: 10px;
-            right: 15px;
-            background: transparent;
+            top: -10px;
+            background: rgba(20, 0, 10, 0.9);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
             color: var(--blood-red);
-            border: none;
+            border: 1px solid var(--blood-red);
             cursor: pointer;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             transition: 0.2s;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
         }
 
+        .discord-msg.is-me .msg-delete-btn {
+            left: -10px;
+        }
+
+        /* Kendi mesajımızda sol üste koyalım */
         .discord-msg.is-me:hover .msg-delete-btn {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .discord-msg .msg-delete-btn:hover {
-            transform: scale(1.2);
+            background: var(--blood-red);
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        /* Kapsül Şeklinde (Pill) Input Bar */
+        .chat-input-bar {
+            padding: 15px 30px 25px;
+            background: transparent;
+            border-top: none;
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        /* DÜZELTME: İptal butonunun gizlenmemesi için overflow visible yapıldı */
+        .chat-input-bar .file-input-wrapper {
+            overflow: visible !important;
+        }
+
+        /* DÜZELTME: Cancel butonunun yeri tam ayarlandı */
+        #dmMediaCancelBtn {
+            top: -8px !important;
+            right: -8px !important;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .chat-input-bar .cyber-textarea {
+            min-height: 55px;
+            height: 55px;
+            border-radius: 25px;
+            font-size: 1rem;
+            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            flex-grow: 1;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-input-bar .cyber-textarea:focus {
+            background: rgba(20, 10, 30, 0.8);
+            border-color: var(--cyber-cyan);
+            box-shadow: 0 0 15px rgba(112, 255, 255, 0.1), inset 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-input-bar .cyber-button.small {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        #dmSendBtn {
+            background: linear-gradient(135deg, var(--cyber-cyan), #00a2ff);
+            box-shadow: 0 5px 15px rgba(112, 255, 255, 0.3);
+            color: #000;
         }
 
         .chat-no-selection {
@@ -1693,31 +1957,47 @@
             align-items: center;
             height: 100%;
             flex-direction: column;
-            color: #555;
+            color: #777;
             font-family: 'Orbitron';
         }
 
         .chat-no-selection i {
-            font-size: 4rem;
+            font-size: 5rem;
             margin-bottom: 20px;
-            color: rgba(0, 243, 255, 0.2);
+            color: rgba(255, 133, 234, 0.1);
+            filter: drop-shadow(0 0 20px rgba(255, 133, 234, 0.2));
         }
 
+        /* Görüldü Tikleri */
+        .message-status {
+            font-size: 0.75rem;
+            margin-left: 8px;
+            display: inline-block;
+        }
+
+        .status-sent {
+            color: #888;
+        }
+
+        .status-read {
+            color: var(--cyber-cyan);
+            text-shadow: 0 0 5px rgba(112, 255, 255, 0.5);
+        }
+
+        /* Mobil Uyum için Yüzen Pencere İptali */
         @media (max-width: 768px) {
             #dmScreen {
+                padding: 0;
                 flex-direction: column;
+                background: rgba(5, 0, 10, 1);
             }
 
-            .chat-sidebar {
-                width: 100%;
-                height: 100%;
-                border-right: none;
-                border-bottom: none;
-            }
-
+            .chat-sidebar,
             .chat-area {
+                border-radius: 0;
                 width: 100%;
                 height: 100%;
+                border: none;
             }
 
             #dmScreen.chat-active .chat-sidebar {
@@ -1729,58 +2009,104 @@
             }
 
             #backToChatListBtn {
-                display: inline-block !important;
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
             }
         }
 
         /* --- YENİ EKLENEN ÖZELLİK STİLLERİ --- */
 
-        /* Canlı Düğüm Tespiti (Online Indicator) */
-        .online-indicator {
+        /* --- TATLI CANLI DÜĞÜM TESPİTİ (CUTE ONLINE/OFFLINE INDICATOR) --- */
+        .cute-status {
             position: absolute;
-            bottom: 5px;
-            right: 5px;
-            width: 15px;
-            height: 15px;
-            background-color: #00ff00;
+            bottom: 0px;
+            right: 0px;
+            width: 26px;
+            height: 26px;
             border-radius: 50%;
-            border: 2px solid var(--void-bg);
-            box-shadow: 0 0 10px #00ff00;
-            animation: pulseOnline 2s infinite alternate;
-            z-index: 10;
+            background: var(--void-bg);
+            /* Arka planla karışmaması için yuvarlak çerçeve */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            z-index: 15;
+            pointer-events: none;
+            /* Tıklamaları engellememesi için */
         }
 
-        @keyframes pulseOnline {
+        /* Tatlı Çevrimiçi (Online) Durumu */
+        .cute-online {
+            color: #ffb6e6;
+            /* Tatlı uçuk pembe */
+            text-shadow: 0 0 8px #ff007f, 0 0 15px #ffb6e6;
+            animation: cuteHeartbeat 1.2s infinite ease-in-out;
+        }
+
+        /* Tatlı Çevrimdışı (Offline) Durumu */
+        .cute-offline {
+            color: #555;
+            /* Soluk ve uykulu renk */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+            animation: sleepyFloat 3s infinite ease-in-out;
+        }
+
+        /* Farklı avatar boyutları için konumlandırma */
+        .profile-avatar .cute-status {
+            bottom: 5px;
+            right: 5px;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+        }
+
+        /* Zıp Zıp Kalp / Yıldız Animasyonu */
+        @keyframes cuteHeartbeat {
             0% {
-                box-shadow: 0 0 5px #00ff00;
+                transform: scale(1) translateY(0);
+            }
+
+            15% {
+                transform: scale(1.25) translateY(-3px);
+            }
+
+            30% {
+                transform: scale(1) translateY(0);
+            }
+
+            45% {
+                transform: scale(1.15) translateY(-1px);
+            }
+
+            60%,
+            100% {
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* Uykulu Süzülme Animasyonu */
+        @keyframes sleepyFloat {
+            0% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: translateY(-4px) rotate(5deg);
+                opacity: 0.4;
             }
 
             100% {
-                box-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00;
-                transform: scale(1.1);
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0.8;
             }
         }
 
         .avatar-container {
             position: relative;
             display: inline-block;
-        }
-
-        /* Avatar Container içindeki Online Indicator konumu ayarlamaları */
-        .profile-avatar .online-indicator {
-            bottom: 10px;
-            right: 10px;
-            width: 20px;
-            height: 20px;
-        }
-
-        .post-avatar .online-indicator,
-        .comment-avatar .online-indicator,
-        .dm-avatar .online-indicator {
-            width: 12px;
-            height: 12px;
-            bottom: 2px;
-            right: 2px;
         }
 
         /* Siber Eko (Yazıyor Animasyonu) */
@@ -1884,6 +2210,7 @@
 </head>
 
 <body>
+    <div class="particles"></div>
 
     <div class="system-hud">
         <div class="hud-item" id="hudStatusBox">
@@ -1945,7 +2272,7 @@
 
     <header>
         <div class="logo">HOTDRAGONS</div>
-        <div class="subtitle">KISA FORMAT. <span>SINIRSIZ TATMİN.</span></div>
+        <div class="subtitle">KISA FORMAT. <span>SINIRSIZ EĞLENCE.</span></div>
     </header>
 
     <div class="container">
@@ -1970,8 +2297,8 @@
                 <p style="color: var(--cyber-cyan); text-shadow: 0 0 10px var(--cyber-cyan);">Maksimum</p>
             </div>
             <div class="stat-item"><i class="fas fa-heart-pulse"></i>
-                <h4>Bağımlılık Oranı</h4>
-                <p>Kritik</p>
+                <h4>Ağ Etkileşimi</h4>
+                <p>Zirvede</p>
             </div>
         </div>
 
@@ -1979,9 +2306,9 @@
             <div class="form-section">
 
                 <div id="formContainer">
-                    <div class="terminal-header">Karanlık Odaya <span>GİR.</span></div>
-                    <div class="terminal-desc">Akış henüz gizli tutuluyor. Fantezi kimliğini tanımla ve yeraltı
-                        kuyruğunda yerini al.</div>
+                    <div class="terminal-header">Ağa <span>KATIL.</span></div>
+                    <div class="terminal-desc">Akışa katılmak için siber kimliğini oluştur ve bu renkli dijital dünyada
+                        yerini al.</div>
 
                     <form id="preRegForm">
                         <div class="input-group">
@@ -1997,17 +2324,17 @@
                                 required autocomplete="off">
                         </div>
                         <div class="input-group">
-                            <label>Dünyaya İniş (Doğum Tarihi)</label>
+                            <label>Doğum Tarihi</label>
                             <i class="fas fa-calendar-alt"></i>
                             <input type="date" id="dobInput" class="cyber-input" required>
                         </div>
                         <div class="input-group">
-                            <label>Ağ Kilidi (Şifre)</label>
+                            <label>Şifre Belirle</label>
                             <i class="fas fa-lock"></i>
                             <input type="password" id="passwordInput" class="cyber-input" placeholder="••••••••••••"
                                 required autocomplete="off">
                         </div>
-                        <button type="submit" class="cyber-button">TUTKUYU BAŞLAT</button>
+                        <button type="submit" class="cyber-button">MACERAYI BAŞLAT</button>
                     </form>
                 </div>
 
@@ -2034,10 +2361,13 @@
                                 <span class="p-tag dark" id="profileLastSeenDisplay">Son Görülme: Gizli</span>
                             </div>
 
-                            <div class="profile-bio" id="profileBioDisplay">"Fantezi özeti henüz girilmedi..."</div>
+                            <div class="profile-bio" id="profileBioDisplay">"Hakkında henüz bir şey yazılmadı..."</div>
 
                             <div class="profile-stats-mini">
-                                <div class="mini-stat"><span>0</span><label>Jeton (Kredi)</label></div>
+                                <div class="mini-stat">
+                                    <span id="myTokenDisplay" style="color: var(--mint-green); text-shadow: 0 0 10px var(--mint-green);">0</span>
+                                    <label>Jeton (Kredi)</label>
+                                </div>
                                 <div class="mini-stat"><span style="color: var(--hot-pink);">Açık</span><label>Beta
                                         Erişimi</label></div>
                             </div>
@@ -2133,9 +2463,9 @@
                         </div>
 
                         <div class="input-group">
-                            <label>Fantezi Özeti (Bio)</label>
+                            <label>Hakkımda (Bio)</label>
                             <textarea id="editBio" class="cyber-textarea" rows="3"
-                                placeholder="Sınırlarını ve arzularını anlat..."></textarea>
+                                placeholder="Kendinden, ilgi alanlarından bahset..."></textarea>
                         </div>
                         <div class="input-group">
                             <label>Biyolojik Beden (Avatar Türü)</label>
@@ -2148,7 +2478,7 @@
                             </select>
                         </div>
                         <div class="input-group">
-                            <label>Üretim Tarihi (Doğum Tarihi)</label>
+                            <label>Doğum Tarihi</label>
                             <i class="fas fa-calendar-alt"></i>
                             <input type="date" id="editDob" class="cyber-input">
                         </div>
@@ -2205,9 +2535,8 @@
                         style="background: transparent; border: 2px solid var(--cyber-cyan); color: var(--cyber-cyan); box-shadow: 0 0 15px rgba(0,243,255,0.3);">
                         <i class="fas fa-link"></i> UPLINK PROTOKOLÜ BAŞLAT
                     </button>
-                </div>
-
-            </div>
+                </div> <!-- Closes publicProfileScreen -->
+            </div> <!-- Closes form-section -->
 
             <div class="connected-nodes">
                 <div class="nodes-header"><span>Ağa Sızanlar</span><i class="fas fa-eye"
@@ -2238,23 +2567,28 @@
             </div>
         </div>
 
-        <div class="roadmap">
-            <h2>Kırmızı Işık Protokolü</h2>
-            <div class="roadmap-item active">
-                <strong>FAZ 1: Gizli Tohum (İçerdesin)</strong>
-                <p>Kullanıcı kimliklerinin inşası, veritabanı şifrelemesi ve yeraltı ağının kurulması. Altyapı test
-                    ediliyor.</p>
+        <!-- --- LO-FI SİBER KAFE --- -->
+        <div class="cyber-cafe-section">
+            <div class="cafe-info">
+                <h2><i class="fas fa-headphones-alt"></i> Lo-Fi Siber Kafe</h2>
+                <p>Ağın gürültüsünden uzaklaş. Şifreli sinyallerin akışını izlerken dinlen.</p>
             </div>
-            <div class="roadmap-item" style="opacity: 0.6;">
-                <strong>FAZ 2: Sonsuz Kaydırma & Algoritmik Bağımlılık</strong>
-                <p>Kullanıcı zevklerini analiz eden yapay zeka destekli video akış arayüzünün (Feed) devreye girmesi.
-                </p>
+
+            <div class="player-controls">
+                <button class="play-btn" id="lofiPlayBtn"><i class="fas fa-play"></i></button>
+                <div class="track-info">
+                    <span class="track-name">FM // Yeraltı Frekansı</span>
+                    <span class="track-status" id="lofiTrackStatus">Sinyal Bekleniyor...</span>
+                </div>
+                <div class="visualizer" style="display: none;" id="lofiVisualizer">
+                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                </div>
             </div>
-            <div class="roadmap-item" style="opacity: 0.4;">
-                <strong>FAZ 3: Sınırların Kalkması (Tam Sürüm)</strong>
-                <p>İçerik üreticileri ile VIP kullanıcıların doğrudan etkileşimi. Sansürsüz yayın ve küresel lansman.
-                </p>
-            </div>
+
+            <button class="daily-reward-btn" id="dailyTokenBtn">
+                <i class="fas fa-gem" style="font-size: 1.5rem; text-shadow: 0 0 10px var(--mint-green);"></i>
+                <span>GÜNLÜK JETONU AL</span>
+            </button>
         </div>
 
         <!-- --- GÜNCELLEME GÜNLÜĞÜ (UPDATE LOG) --- -->
@@ -2367,18 +2701,18 @@
             style="background: rgba(20, 0, 5, 0.9); border: 2px solid var(--blood-red); padding: 50px; border-radius: 10px; max-width: 500px; text-align: center; box-shadow: 0 0 50px rgba(255, 0, 60, 0.6); position: relative;">
             <i class="fas fa-exclamation-triangle"
                 style="font-size: 4rem; color: var(--blood-red); margin-bottom: 20px; animation: blink 1s infinite;"></i>
-            <h2 style="font-family: 'Orbitron'; color: #fff; margin-bottom: 15px; letter-spacing: 2px;">BÖLGE İHLALİ
+            <h2 style="font-family: 'Orbitron'; color: #fff; margin-bottom: 15px; letter-spacing: 2px;">YETİŞKİN İÇERİK
                 <span style="color: var(--blood-red);">18+</span>
             </h2>
             <p style="font-family: 'Rajdhani'; color: #ccc; font-size: 1.2rem; margin-bottom: 30px; line-height: 1.5;">
-                Bu siber akış tamamen sansürsüz, aşırı ve yetişkinlere yönelik (+18) paylaşımlar barındırır. Eğer 18
-                yaşından küçük veya bu tür içeriklerden rahatsız olan biriysen, derhal buradan ayrıl.</p>
+                Bu alan yalnızca yetişkinlere yönelik (+18) içerikler barındırır. Eğer 18 yaşından küçükseniz veya bu
+                tür içeriklerden rahatsız oluyorsanız, lütfen geri dönün.</p>
             <div style="display: flex; gap: 15px; justify-content: center;">
                 <button id="declineNsfwBtn" class="cyber-button outline"
                     style="flex: 1; border-color: var(--cyber-cyan); color: var(--cyber-cyan);">HAYIR, GERİ DÖN</button>
                 <button id="acceptNsfwBtn" class="cyber-button"
-                    style="flex: 1; background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);">EVET, GİRİŞ
-                    YAP</button>
+                    style="flex: 1; background: var(--blood-red); box-shadow: 0 0 15px var(--blood-red);">EVET, 18
+                    YAŞINDAYIM</button>
             </div>
         </div>
     </div>
@@ -2829,36 +3163,63 @@
     </style>
     <div id="miniProfileModal" onclick="if(event.target === this) this.style.display='none'"
         style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 5000; justify-content: center; align-items: center; backdrop-filter: blur(10px);">
-        <div
-            style="background: rgba(20, 0, 10, 0.95); width: 90%; max-width: 400px; border: 2px solid var(--cyber-cyan); border-radius: 15px; padding: 25px; box-shadow: 0 0 30px rgba(0, 243, 255, 0.4); text-align: center; position: relative;">
-            <button onclick="document.getElementById('miniProfileModal').style.display='none'"
-                style="position: absolute; top: 15px; right: 15px; background: transparent; border: none; color: var(--blood-red); font-size: 1.5rem; cursor: pointer;"><i
-                    class="fas fa-times"></i></button>
-            <div id="mpAvatar"
-                style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--cyber-cyan); margin: 0 auto 15px; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; color: var(--cyber-cyan);">
-                <i class="fas fa-user-ninja"></i>
+
+        <!-- Ana İçerik Kutusu -->
+        <div id="mpContentBox"
+            style="background: rgba(15, 0, 10, 0.95); width: 90%; max-width: 380px; border: 1px solid var(--cyber-cyan); border-radius: 15px; box-shadow: 0 15px 40px rgba(0, 243, 255, 0.3); text-align: center; position: relative; overflow: hidden; display: flex; flex-direction: column;">
+
+            <!-- Banner Alanı -->
+            <div id="mpBanner"
+                style="width: 100%; height: 120px; background: linear-gradient(45deg, #000, var(--cyber-cyan)); position: relative; overflow: hidden;">
             </div>
-            <h2 id="mpAlias"
-                style="font-family: 'Orbitron'; color: var(--cyber-cyan); margin-bottom: 5px; text-shadow: 0 0 10px var(--cyber-cyan);">
-                @RUMUZ</h2>
-            <div style="font-size: 0.85rem; color: #aaa; margin-bottom: 15px;" id="mpLastSeen">Son Görülme: Aranıyor...
-            </div>
-            <div id="mpBio"
-                style="font-family: 'Rajdhani'; color: #fff; font-size: 1.1rem; margin-bottom: 20px; font-style: italic; border-left: 3px solid var(--hot-pink); padding-left: 10px; text-align: left;">
-                "..."</div>
-            <div
-                style="display: flex; justify-content: space-between; margin-bottom: 20px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;">
-                <div style="text-align: left;">
-                    <div style="font-family: 'Orbitron'; color: var(--hot-pink); font-size: 0.8rem;">BEDEN</div>
-                    <div id="mpGender" style="font-weight: bold; color: #fff;">?</div>
+
+            <!-- Kapatma Butonu (Bannerın üstünde) -->
+            <button onclick="document.getElementById('miniProfileModal').style.display='none'" id="mpCloseBtn"
+                style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); border: 1px solid var(--cyber-cyan); color: var(--cyber-cyan); width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; z-index: 10; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); transition: 0.3s;">
+                <i class="fas fa-times"></i>
+            </button>
+
+            <!-- Avatar & Bilgiler Alanı -->
+            <div style="padding: 0 25px 25px 25px; position: relative;">
+
+                <!-- Avatar (Bannera üsten taşar) -->
+                <div id="mpAvatar"
+                    style="width: 90px; height: 90px; border-radius: 50%; border: 4px solid rgba(15, 0, 10, 1); margin: -45px auto 10px; font-size: 2.5rem; display: flex; align-items: center; justify-content: center; background: #000; overflow: hidden; color: var(--cyber-cyan); box-shadow: 0 0 20px var(--cyber-cyan); position: relative; z-index: 2; transition: 0.3s;">
+                    <i class="fas fa-user-ninja"></i>
                 </div>
-                <div style="text-align: right;">
-                    <div style="font-family: 'Orbitron'; color: var(--hot-pink); font-size: 0.8rem;">YAŞ</div>
-                    <div id="mpAge" style="font-weight: bold; color: #fff;">?</div>
+
+                <h2 id="mpAlias"
+                    style="font-family: 'Orbitron'; color: var(--cyber-cyan); margin: 0 0 5px; font-size: 1.5rem; text-shadow: 0 0 10px var(--cyber-cyan); letter-spacing: 1px;">
+                    @RUMUZ</h2>
+
+                <div style="font-size: 0.8rem; color: #888; font-family: 'Orbitron'; margin-bottom: 15px; letter-spacing: 1px;"
+                    id="mpLastSeen">Son Görülme: Aranıyor...</div>
+
+                <div id="mpBio"
+                    style="font-family: 'Rajdhani'; color: #ddd; font-size: 1.05rem; margin-bottom: 20px; font-style: italic; background: rgba(0,0,0,0.4); padding: 12px; border-radius: 8px; border-left: 3px solid var(--hot-pink); text-align: left; line-height: 1.4;">
+                    "..."</div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                    <div
+                        style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div
+                            style="font-family: 'Orbitron'; color: var(--hot-pink); font-size: 0.75rem; margin-bottom: 3px; letter-spacing: 1px;">
+                            BEDEN</div>
+                        <div id="mpGender" style="font-weight: 600; color: #fff; font-size: 1.1rem;">?</div>
+                    </div>
+                    <div
+                        style="background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div
+                            style="font-family: 'Orbitron'; color: var(--hot-pink); font-size: 0.75rem; margin-bottom: 3px; letter-spacing: 1px;">
+                            YAŞ</div>
+                        <div id="mpAge" style="font-weight: 600; color: #fff; font-size: 1.1rem;">?</div>
+                    </div>
                 </div>
+
+                <button id="mpTamProfilBtn" class="cyber-button"
+                    style="width: 100%; font-size: 0.95rem; padding: 12px; border-radius: 8px; letter-spacing: 2px;"><i
+                        class="fas fa-external-link-alt"></i> TAM PROFİLİ GÖR</button>
             </div>
-            <button id="mpTamProfilBtn" class="cyber-button" style="width: 100%; font-size: 0.9rem; padding: 10px;"><i
-                    class="fas fa-external-link-alt"></i> TAM PROFİLİ GÖR</button>
         </div>
     </div>
     <div id="commentModal" onclick="if(event.target === this) this.style.display='none'"
@@ -3154,18 +3515,24 @@
 
         window.updateAllOnlineIndicators = function () {
             document.querySelectorAll('[data-online-target]').forEach(el => {
-                // toLowerCase() ile tutarlı arama: "Sinner" / "sinner" farkı ortadan kalkar
                 const alias = (el.getAttribute('data-online-target') || '').toLowerCase();
                 const isOnline = window.onlineUsers[alias] && window.onlineUsers[alias].state === 'online';
-                let indicator = el.querySelector('.online-indicator');
+
+                let indicator = el.querySelector('.cute-status');
+
+                // Eğer simge henüz yoksa, container (kutu) oluştur
+                if (!indicator) {
+                    indicator = document.createElement('div');
+                    el.appendChild(indicator);
+                }
+
+                // Duruma göre klasları ve tatlı ikonları değiştir
                 if (isOnline) {
-                    if (!indicator) {
-                        indicator = document.createElement('div');
-                        indicator.className = 'online-indicator';
-                        el.appendChild(indicator);
-                    }
+                    indicator.className = 'cute-status cute-online';
+                    indicator.innerHTML = '<i class="fas fa-heart"></i>';
                 } else {
-                    if (indicator) indicator.remove();
+                    indicator.className = 'cute-status cute-offline';
+                    indicator.innerHTML = '<i class="fas fa-moon"></i>';
                 }
             });
         };
@@ -3575,29 +3942,13 @@
             return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
         }
 
-        const userCache = {};
-        const shadowbanCache = {}; // Hızlı kontrol için s-ban cache
 
-        window.getUserAvatar = async function (alias) {
-            if (userCache[alias]) return userCache[alias];
-            try {
-                const q = query(collection(db, "preRegistrations"), where("alias", "==", alias));
-                const snap = await getDocs(q);
-                if (!snap.empty) {
-                    const data = snap.docs[0].data();
-                    if (data.isShadowbanned) shadowbanCache[alias] = true;
-                    if (data.avatar) {
-                        userCache[alias] = data.avatar;
-                        return userCache[alias];
-                    }
-                }
-            } catch (e) { }
-            userCache[alias] = "default";
-            return "default";
-        }
 
         window.showMiniProfile = async function (alias) {
             const modal = document.getElementById("miniProfileModal");
+            const mpContentBox = document.getElementById("mpContentBox");
+            const mpBanner = document.getElementById("mpBanner");
+            const mpCloseBtn = document.getElementById("mpCloseBtn");
             const mpAlias = document.getElementById("mpAlias");
             const mpAvatar = document.getElementById("mpAvatar");
             const mpBio = document.getElementById("mpBio");
@@ -3607,24 +3958,25 @@
             const mpTamProfilBtn = document.getElementById("mpTamProfilBtn");
 
             modal.style.display = "flex";
-            mpAlias.innerText = "@" + alias;
+            mpAlias.innerText = "@" + alias.toUpperCase();
 
-            // Online Tracker'ı bağla (Avatar içeriğini değiştirmeden önce attribute'u koy)
-            mpAvatar.setAttribute('data-online-target', alias.toLowerCase());
-
-            // Avatar içeriğini güvenli şekilde değiştir (.online-indicator'ı korur)
+            // Avatar içeriğini güvenli şekilde değiştir (Tatlı Online simgesini korur)
             function setAvatarContent(el, html) {
-                // Mevcut .online-indicator'ı sakla
-                const indicator = el.querySelector('.online-indicator');
+                const indicator = el.querySelector('.cute-status') || el.querySelector('.online-indicator');
                 el.innerHTML = html;
                 if (indicator) el.appendChild(indicator);
             }
 
+            // Başlangıç Yükleniyor Durumu
             setAvatarContent(mpAvatar, '<i class="fas fa-spinner fa-spin"></i>');
-            mpBio.innerText = "Bağlantı Kuruluyor...";
+            mpBanner.innerHTML = '';
+            mpBanner.style.background = 'linear-gradient(45deg, #000, var(--cyber-cyan))';
+            mpBio.innerText = "Siber dünyada keşfediliyor...";
             mpGender.innerText = "?";
             mpAge.innerText = "?";
-            mpLastSeen.innerText = "Son Görülme: Aranıyor...";
+            mpLastSeen.innerText = "Bağlantı Kuruluyor...";
+
+            mpAvatar.setAttribute('data-online-target', alias.toLowerCase());
 
             mpTamProfilBtn.onclick = function () {
                 modal.style.display = 'none';
@@ -3637,14 +3989,41 @@
                 if (!snap.empty) {
                     const data = snap.docs[0].data();
 
+                    // Tema Rengi Ayarları
+                    const themeColor = data.themeColor || "var(--cyber-cyan)";
+                    mpContentBox.style.borderColor = themeColor;
+                    mpContentBox.style.boxShadow = `0 15px 40px ${themeColor}4d`; /* 4d = %30 opacity hex */
+                    mpAlias.style.color = themeColor;
+                    mpAlias.style.textShadow = `0 0 10px ${themeColor}`;
+                    mpAvatar.style.boxShadow = `0 0 20px ${themeColor}`;
+                    mpAvatar.style.color = themeColor;
+                    mpCloseBtn.style.borderColor = themeColor;
+                    mpCloseBtn.style.color = themeColor;
+
+                    // Kapak Fotoğrafı (Banner) Ayarları
+                    if (data.bannerUrl) {
+                        if (data.bannerType === 'video') {
+                            mpBanner.innerHTML = `<video src="${data.bannerUrl}" autoplay loop muted playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>`;
+                        } else {
+                            mpBanner.innerHTML = `<img src="${data.bannerUrl}" style="width: 100%; height: 100%; object-fit: cover;">`;
+                        }
+                        mpBanner.style.background = 'none';
+                    } else {
+                        // Banner yoksa tema rengiyle gradient oluştur
+                        mpBanner.innerHTML = '';
+                        mpBanner.style.background = `linear-gradient(45deg, rgba(0,0,0,0.8) 10%, ${themeColor} 100%)`;
+                    }
+
+                    // Avatar Ayarları
                     if (data.avatar) setAvatarContent(mpAvatar, `<img src="${data.avatar}" style="width:100%; height:100%; object-fit:cover;">`);
                     else setAvatarContent(mpAvatar, '<i class="fas fa-user-ninja"></i>');
 
-                    // Avatar ayarlandıktan sonra online göstergeyi tetikle
+                    // Online göstergeyi tetikle
                     if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
 
+                    // Diğer Bilgiler
                     if (data.bio) mpBio.innerText = `"${data.bio}"`;
-                    else mpBio.innerText = '"Sessizliği tercih ediyor..."';
+                    else mpBio.innerText = '"Burası henüz biraz boş ama yakında dolacak..."';
 
                     if (data.gender) mpGender.innerText = data.gender;
 
@@ -3661,11 +4040,6 @@
                         mpLastSeen.innerText = "Son Görülme: Gizli";
                     }
 
-                    const themeColor = data.themeColor || "var(--cyber-cyan)";
-                    modal.querySelector('div>div').style.borderColor = themeColor;
-                    modal.querySelector('div>div').style.boxShadow = `0 0 30px ${themeColor}80`;
-                    mpAlias.style.color = themeColor;
-                    mpAlias.style.textShadow = `0 0 10px ${themeColor}`;
                     mpAvatar.style.borderColor = themeColor;
                     mpAvatar.style.color = themeColor;
                 } else {
@@ -3829,7 +4203,7 @@
 
                     if (data.avatar) {
                         // Online-indicator'ı koru: innerHTML yerine güvenli değiştirme
-                        const existingIndicator = publicAvatar.querySelector('.online-indicator');
+                        const existingIndicator = publicAvatar.querySelector('.cute-status');
                         publicAvatar.innerHTML = `<img src="${data.avatar}" alt="${data.alias}">`;
                         if (existingIndicator) publicAvatar.appendChild(existingIndicator);
                     }
@@ -3923,6 +4297,18 @@
                     }
 
                     document.getElementById("myJoinDate").innerHTML = `<i class="fas fa-link"></i> Sisteme Giriş: ${formatTimestamp(userData.timestamp)}`;
+
+                    // --- GÜNLÜK JETON VE GERİ SAYIM SENKRONİZASYONU ---
+                    if (userData.tokens !== undefined) {
+                        document.getElementById("myTokenDisplay").innerText = userData.tokens;
+                    } else {
+                        document.getElementById("myTokenDisplay").innerText = "0";
+                    }
+
+                    if (window.updateDailyButtonState) {
+                        window.updateDailyButtonState(userData.lastRewardTime);
+                    }
+                    // --------------------------------------------------
 
                     if (userData.socialLink) {
                         const mySocialLink = document.getElementById("mySocialLink");
@@ -4679,9 +5065,12 @@
         };
 
         // GLOBAL DÜĞÜM ÖNBELLEĞİ (Arama tahminleri için)
-        // Yönetici dahil herkesin arama yapabilmesi için genel bir cache tutuyoruz
         let globalNodesCache = [];
 
+        // 🚀 VERİTABANI OPTİMİZASYONU: GLOBAL KULLANICI SÖZLÜĞÜ
+        window.globalUserDict = {}; // Tüm kullanıcıların verisi tek seferde buraya dolacak
+
+        // Ağa Sızanlar (Sağ Menü) Dinleyicisi - Tüm profilleri TEK SORGuda çeker
         const qList = query(collection(db, "preRegistrations"), orderBy("timestamp", "desc"));
         let nodeScrollAnimFrame;
         let isNodeScrollPaused = false;
@@ -4691,87 +5080,66 @@
             const nodeList = document.getElementById('nodeList');
             nodeList.innerHTML = ''; let count = 0;
             const fragment = document.createDocumentFragment();
-            globalNodesCache = []; // Önbelleği temizle
+            globalNodesCache = []; // Arama motoru için
 
             snapshot.forEach((docSnap) => {
                 count++;
-                const data = docSnap.data(); const rumuz = data.alias || "Gizli_Düğüm";
-                globalNodesCache.push({ alias: rumuz.toLowerCase(), originalAlias: rumuz });
+                const data = docSnap.data(); 
+                const rumuz = data.alias || "Gizli_Düğüm";
+                const safeAlias = rumuz.toLowerCase();
+
+                // DİKKAT: Veritabanı yorgunluğunu çözen satır burası!
+                // Tüm avatarları ve ban durumlarını yerel hafızaya gömüyoruz.
+                window.globalUserDict[safeAlias] = {
+                    avatar: data.avatar || "default",
+                    isShadowbanned: data.isShadowbanned || false,
+                    isNsfwBanned: data.isNsfwBanned || false
+                };
+
+                globalNodesCache.push({ alias: safeAlias, originalAlias: rumuz });
                 let timeString = "Az önce";
                 if (data.timestamp) {
                     const now = new Date(); const past = data.timestamp.toDate(); const diffMins = Math.floor((now - past) / 60000);
                     if (diffMins > 0 && diffMins < 60) timeString = `${diffMins} dk`; else if (diffMins >= 60) timeString = `${Math.floor(diffMins / 60)} sa`;
                 }
 
-                // Helper to generate a node element
                 const createNodeEl = (isFirst, elIndex) => {
                     const newItem = document.createElement('li');
                     newItem.className = 'node-item';
                     newItem.addEventListener('click', () => { window.showMiniProfile(rumuz); });
 
-                    const avatarId = `n-av-${elIndex}`;
-
-                    // En yeni giren kişiye kırmızı, diğerlerine pembe parlama efekti veriyoruz
                     const borderColor = isFirst ? "var(--blood-red)" : "var(--hot-pink)";
                     const shadowColor = isFirst ? "rgba(255, 0, 60, 0.6)" : "rgba(255, 0, 127, 0.3)";
                     const iconColor = isFirst ? "var(--blood-red)" : "var(--hot-pink)";
+                    
+                    // Avatarı artık beklemeden, direkt sözlükten (dictionary) alıyoruz (Gecikme 0ms)
+                    const userAvatarUrl = window.globalUserDict[safeAlias].avatar;
+                    let avatarHtml = `<i class="fas fa-user-ninja"></i>`;
+                    if (userAvatarUrl !== "default") {
+                        avatarHtml = `<img src="${userAvatarUrl}">`;
+                    }
 
-                    // HTML Taslağı: Başlangıçta Ninja ikonu (Varsayılan Profil) gösterilir
                     newItem.innerHTML = `
-                        <div id="${avatarId}" class="node-avatar" data-online-target="${rumuz.toLowerCase()}" style="border: 2px solid ${borderColor}; box-shadow: 0 0 10px ${shadowColor}; color: ${iconColor};">
-                            <i class="fas fa-user-ninja"></i>
+                        <div class="node-avatar" data-online-target="${safeAlias}" style="border: 2px solid ${borderColor}; box-shadow: 0 0 10px ${shadowColor}; color: ${iconColor}; background: transparent;">
+                            ${avatarHtml}
                         </div>
                         <span class="node-name" style="font-size: 1.15rem; opacity: 1;">${rumuz}</span>
                         <span class="node-time" style="font-size: 0.9rem;">${timeString}</span>
                     `;
-
-                    // Eğer veritabanında kullanıcının avatarı varsa ninja ikonunu resimle değiştir
-                    if (window.getUserAvatar) {
-                        window.getUserAvatar(rumuz).then(url => {
-                            if (url && url !== "default") {
-                                const avDiv = newItem.querySelector(`#${avatarId}`);
-                                if (avDiv) {
-                                    avDiv.style.background = 'transparent';
-                                    const indicator = avDiv.querySelector('.online-indicator');
-                                    avDiv.innerHTML = `<img src="${url}">`;
-                                    if (indicator) avDiv.appendChild(indicator);
-                                    if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
-                                }
-                            }
-                        });
-                    }
-
                     return newItem;
                 };
 
                 fragment.appendChild(createNodeEl(count === 1, `orig-${count}`));
             });
 
-            // Kesintisiz loop için tüm listenin birebir klonunu ekliyoruz
+            // Kesintisiz loop için klon
             const cloneFragment = fragment.cloneNode(true);
-
-            // Event listenerları klonlara yeniden bağla çünkü cloneNode elemanlardaki listenerları kopyalamaz
             let cloneIdx = 0;
             snapshot.forEach((docSnap) => {
                 const rumuz = docSnap.data().alias || "Gizli_Düğüm";
                 const clonedLi = cloneFragment.childNodes[cloneIdx];
                 if (clonedLi) {
                     clonedLi.addEventListener('click', () => { window.showMiniProfile(rumuz); });
-
-                    // Eski .node-status yerine yeni .node-avatar'ı arıyoruz
-                    const avDiv = clonedLi.querySelector('.node-avatar');
-                    if (avDiv && window.getUserAvatar) {
-                        window.getUserAvatar(rumuz).then(url => {
-                            // "default" değer dönmediğinden ve URL olduğundan emin oluyoruz
-                            if (url && url !== "default") {
-                                avDiv.style.background = 'transparent';
-                                const indicator = avDiv.querySelector('.online-indicator');
-                                avDiv.innerHTML = `<img src="${url}">`;
-                                if (indicator) avDiv.appendChild(indicator);
-                                if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
-                            }
-                        });
-                    }
                 }
                 cloneIdx++;
             });
@@ -4779,51 +5147,161 @@
             nodeList.appendChild(fragment);
             nodeList.appendChild(cloneFragment);
             if (window.updateAllOnlineIndicators) window.updateAllOnlineIndicators();
-
             if (count > 0) document.getElementById('userCount').innerText = count * 14;
 
-            // --- Auto-scroll (Loop) Logic ---
+            // Auto-scroll logic...
             if (nodeScrollAnimFrame) cancelAnimationFrame(nodeScrollAnimFrame);
-
             const startNodeScrollLoop = () => {
                 nodeScrollAnimFrame = requestAnimationFrame(() => {
                     if (!isNodeScrollPaused && nodeList.scrollHeight > nodeList.clientHeight) {
-                        nodeList.scrollTop += 0.5; // Kayan hız
-
-                        // Tam ortasına gelince görünmez şekilde sıfırla (Loop)
-                        if (nodeList.scrollTop >= nodeList.scrollHeight / 2) {
-                            nodeList.scrollTop = 0;
-                        }
+                        nodeList.scrollTop += 0.5;
+                        if (nodeList.scrollTop >= nodeList.scrollHeight / 2) nodeList.scrollTop = 0;
                     }
                     startNodeScrollLoop();
                 });
             };
 
-            const pauseScroll = () => {
-                isNodeScrollPaused = true;
-                clearTimeout(nodeScrollResetTimeout);
-            };
-
-            const resumeScroll = () => {
-                clearTimeout(nodeScrollResetTimeout);
-                // Kullanıcı bıraktıktan 1.5s sonra devam etsin
-                nodeScrollResetTimeout = setTimeout(() => {
-                    isNodeScrollPaused = false;
-                }, 1500);
-            };
-
-            // Etkileşim dinleyicileri
+            const pauseScroll = () => { isNodeScrollPaused = true; clearTimeout(nodeScrollResetTimeout); };
+            const resumeScroll = () => { clearTimeout(nodeScrollResetTimeout); nodeScrollResetTimeout = setTimeout(() => { isNodeScrollPaused = false; }, 1500); };
             nodeList.addEventListener('mouseenter', pauseScroll);
             nodeList.addEventListener('mouseleave', resumeScroll);
             nodeList.addEventListener('touchstart', pauseScroll, { passive: true });
             nodeList.addEventListener('touchend', resumeScroll);
-            nodeList.addEventListener('wheel', () => {
-                pauseScroll();
-                resumeScroll(); // wheel bitince trigger edilecek
-            }, { passive: true });
-
             startNodeScrollLoop();
         });
+
+        // 🚀 ESKİ YAVAŞ FONKSİYONUN YERİNE IŞIK HIZINDA OLAN YENİSİ:
+        window.getUserAvatar = async function (alias) {
+            if (!alias) return "default";
+            const safeAlias = alias.toLowerCase();
+            // Artık veritabanına sorgu atmak yok! Direkt hazır listeden çekiyoruz.
+            if (window.globalUserDict && window.globalUserDict[safeAlias]) {
+                return window.globalUserDict[safeAlias].avatar;
+            }
+            return "default";
+        }
+
+        // --- LO-FI SİBER KAFE MÜZİK VE JETON MANTIĞI ---
+        const lofiAudio = new Audio('https://stream.zeno.fm/f3wvbbqmdg8uv'); // Kesintisiz Synthwave/Chillwave Radyosu
+        lofiAudio.volume = 0.4;
+        const playBtn = document.getElementById('lofiPlayBtn');
+        const visualizer = document.getElementById('lofiVisualizer');
+        const lofiTrackStatus = document.getElementById('lofiTrackStatus');
+
+        if(playBtn) {
+            playBtn.addEventListener('click', () => {
+                if(lofiAudio.paused) {
+                    lofiAudio.play();
+                    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+                    visualizer.style.display = 'flex';
+                    lofiTrackStatus.innerText = 'Sinyal Aktif / Dinleniliyor...';
+                } else {
+                    lofiAudio.pause();
+                    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+                    visualizer.style.display = 'none';
+                    lofiTrackStatus.innerText = 'Sinyal Duraklatıldı.';
+                }
+            });
+        }
+
+        // --- GÜNLÜK JETON (KREDİ) SİSTEMİ VE 24 SAAT GERİ SAYIM ---
+        const dailyBtn = document.getElementById('dailyTokenBtn');
+        let countdownInterval;
+
+        // Butonun durumunu veritabanındaki tarihe göre ayarlar
+        window.updateDailyButtonState = function(lastRewardDate) {
+            if(!dailyBtn) return;
+            clearInterval(countdownInterval); // Varsa eski sayacı temizle
+            
+            if (!lastRewardDate) {
+                // Daha önce hiç alınmamış
+                enableDailyButton();
+                return;
+            }
+
+            const now = new Date();
+            const rewardTime = lastRewardDate.toDate();
+            const nextRewardTime = new Date(rewardTime.getTime() + 24 * 60 * 60 * 1000); // Tam 24 saat sonrası
+
+            if (now >= nextRewardTime) {
+                enableDailyButton();
+            } else {
+                disableDailyButtonAndStartTimer(nextRewardTime);
+            }
+        };
+
+        function enableDailyButton() {
+            dailyBtn.disabled = false;
+            dailyBtn.style.opacity = "1";
+            dailyBtn.style.cursor = "pointer";
+            dailyBtn.innerHTML = '<i class="fas fa-gem" style="font-size: 1.5rem; text-shadow: 0 0 10px var(--mint-green);"></i> <span>GÜNLÜK JETONU AL</span>';
+        }
+
+        function disableDailyButtonAndStartTimer(nextRewardTime) {
+            dailyBtn.disabled = true;
+            dailyBtn.style.opacity = "0.7";
+            dailyBtn.style.cursor = "not-allowed";
+
+            const updateTimer = () => {
+                const now = new Date().getTime();
+                const distance = nextRewardTime.getTime() - now;
+
+                if (distance <= 0) {
+                    clearInterval(countdownInterval);
+                    enableDailyButton();
+                } else {
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    const hStr = String(hours).padStart(2, '0');
+                    const mStr = String(minutes).padStart(2, '0');
+                    const sStr = String(seconds).padStart(2, '0');
+
+                    dailyBtn.innerHTML = `<i class="fas fa-clock" style="font-size: 1.5rem; color: #888;"></i> <span style="color: #888;">${hStr}sa ${mStr}dk ${sStr}sn</span>`;
+                }
+            };
+
+            updateTimer(); 
+            countdownInterval = setInterval(updateTimer, 1000); 
+        }
+
+        if(dailyBtn) {
+            dailyBtn.addEventListener('click', async () => {
+                const docId = localStorage.getItem("hotdragons_doc_id");
+                if(!docId) return alert("Jeton toplamak için ağa giriş yapmalısın.");
+                
+                dailyBtn.disabled = true;
+                dailyBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 1.5rem;"></i> <span>ŞİFRELENİYOR...</span>';
+                
+                try {
+                    await updateDoc(doc(db, "preRegistrations", docId), {
+                        tokens: increment(10),
+                        lastRewardTime: serverTimestamp()
+                    });
+                    
+                    dailyBtn.innerHTML = '<i class="fas fa-check" style="font-size: 1.5rem;"></i> <span>+10 KREDİ EKLENDİ</span>';
+                    dailyBtn.style.background = "var(--mint-green)";
+                    dailyBtn.style.color = "#000";
+                    
+                    const tokenDisplay = document.getElementById("myTokenDisplay");
+                    if (tokenDisplay) {
+                        tokenDisplay.innerText = parseInt(tokenDisplay.innerText || 0) + 10;
+                    }
+                    
+                    setTimeout(() => {
+                        dailyBtn.style.background = "transparent";
+                        dailyBtn.style.color = "var(--mint-green)";
+                        const nextTime = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
+                        disableDailyButtonAndStartTimer(nextTime);
+                    }, 3000);
+                } catch(e) {
+                    console.error("Jeton Hatası:", e);
+                    dailyBtn.innerHTML = "HATA OLUŞTU";
+                    setTimeout(() => enableDailyButton(), 3000);
+                }
+            });
+        }
 
         // --- ARKADAŞ EKLE / HIZLI ARAMA (FUZZY SEARCH) ---
         const addFriendInput = document.getElementById('addFriendInput');
