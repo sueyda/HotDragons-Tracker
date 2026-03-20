@@ -1143,73 +1143,182 @@
         .cafe-info h2 {
             font-family: 'Orbitron', sans-serif;
             color: #fff;
-            text-transform: uppercase; margin: 0; font-size: 1.6rem;
-            display: flex; align-items: center; gap: 10px;
+            text-transform: uppercase;
+            margin: 0;
+            font-size: 1.6rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .cafe-info h2 i { color: var(--mint-green); text-shadow: 0 0 15px var(--mint-green); }
-        .cafe-info p { color: #aaa; font-family: 'Rajdhani', sans-serif; font-size: 1.1rem; margin-top: 5px; }
+
+        .cafe-info h2 i {
+            color: var(--mint-green);
+            text-shadow: 0 0 15px var(--mint-green);
+        }
+
+        .cafe-info p {
+            color: #aaa;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            margin-top: 5px;
+        }
 
         .player-controls {
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(255, 133, 234, 0.3);
             padding: 10px 20px;
             border-radius: 50px;
-            display: flex; align-items: center; gap: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
         .play-btn {
-            background: var(--hot-pink); color: #fff; border: none;
-            width: 45px; height: 45px; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            font-size: 1.2rem; cursor: pointer; transition: 0.3s;
+            background: var(--hot-pink);
+            color: #fff;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.3s;
             box-shadow: 0 0 15px var(--hot-pink);
         }
-        .play-btn:hover { transform: scale(1.1); background: #fff; color: var(--hot-pink); }
 
-        .track-info { display: flex; flex-direction: column; }
-        .track-name { font-family: 'Orbitron', sans-serif; color: var(--cyber-cyan); font-size: 0.9rem; font-weight: bold; }
-        .track-status { font-family: 'Rajdhani', sans-serif; color: #888; font-size: 0.8rem; }
+        .play-btn:hover {
+            transform: scale(1.1);
+            background: #fff;
+            color: var(--hot-pink);
+        }
 
-        .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 20px; }
-        .bar { width: 4px; background: var(--cyber-cyan); border-radius: 2px; animation: eq 1s ease-in-out infinite alternate; }
-        .bar:nth-child(2) { animation-delay: 0.2s; background: var(--hot-pink); }
-        .bar:nth-child(3) { animation-delay: 0.4s; background: var(--mint-green); }
-        .bar:nth-child(4) { animation-delay: 0.1s; background: var(--cyber-cyan); }
-        .bar:nth-child(5) { animation-delay: 0.5s; background: var(--hot-pink); }
-        @keyframes eq { 0% { height: 4px; } 100% { height: 20px; } }
+        .track-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .track-name {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyber-cyan);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .track-status {
+            font-family: 'Rajdhani', sans-serif;
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        .visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 3px;
+            height: 20px;
+        }
+
+        .bar {
+            width: 4px;
+            background: var(--cyber-cyan);
+            border-radius: 2px;
+            animation: eq 1s ease-in-out infinite alternate;
+        }
+
+        .bar:nth-child(2) {
+            animation-delay: 0.2s;
+            background: var(--hot-pink);
+        }
+
+        .bar:nth-child(3) {
+            animation-delay: 0.4s;
+            background: var(--mint-green);
+        }
+
+        .bar:nth-child(4) {
+            animation-delay: 0.1s;
+            background: var(--cyber-cyan);
+        }
+
+        .bar:nth-child(5) {
+            animation-delay: 0.5s;
+            background: var(--hot-pink);
+        }
+
+        @keyframes eq {
+            0% {
+                height: 4px;
+            }
+
+            100% {
+                height: 20px;
+            }
+        }
 
         .daily-reward-btn {
-            background: rgba(0,0,0,0.4); border: 1px dashed var(--mint-green);
-            color: var(--mint-green); padding: 15px 25px; border-radius: 15px;
-            font-family: 'Orbitron', sans-serif; font-size: 0.9rem; font-weight: bold;
-            cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 5px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed var(--mint-green);
+            color: var(--mint-green);
+            padding: 15px 25px;
+            border-radius: 15px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
-        .daily-reward-btn:hover { background: rgba(157, 255, 176, 0.1); box-shadow: 0 0 20px rgba(157, 255, 176, 0.2); }
+
+        .daily-reward-btn:hover {
+            background: rgba(157, 255, 176, 0.1);
+            box-shadow: 0 0 20px rgba(157, 255, 176, 0.2);
+        }
 
         /* --- COZY DM EKRANI MAKYAJI --- */
         #dmScreen {
-            background: linear-gradient(to bottom, #05010a, #1a0525) !important; /* Sıcak gece mavisi/mor degrade */
+            background: linear-gradient(to bottom, #05010a, #1a0525) !important;
+            /* Sıcak gece mavisi/mor degrade */
         }
+
         #dmScreen::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: radial-gradient(circle at 50% 50%, rgba(255, 133, 234, 0.03) 0%, transparent 80%),
-                              url('https://www.transparenttextures.com/patterns/stardust.png'); /* Lo-fi noise dokusu */
-            opacity: 0.5; pointer-events: none; z-index: -1;
+                url('https://www.transparenttextures.com/patterns/stardust.png');
+            /* Lo-fi noise dokusu */
+            opacity: 0.5;
+            pointer-events: none;
+            z-index: -1;
         }
+
         .chat-area {
-            background: rgba(10, 2, 20, 0.4) !important; /* Arkayı hafif gösteren cam efekti */
+            background: rgba(10, 2, 20, 0.4) !important;
+            /* Arkayı hafif gösteren cam efekti */
             backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(255,255,255,0.05) !important;
+            border-left: 1px solid rgba(255, 255, 255, 0.05) !important;
         }
+
         .chat-header {
             background: rgba(0, 0, 0, 0.3) !important;
             backdrop-filter: blur(10px);
         }
+
         .chat-input-bar {
             background: rgba(0, 0, 0, 0.5) !important;
-            margin: 15px; border-radius: 20px; /* Kenarları yumuşatılmış input alanı */
+            margin: 15px;
+            border-radius: 20px;
+            /* Kenarları yumuşatılmış input alanı */
             border: 1px solid rgba(112, 255, 255, 0.1) !important;
-            box-shadow: 0 -5px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.5);
         }
 
         /* --- BİLEŞEN: SİBER AKIŞ (VERTICAL FEED) --- */
@@ -2365,7 +2474,8 @@
 
                             <div class="profile-stats-mini">
                                 <div class="mini-stat">
-                                    <span id="myTokenDisplay" style="color: var(--mint-green); text-shadow: 0 0 10px var(--mint-green);">0</span>
+                                    <span id="myTokenDisplay"
+                                        style="color: var(--mint-green); text-shadow: 0 0 10px var(--mint-green);">0</span>
                                     <label>Jeton (Kredi)</label>
                                 </div>
                                 <div class="mini-stat"><span style="color: var(--hot-pink);">Açık</span><label>Beta
@@ -2581,7 +2691,11 @@
                     <span class="track-status" id="lofiTrackStatus">Sinyal Bekleniyor...</span>
                 </div>
                 <div class="visualizer" style="display: none;" id="lofiVisualizer">
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
                 </div>
             </div>
 
@@ -5066,6 +5180,7 @@
 
         // GLOBAL DÜĞÜM ÖNBELLEĞİ (Arama tahminleri için)
         let globalNodesCache = [];
+        let shadowbanCache = {}; // Re-added to fix ReferenceError
 
         // 🚀 VERİTABANI OPTİMİZASYONU: GLOBAL KULLANICI SÖZLÜĞÜ
         window.globalUserDict = {}; // Tüm kullanıcıların verisi tek seferde buraya dolacak
@@ -5084,7 +5199,7 @@
 
             snapshot.forEach((docSnap) => {
                 count++;
-                const data = docSnap.data(); 
+                const data = docSnap.data();
                 const rumuz = data.alias || "Gizli_Düğüm";
                 const safeAlias = rumuz.toLowerCase();
 
@@ -5111,7 +5226,7 @@
                     const borderColor = isFirst ? "var(--blood-red)" : "var(--hot-pink)";
                     const shadowColor = isFirst ? "rgba(255, 0, 60, 0.6)" : "rgba(255, 0, 127, 0.3)";
                     const iconColor = isFirst ? "var(--blood-red)" : "var(--hot-pink)";
-                    
+
                     // Avatarı artık beklemeden, direkt sözlükten (dictionary) alıyoruz (Gecikme 0ms)
                     const userAvatarUrl = window.globalUserDict[safeAlias].avatar;
                     let avatarHtml = `<i class="fas fa-user-ninja"></i>`;
@@ -5188,9 +5303,9 @@
         const visualizer = document.getElementById('lofiVisualizer');
         const lofiTrackStatus = document.getElementById('lofiTrackStatus');
 
-        if(playBtn) {
+        if (playBtn) {
             playBtn.addEventListener('click', () => {
-                if(lofiAudio.paused) {
+                if (lofiAudio.paused) {
                     lofiAudio.play();
                     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
                     visualizer.style.display = 'flex';
@@ -5209,10 +5324,10 @@
         let countdownInterval;
 
         // Butonun durumunu veritabanındaki tarihe göre ayarlar
-        window.updateDailyButtonState = function(lastRewardDate) {
-            if(!dailyBtn) return;
+        window.updateDailyButtonState = function (lastRewardDate) {
+            if (!dailyBtn) return;
             clearInterval(countdownInterval); // Varsa eski sayacı temizle
-            
+
             if (!lastRewardDate) {
                 // Daha önce hiç alınmamış
                 enableDailyButton();
@@ -5253,7 +5368,7 @@
                     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                    
+
                     const hStr = String(hours).padStart(2, '0');
                     const mStr = String(minutes).padStart(2, '0');
                     const sStr = String(seconds).padStart(2, '0');
@@ -5262,40 +5377,40 @@
                 }
             };
 
-            updateTimer(); 
-            countdownInterval = setInterval(updateTimer, 1000); 
+            updateTimer();
+            countdownInterval = setInterval(updateTimer, 1000);
         }
 
-        if(dailyBtn) {
+        if (dailyBtn) {
             dailyBtn.addEventListener('click', async () => {
                 const docId = localStorage.getItem("hotdragons_doc_id");
-                if(!docId) return alert("Jeton toplamak için ağa giriş yapmalısın.");
-                
+                if (!docId) return alert("Jeton toplamak için ağa giriş yapmalısın.");
+
                 dailyBtn.disabled = true;
                 dailyBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="font-size: 1.5rem;"></i> <span>ŞİFRELENİYOR...</span>';
-                
+
                 try {
                     await updateDoc(doc(db, "preRegistrations", docId), {
                         tokens: increment(10),
                         lastRewardTime: serverTimestamp()
                     });
-                    
+
                     dailyBtn.innerHTML = '<i class="fas fa-check" style="font-size: 1.5rem;"></i> <span>+10 KREDİ EKLENDİ</span>';
                     dailyBtn.style.background = "var(--mint-green)";
                     dailyBtn.style.color = "#000";
-                    
+
                     const tokenDisplay = document.getElementById("myTokenDisplay");
                     if (tokenDisplay) {
                         tokenDisplay.innerText = parseInt(tokenDisplay.innerText || 0) + 10;
                     }
-                    
+
                     setTimeout(() => {
                         dailyBtn.style.background = "transparent";
                         dailyBtn.style.color = "var(--mint-green)";
                         const nextTime = new Date(new Date().getTime() + 24 * 60 * 60 * 1000);
                         disableDailyButtonAndStartTimer(nextTime);
                     }, 3000);
-                } catch(e) {
+                } catch (e) {
                     console.error("Jeton Hatası:", e);
                     dailyBtn.innerHTML = "HATA OLUŞTU";
                     setTimeout(() => enableDailyButton(), 3000);
@@ -5573,17 +5688,30 @@
 
         // Belli bir kullanıcının Shadowban durumunu hızlıca öğrenme
         async function checkShadowbanStatus(alias) {
-            if (shadowbanCache[alias] !== undefined) return shadowbanCache[alias];
+            if (!alias) return false;
+            const safeAlias = alias.toLowerCase();
+
+            // 1. Önce globalUserDict (Hızı x100 artırır)
+            if (window.globalUserDict && window.globalUserDict[safeAlias]) {
+                const isBanned = window.globalUserDict[safeAlias].isShadowbanned === true;
+                shadowbanCache[safeAlias] = isBanned;
+                return isBanned;
+            }
+
+            // 2. Bellekte varsa (Cache)
+            if (shadowbanCache[safeAlias] !== undefined) return shadowbanCache[safeAlias];
+
+            // 3. Hiçbiri yoksa (Fallback - Nadir Durum)
             try {
                 const q = query(collection(db, "preRegistrations"), where("alias", "==", alias));
                 const snap = await getDocs(q);
                 if (!snap.empty) {
                     const isBanned = snap.docs[0].data().isShadowbanned === true;
-                    shadowbanCache[alias] = isBanned;
+                    shadowbanCache[safeAlias] = isBanned;
                     return isBanned;
                 }
             } catch (e) { }
-            return false; // Default olarak banlı değil farz et
+            return false;
         }
 
         async function fetchInitialFeeds() {
@@ -5600,7 +5728,7 @@
             }
 
             try {
-                const feedQ = query(collection(db, "globalFeed"), orderBy("timestamp", "desc"), limit(3));
+                const feedQ = query(collection(db, "globalFeed"), orderBy("timestamp", "desc"), limit(10));
                 const snap = await getDocs(feedQ);
 
                 document.getElementById("feedLoadingText").style.display = "none";
@@ -5633,7 +5761,7 @@
             document.getElementById("feedLoader").style.display = "block";
 
             try {
-                const nextQ = query(collection(db, "globalFeed"), orderBy("timestamp", "desc"), startAfter(lastVisibleFeed), limit(3));
+                const nextQ = query(collection(db, "globalFeed"), orderBy("timestamp", "desc"), startAfter(lastVisibleFeed), limit(10));
                 const nextSnap = await getDocs(nextQ);
 
                 document.getElementById("feedLoader").style.display = "none";
@@ -5991,7 +6119,7 @@
             }
 
             try {
-                const feedQ = query(collection(db, "globalNsfwFeed"), orderBy("timestamp", "desc"), limit(3));
+                const feedQ = query(collection(db, "globalNsfwFeed"), orderBy("timestamp", "desc"), limit(10));
                 const snap = await getDocs(feedQ);
 
                 document.getElementById("nsfwFeedLoadingText").style.display = "none";
@@ -6024,7 +6152,7 @@
             document.getElementById("nsfwFeedLoader").style.display = "block";
 
             try {
-                const nextQ = query(collection(db, "globalNsfwFeed"), orderBy("timestamp", "desc"), startAfter(lastVisibleNsfwFeed), limit(3));
+                const nextQ = query(collection(db, "globalNsfwFeed"), orderBy("timestamp", "desc"), startAfter(lastVisibleNsfwFeed), limit(10));
                 const nextSnap = await getDocs(nextQ);
 
                 document.getElementById("nsfwFeedLoader").style.display = "none";
