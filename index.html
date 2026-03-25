@@ -8,7 +8,7 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Syncopate:wght@700&family=Rajdhani:wght@500;600;700&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&family=Syncopate:wght@700&family=Rajdhani:wght@500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -388,6 +388,110 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 30px;
+        }
+
+        /* --- EDİTÖR GÜNLÜKLERİ (VOGUE x CYBERPUNK) --- */
+        .editorials-wrapper {
+            width: 100%;
+            max-width: 1100px;
+            margin: -20px auto 30px auto;
+            padding: 0 20px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .editorial-section-title {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--hot-pink);
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            border-bottom: 1px solid rgba(255, 133, 234, 0.3);
+            padding-bottom: 5px;
+        }
+
+        .editorials-scroll {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: thin;
+        }
+
+        .editorials-scroll::-webkit-scrollbar { height: 6px; }
+        .editorials-scroll::-webkit-scrollbar-thumb { background: var(--hot-pink); border-radius: 3px; }
+
+        .editorial-card {
+            min-width: 280px;
+            max-width: 320px;
+            background: rgba(20, 5, 30, 0.6); /* Buzlu cam efekti */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 133, 234, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+            scroll-snap-align: start;
+            flex-shrink: 0;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .editorial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 133, 234, 0.3);
+            border-color: var(--hot-pink);
+        }
+
+        .editorial-cover {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            background: #000;
+        }
+
+        .editorial-content-preview {
+            padding: 15px;
+        }
+
+        .editorial-title {
+            font-family: 'Playfair Display', serif; /* VOGUE HİSSİ (Tırnaklı Şık Font) */
+            font-style: italic;
+            font-size: 1.25rem;
+            color: #fff;
+            margin: 0 0 12px 0;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* Sadece 2 satır gösterir, uzunsa ... koyar */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .editorial-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Rajdhani', sans-serif;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .editorial-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--cyber-cyan);
+            font-weight: 600;
+        }
+
+        .editorial-author img {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: 1px solid var(--cyber-cyan);
+            object-fit: cover;
         }
 
         /* --- BİLEŞEN: ANA DEĞER KARTI --- */
@@ -2315,7 +2419,184 @@
                 text-shadow: 0 0 12px var(--cyber-cyan);
             }
         }
+
+        /* --- QUILL EDİTÖR SİBER TEMA --- */
+        .ql-toolbar.ql-snow {
+            background: rgba(13, 1, 24, 0.8);
+            border: 1px solid var(--cyber-cyan);
+            border-radius: 8px 8px 0 0;
+        }
+        .ql-container.ql-snow {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--cyber-cyan);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.1rem;
+            min-height: 250px;
+        }
+        .ql-snow .ql-stroke { stroke: var(--cyber-cyan); }
+        .ql-snow .ql-fill, .ql-snow .ql-stroke.ql-fill { fill: var(--cyber-cyan); }
+        .ql-snow .ql-picker { color: var(--cyber-cyan); }
+        .ql-editor::before { color: rgba(112, 255, 255, 0.5) !important; font-style: italic; }
+        /* --- ARTICLE READER (YAZI OKUMA EKRANI) CSS --- */
+        #articleReaderScreen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--void-bg);
+            z-index: 3000;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .reader-close-btn {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            z-index: 3100;
+            background: rgba(13, 1, 24, 0.8) !important;
+            border-color: var(--hot-pink) !important;
+            color: var(--hot-pink) !important;
+            backdrop-filter: blur(10px);
+        }
+
+        .article-cover-header {
+            width: 100%;
+            height: 55vh;
+            position: relative;
+            background: #000;
+        }
+
+        .article-cover-header img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 100%);
+        }
+
+        .article-header-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 40px 20px;
+            background: linear-gradient(to top, var(--void-bg) 0%, transparent 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .article-hero-title {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 3rem;
+            color: #fff;
+            text-align: center;
+            line-height: 1.2;
+            margin: 0;
+            max-width: 900px;
+            text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+        }
+
+        .article-content-wrapper {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 50vh;
+        }
+
+        .article-meta-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 133, 234, 0.2);
+        }
+
+        .article-reader-author {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .article-reader-author:hover {
+            transform: scale(1.05);
+        }
+
+        .article-reader-author img {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--cyber-cyan);
+            object-fit: cover;
+        }
+
+        .article-reader-author-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-author-name {
+            font-family: 'Orbitron', sans-serif;
+            color: var(--cyber-cyan);
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .article-date {
+            font-family: 'Rajdhani', sans-serif;
+            color: #aaa;
+            font-size: 0.85rem;
+        }
+
+        .article-read-time {
+            font-family: 'Rajdhani', sans-serif;
+            color: var(--mint-green);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* YAZI İÇERİĞİ (QUILL RENDER) TEST */
+        .article-body.ql-editor {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #eee;
+            padding: 0;
+            overflow-y: visible; /* Scroll çıkmaması için */
+        }
+
+        .article-body .ql-video {
+            width: 100%;
+            height: 450px;
+            border-radius: 10px;
+            border: 1px solid var(--cyber-cyan);
+            margin: 20px 0;
+        }
+
+        .article-body a {
+            color: var(--hot-pink);
+            text-shadow: 0 0 5px var(--hot-pink);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--hot-pink);
+        }
+        
     </style>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
 
 <body>
@@ -2383,6 +2664,17 @@
         <div class="logo">HOTDRAGONS</div>
         <div class="subtitle">KISA FORMAT. <span>SINIRSIZ EĞLENCE.</span></div>
     </header>
+
+    <!-- YENİ EKLENEN: Mağara Günlükleri (Kompakt Vogue) -->
+    <div class="editorials-wrapper" id="editorialsWrapper" style="display: none;">
+        <h3 class="editorial-section-title"><i class="fas fa-pen-nib"></i> MAĞARA GÜNLÜKLERİ</h3>
+        <div class="editorials-scroll" id="editorialsContainer">
+            <!-- Firebase'den gelen yazılar JS ile buraya dizilecek -->
+            <div style="color: var(--hot-pink); font-family: 'Orbitron'; text-align: center; width: 100%;">
+                <i class="fas fa-spinner fa-spin"></i> Parşömenler Çekiliyor...
+            </div>
+        </div>
+    </div>
 
     <div class="container">
 
@@ -2499,6 +2791,10 @@
                         <i class="fas fa-comments"></i> SİNYAL AĞI (DM)
                     </button>
 
+                    <button id="openEditorPanelBtn" class="cyber-button outline" style="display: none; margin-bottom: 15px; border-color: var(--mint-green); color: var(--mint-green); text-shadow: 0 0 5px var(--mint-green);">
+                        <i class="fas fa-pen-nib"></i> MAĞARA GÜNLÜĞÜ YAZ (EDİTÖR)
+                    </button>
+
                     <button id="showEditFormBtn" class="cyber-button" style="margin-bottom: 15px;"><i
                             class="fas fa-pen"></i> KİMLİĞİ DÜZENLE</button>
                     <div id="uplinkRequestsArea" style="margin-bottom: 20px; display:none;">
@@ -2597,6 +2893,71 @@
                             style="margin-top: 15px;">İPTAL ET</button>
                     </form>
                 </div>
+
+                <div id="editorPanelScreen" style="display: none; text-align: left; padding-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="font-family: 'Orbitron'; color: var(--mint-green); margin: 0; text-shadow: 0 0 10px var(--mint-green);">
+                            <i class="fas fa-scroll"></i> YENİ PARŞÖMEN
+                        </h2>
+                        <button id="closeEditorPanelBtn" class="cyber-button outline small" style="border-color: var(--blood-red); color: var(--blood-red); width: auto; margin: 0;">
+                            <i class="fas fa-arrow-left"></i> VAZGEÇ
+                        </button>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--mint-green);">Haber Ambiyansı (Sayfa Teması)</label>
+                        <select id="editorialAmbiance" class="cyber-select" style="border-color: var(--mint-green);">
+                            <option value="default">Matrix (Standart Siber)</option>
+                            <option value="blood-moon">Kanlı Ay (Koyu Kırmızı & Siyah)</option>
+                            <option value="toxic">Toksik Çöplük (Zehir Yeşili)</option>
+                            <option value="void">Hiçlik (Tam Siyah & Soluk Beyaz)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--mint-green);">Yazı Başlığı</label>
+                        <input type="text" id="editorialTitle" class="cyber-input" style="border-color: var(--mint-green); padding-left: 15px;" placeholder="Çarpıcı bir başlık at..." autocomplete="off">
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--mint-green);">Kapak Görseli</label>
+                        <div class="file-input-wrapper" style="width: 100%;">
+                            <div class="file-input-btn" id="editorialCoverLabel" style="font-size: 0.85rem; padding: 10px; border-color: var(--mint-green); color: var(--mint-green);">
+                                <i class="fas fa-camera"></i> KAPAK YÜKLE (Max 5MB)
+                            </div>
+                            <input type="file" id="editorialCoverInput" accept="image/png, image/jpeg, image/webp">
+                        </div>
+                        <input type="hidden" id="editorialCoverUrl">
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--mint-green);">Özel Arka Plan Rengi (Ambiyansı Ezer)</label>
+                        <input type="color" id="editorialBgColor" class="cyber-input" style="border-color: var(--mint-green); height: 50px; padding: 5px; cursor: pointer;" value="#0d0118">
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--mint-green);">Arka Plan Medyası (Video/GIF/Görsel - Hepsini Ezer)</label>
+                        <div class="file-input-wrapper" style="width: 100%;">
+                            <div class="file-input-btn" id="editorialBgLabel" style="font-size: 0.85rem; padding: 10px; border-color: var(--mint-green); color: var(--mint-green);">
+                                <i class="fas fa-image"></i> ARKA PLAN YÜKLE (Max 50MB)
+                            </div>
+                            <input type="file" id="editorialBgInput" accept="image/png, image/jpeg, image/webp, image/gif, video/mp4, video/webm">
+                        </div>
+                        <input type="hidden" id="editorialBgUrl">
+                        <input type="hidden" id="editorialBgType">
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--mint-green);">İçerik (Zengin Metin)</label>
+                        <div id="quillEditorContainer"></div> 
+                    </div>
+
+                    <button id="publishEditorialBtn" class="cyber-button" style="background: linear-gradient(45deg, #008844, var(--mint-green)); color: #000; box-shadow: 0 0 20px rgba(157, 255, 176, 0.4);">
+                        <i class="fas fa-paper-plane"></i> AĞA YAYINLA
+                    </button>
+                </div>
+
+
 
                 <div id="publicProfileScreen">
                     <div style="text-align: left; margin-bottom: 20px;">
@@ -3599,6 +3960,40 @@
         </div>
     </div>
 
+    <!-- YAZI OKUMA EKRANI (ARTICLE READER) -->
+    <div id="articleReaderScreen">
+        <button class="reader-close-btn cyber-button outline small" onclick="window.closeArticleReader()">
+            <i class="fas fa-arrow-left"></i> AĞA DÖN
+        </button>
+        
+        <div class="article-cover-header">
+            <img id="readerCoverImage" src="" alt="Cover Image">
+            <div class="article-header-overlay">
+                <h1 id="readerTitle" class="article-hero-title">Başlık Yükleniyor...</h1>
+            </div>
+        </div>
+
+        <div class="article-content-wrapper">
+            <div class="article-meta-bar">
+                <div class="article-reader-author" id="readerAuthorBtn" onclick="">
+                    <img id="readerAuthorAvatar" src="https://via.placeholder.com/45/0d0118/00f3ff?text=N" alt="Avatar">
+                    <div class="article-reader-author-info">
+                        <span class="article-author-name" id="readerAuthorAlias">@Yazar</span>
+                        <span class="article-date" id="readerDate">Tarih</span>
+                    </div>
+                </div>
+                <div class="article-read-time" id="readerTime">
+                    <i class="fas fa-clock"></i> 3 dk
+                </div>
+            </div>
+
+            <!-- Quill Content Render Area -->
+            <div id="readerContent" class="article-body ql-editor">
+                <p style="text-align: center; color: #888; font-family: 'Orbitron';"><i class="fas fa-spinner fa-spin"></i> Parşömen Çözümleniyor...</p>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp, onSnapshot, query, orderBy, limit, limitToLast, startAfter, where, getDocs, updateDoc, doc, deleteDoc, increment, arrayUnion, arrayRemove, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
@@ -3825,6 +4220,245 @@
                 feedPostArea.style.display = 'none';
                 toggleFeedPostBtn.style.display = 'flex'; // Geri göster
                 resetFeedPostForm();
+            });
+        }
+
+        // --- EDİTÖR PANELİ KONTROLLERİ VE QUILL.JS ---
+        const openEditorPanelBtn = document.getElementById("openEditorPanelBtn");
+        const closeEditorPanelBtn = document.getElementById("closeEditorPanelBtn");
+        const editorPanelScreen = document.getElementById("editorPanelScreen");
+        const profileDashboardDiv = document.getElementById("profileDashboard");
+        let quill; // Editör nesnesi
+
+        if (openEditorPanelBtn) {
+            openEditorPanelBtn.addEventListener('click', () => {
+                profileDashboardDiv.style.display = 'none';
+                editorPanelScreen.style.display = 'block';
+                
+                // Quill Editörü sadece bir kez başlatılsın
+                if (!quill) {
+                    quill = new Quill('#quillEditorContainer', {
+                        theme: 'snow',
+                        placeholder: 'Bugün ne hissediyorsun? Mağara duvarlarına fısılda...',
+                        modules: {
+                            toolbar: {
+                                container: [
+                                    [{ 'header': [2, 3, false] }],
+                                    ['bold', 'italic', 'underline', 'strike'],
+                                    ['blockquote', 'code-block'],
+                                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                                    ['image', 'video', 'link'], // image eklendi!
+                                    ['clean']
+                                ],
+                                handlers: {
+                                    // GÖRSEL BUTONUNA ÖZEL GÖREV EKLİYORUZ
+                                    'image': selectLocalImage
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Quill İçin Özel Resim Yükleyici (Firebase Storage'a atar)
+                function selectLocalImage() {
+                    const input = document.createElement('input');
+                    input.setAttribute('type', 'file');
+                    input.setAttribute('accept', 'image/png, image/jpeg, image/webp, image/gif');
+                    input.click();
+
+                    input.onchange = async () => {
+                        const file = input.files[0];
+                        if (!file) return;
+                        if (file.size > 5 * 1024 * 1024) return alert("Sistem Reddi: Görsel maks 5MB olabilir.");
+
+                        // Editörde kullanıcının imlecinin nerede olduğunu bul ve yükleniyor metni koy
+                        const range = quill.getSelection(true);
+                        quill.insertText(range.index, '📸 Sinyal İşleniyor...', 'user');
+
+                        try {
+                            const storageRef = ref(storage, 'editorial_media/' + Date.now() + '_' + file.name);
+                            const uploadTask = await uploadBytesResumable(storageRef, file);
+                            const dlUrl = await getDownloadURL(uploadTask.ref);
+
+                            // "Yükleniyor" yazısını sil, resmi göm!
+                            quill.deleteText(range.index, 22); 
+                            quill.insertEmbed(range.index, 'image', dlUrl); 
+                        } catch (e) {
+                            console.error("İçerik görseli yükleme hatası", e);
+                            quill.deleteText(range.index, 22);
+                            alert("Görsel ağa yüklenemedi.");
+                        }
+                    };
+                }
+            });
+        }
+
+        if (closeEditorPanelBtn) {
+            closeEditorPanelBtn.addEventListener('click', () => {
+                editorPanelScreen.style.display = 'none';
+                profileDashboardDiv.style.display = 'block';
+            });
+        }
+
+        // Kapak Görseli Yükleme (Firebase Storage)
+        document.getElementById('editorialCoverInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert("Kapak görseli maks 5MB olabilir.");
+                this.value = ''; return;
+            }
+
+            const storageRef = ref(storage, 'editorial_covers/' + Date.now() + '_' + file.name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            const labelBtn = document.getElementById('editorialCoverLabel');
+
+            labelBtn.innerHTML = "YÜKLENİYOR... %0";
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    labelBtn.innerHTML = `YÜKLENİYOR... %${Math.round(progress)}`;
+                },
+                (error) => {
+                    console.error("Kapak yükleme hatası", error);
+                    labelBtn.innerHTML = '<i class="fas fa-camera"></i> TEKRAR DENE';
+                },
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    document.getElementById('editorialCoverUrl').value = downloadURL;
+                    labelBtn.innerHTML = '<i class="fas fa-check"></i> KAPAK HAZIR';
+                    labelBtn.style.color = "#000";
+                    labelBtn.style.background = "var(--mint-green)";
+                }
+            );
+        });
+
+        // Özel Arka Plan Medyası Yükleme (Firebase Storage)
+        document.getElementById('editorialBgInput').addEventListener('change', function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Limit 50MB olarak ayarlandı
+            if (file.size > 50 * 1024 * 1024) {
+                alert("Arka plan medyası maks 50MB olabilir.");
+                this.value = ''; return;
+            }
+
+            // Dosyanın video mu yoksa görsel mi olduğunu tespit et
+            const isVideo = file.type.startsWith('video/');
+            const typeStr = isVideo ? 'video' : 'image';
+            document.getElementById('editorialBgType').value = typeStr;
+
+            const storageRef = ref(storage, 'editorial_bgs/' + Date.now() + '_' + file.name);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+            const labelBtn = document.getElementById('editorialBgLabel');
+
+            labelBtn.innerHTML = "YÜKLENİYOR... %0";
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    labelBtn.innerHTML = `YÜKLENİYOR... %${Math.round(progress)}`;
+                },
+                (error) => {
+                    console.error("Arka plan yükleme hatası", error);
+                    labelBtn.innerHTML = `<i class="fas fa-${isVideo ? 'video' : 'image'}"></i> TEKRAR DENE`;
+                },
+                async () => {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    document.getElementById('editorialBgUrl').value = downloadURL;
+                    labelBtn.innerHTML = `<i class="fas fa-check"></i> ${isVideo ? 'VİDEO' : 'GÖRSEL'} HAZIR`;
+                    labelBtn.style.color = "#000";
+                    labelBtn.style.background = "var(--mint-green)";
+                }
+            );
+        });
+
+        // Yazıyı Firebase'e Gönder
+        const publishEditorialBtn = document.getElementById("publishEditorialBtn");
+        if (publishEditorialBtn) {
+            publishEditorialBtn.addEventListener('click', async () => {
+                // Tıklandığı an içindeki değişkenleri bul:
+                const title = document.getElementById("editorialTitle").value.trim();
+                const coverUrl = document.getElementById("editorialCoverUrl").value;
+                const ambiance = document.getElementById("editorialAmbiance").value; // YENİ
+                const contentHtml = quill.root.innerHTML;
+                const textContent = quill.getText().trim(); // Sadece kelime sayısını hesaplamak için
+                const customBgColor = document.getElementById("editorialBgColor").value;
+                const customBgUrl = document.getElementById("editorialBgUrl").value;
+                const customBgType = document.getElementById("editorialBgType").value;
+                const aliasForPost = localStorage.getItem("hotdragons_alias");
+
+                if (!title || textContent.length < 10) {
+                    return alert("Başlık ve yeterli uzunlukta içerik girmelisin.");
+                }
+                if (!coverUrl) {
+                    return alert("Lütfen yazı için şık bir kapak görseli yükle.");
+                }
+
+                const originalText = publishEditorialBtn.innerHTML;
+                publishEditorialBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> PARŞÖMEN İŞLENİYOR...';
+                publishEditorialBtn.disabled = true;
+
+                try {
+                    // Kelime sayısına göre tahmini okuma süresi (Dakikada 200 kelime varsayımı)
+                    const wordCount = textContent.split(/\s+/).length;
+                    const readTime = Math.max(1, Math.ceil(wordCount / 200));
+                    
+                    // Yazarın avatarını çekelim
+                    const authorAvatar = await window.getUserAvatar(aliasForPost);
+
+                    await addDoc(collection(db, "editorials"), {
+                        title: title,
+                        content: contentHtml,
+                        coverImage: coverUrl,
+                        ambiance: ambiance, // YENİ: Ambiyans verisi
+                        customBgColor: customBgColor,
+                        customBgImage: customBgUrl,
+                        customBgType: customBgType,
+                        authorAlias: aliasForPost,
+                        authorAvatar: authorAvatar,
+                        readTime: readTime,
+                        isPublished: true,
+                        timestamp: serverTimestamp()
+                    });
+
+                    publishEditorialBtn.innerHTML = '<i class="fas fa-check"></i> YAYINLANDI';
+                    
+                    // Arayüzü temizle ve ana ekrana dön
+                    setTimeout(() => {
+                        document.getElementById("editorialTitle").value = "";
+                        document.getElementById("editorialCoverUrl").value = "";
+                        document.getElementById("editorialAmbiance").value = "default";
+                        quill.setContents([]);
+                        const labelBtn = document.getElementById('editorialCoverLabel');
+                        labelBtn.innerHTML = '<i class="fas fa-camera"></i> KAPAK YÜKLE (Max 5MB)';
+                        labelBtn.style.background = "transparent";
+                        labelBtn.style.color = "var(--mint-green)";
+                        document.getElementById("editorialBgColor").value = "#0d0118";
+                        document.getElementById("editorialBgUrl").value = "";
+                        document.getElementById("editorialBgType").value = "";
+                        const bgLabel = document.getElementById('editorialBgLabel');
+                        bgLabel.innerHTML = '<i class="fas fa-image"></i> ARKA PLAN YÜKLE (Max 50MB)';
+                        bgLabel.style.background = "transparent";
+                        bgLabel.style.color = "var(--mint-green)";
+                        
+                        closeEditorPanelBtn.click();
+                        publishEditorialBtn.innerHTML = originalText;
+                        publishEditorialBtn.disabled = false;
+                        
+                        // Ana ekrandaki vitrini tazele
+                        if(window.fetchEditorials) window.fetchEditorials();
+                    }, 2000);
+
+                } catch (error) {
+                    console.error("Yazı yayınlama hatası:", error);
+                    alert("Ağa bağlantı koptu, yazı gönderilemedi.");
+                    publishEditorialBtn.innerHTML = originalText;
+                    publishEditorialBtn.disabled = false;
+                }
             });
         }
 
@@ -4516,6 +5150,13 @@
                         myAvatar.innerHTML = `<img src="${userData.avatar}" alt="Avatar">`;
                         document.getElementById('editAvatarUrl').value = userData.avatar;
                     }
+
+                    // --- EDİTÖR YETKİSİ KONTROLÜ ---
+                    const openEditorBtn = document.getElementById("openEditorPanelBtn");
+                    // Eğer kullanıcı sueyda ise veya veritabanında rolü 'editor' ise butonu göster
+                    if ((savedAlias && savedAlias.toLowerCase() === "sueyda") || userData.role === "editor") {
+                        if (openEditorBtn) openEditorBtn.style.display = "inline-block";
+                    }
                 }
             } catch (error) { console.error("Profil çekilemedi: ", error); }
         }
@@ -4610,11 +5251,13 @@
                 return;
             }
 
-            let finalHTML = ""; // Bütün HTML'i burada biriktireceğiz (Performans için)
+            let finalHTML = ""; 
 
             usersList.forEach(user => {
                 const isSueyda = user.alias.toLowerCase() === "sueyda";
                 const isBanned = user.isShadowbanned === true;
+                const isNsfwBanned = user.isNsfwBanned === true;
+                const isEditor = user.role === "editor"; // KULLANICI EDİTÖR MÜ KONTROLÜ
 
                 const deleteBtnHtml = isSueyda
                     ? `<button class="cyber-button small outline" style="border-color: #555; color: #555; cursor: not-allowed;" title="Kurucu Silinemez" disabled><i class="fas fa-ban"></i> SİL</button>`
@@ -4626,18 +5269,26 @@
                         ? `<button onclick="window.adminToggleShadowban('${user.id}', '${user.alias}', false)" class="cyber-button small outline" style="border-color: #ffaa00; color: #ffaa00;"><i class="fas fa-sun"></i> BAN KALDIR</button>`
                         : `<button onclick="window.adminToggleShadowban('${user.id}', '${user.alias}', true)" class="cyber-button small outline" style="border-color: #555; color: #aaa;"><i class="fas fa-ghost"></i> GÖLGE BAN</button>`;
 
-                const isNsfwBanned = user.isNsfwBanned === true;
                 const nsfwBanBtnHtml = isSueyda
                     ? ``
                     : isNsfwBanned
                         ? `<button onclick="window.adminToggleNsfwBan('${user.id}', '${user.alias}', false)" class="cyber-button small outline" style="border-color: #00ffaa; color: #00ffaa;"><i class="fas fa-check"></i> NSFW AÇ</button>`
                         : `<button onclick="window.adminToggleNsfwBan('${user.id}', '${user.alias}', true)" class="cyber-button small outline" style="border-color: #ff003c; color: #ff003c;"><i class="fas fa-ban"></i> NSFW BAN</button>`;
 
+                // YENİ EKLENEN: YAZAR YAP BUTONU
+                const editorBtnHtml = isSueyda
+                    ? ``
+                    : isEditor
+                        ? `<button onclick="window.adminToggleEditorRole('${user.id}', '${user.alias}', false)" class="cyber-button small outline" style="border-color: var(--mint-green); color: var(--mint-green);"><i class="fas fa-user-minus"></i> YAZARLIĞI AL</button>`
+                        : `<button onclick="window.adminToggleEditorRole('${user.id}', '${user.alias}', true)" class="cyber-button small outline" style="border-color: var(--cyber-cyan); color: var(--cyber-cyan);"><i class="fas fa-user-edit"></i> YAZAR YAP</button>`;
+
                 const customBadgesCount = user.customBadges ? user.customBadges.length : 0;
+                
                 let banStatusText = isBanned ? `<span style="color: #ffaa00; font-size: 0.8rem; margin-left:10px;"><i class="fas fa-ghost"></i> SHADOWBANNED</span>` : "";
                 if (isNsfwBanned) banStatusText += `<span style="color: #ff003c; font-size: 0.8rem; margin-left:10px;"><i class="fas fa-ban"></i> NSFW BANLI</span>`;
+                // YENİ EKLENEN: EDİTÖR ETİKETİ
+                if (isEditor) banStatusText += `<span style="color: var(--mint-green); font-size: 0.8rem; margin-left:10px;"><i class="fas fa-pen-nib"></i> EDİTÖR</span>`;
 
-                // finalHTML içine ekleme yapıyoruz, DOM'a dokunmuyoruz!
                 finalHTML += `
                     <div style="background: rgba(255, 0, 0, 0.05); border: 1px solid rgba(255, 0, 0, 0.3); padding: 15px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
                         <div style="flex: 1; min-width: 200px;">
@@ -4646,6 +5297,7 @@
                             <div style="font-size: 0.8rem; color: var(--hot-pink); margin-top: 5px;"><i class="fas fa-medal"></i> ${customBadgesCount} Özel Rozet</div>
                         </div>
                         <div style="display: flex; gap: 10px;">
+                            ${editorBtnHtml}
                             ${shadowbanBtnHtml}
                             ${nsfwBanBtnHtml}
                             <button onclick="window.adminManageBadges('${user.id}', '${user.alias}')" class="cyber-button small outline" style="border-color: var(--cyber-cyan); color: var(--cyber-cyan);"><i class="fas fa-medal"></i> ROZETLER</button>
@@ -4655,7 +5307,6 @@
                 `;
             });
 
-            // Döngü bittikten sonra DOM'a tek seferde yazdırıyoruz. (Hız x10 artar)
             adminUserList.innerHTML = finalHTML;
         }
 
@@ -4727,6 +5378,22 @@
                     loadAdminUsers(); // Listeyi yenileyip buton state'lerini update edelim
                 } catch (e) {
                     console.error("Shadowban toggle hatası", e);
+                    alert("İşlem sırasında sunucuda hata oluştu.");
+                }
+            }
+        };
+
+        // Yönetici - Editör Rolü Verme/Alma Fonksiyonu
+        window.adminToggleEditorRole = async function (docId, alias, makeEditor) {
+            const actionText = makeEditor ? "Mağara Günlükleri için YAZAR (Editör) yetkisi verilecek" : "Yazarlık yetkisi GERİ ALINACAK";
+            if (confirm(`@${alias} kişisine ${actionText}. Onaylıyor musun?`)) {
+                try {
+                    await updateDoc(doc(db, "preRegistrations", docId), {
+                        role: makeEditor ? "editor" : "user"
+                    });
+                    loadAdminUsers(); // Listeyi anında yenileyip butonu günceller
+                } catch (e) {
+                    console.error("Editör yetkisi değiştirme hatası:", e);
                     alert("İşlem sırasında sunucuda hata oluştu.");
                 }
             }
@@ -5506,6 +6173,192 @@
             }
         }
 
+        // --- MAĞARA GÜNLÜKLERİ (EDİTÖR YAZILARI) ÇEKİCİ ---
+        window.fetchEditorials = async function() {
+            const wrapper = document.getElementById("editorialsWrapper");
+            const container = document.getElementById("editorialsContainer");
+            
+            try {
+                // Firebase'den yayınlanmış (isPublished: true) yazıları çek
+                const q = query(collection(db, "editorials"), where("isPublished", "==", true), orderBy("timestamp", "desc"), limit(6));
+                const snap = await getDocs(q);
+                
+                if (!snap.empty) {
+                    wrapper.style.display = "block"; // Kayıt varsa Slider'ı görünür yap
+                    container.innerHTML = ""; // Yükleniyor yazısını sil
+                    
+                    snap.forEach(doc => {
+                        const data = doc.data();
+                        
+                        // Avatar yoksa varsayılan siber ninja ikonu koyalım
+                        let avatarHtml = `<i class="fas fa-user-ninja" style="font-size: 18px; padding: 2px;"></i>`;
+                        if (data.authorAvatar && data.authorAvatar !== "default") {
+                            avatarHtml = `<img src="${data.authorAvatar}">`;
+                        }
+
+                        // Kart HTML'i (Buzlu cam ve Vogue fontuyla)
+                        const cardHtml = `
+                            <div class="editorial-card" onclick="window.openArticleReader('${doc.id}')">
+                                <img src="${data.coverImage || 'https://via.placeholder.com/320x140/0d0118/ff85ea?text=HOTDRAGONS'}" class="editorial-cover">
+                                <div class="editorial-content-preview">
+                                    <h4 class="editorial-title">${data.title}</h4>
+                                    <div class="editorial-meta">
+                                        <div class="editorial-author">
+                                            ${avatarHtml} <span>@${data.authorAlias}</span>
+                                        </div>
+                                        <span><i class="fas fa-clock"></i> ${data.readTime || 3} dk</span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        container.innerHTML += cardHtml;
+                    });
+                } else {
+                    // Veritabanında yazı yoksa alanı gizli tutmaya devam et
+                    wrapper.style.display = "none";
+                }
+            } catch (e) {
+                console.error("Parşömenler (Yazılar) çekilemedi:", e);
+                // Hata durumunda index hatası vs alırsan konsoldan görebiliriz
+            }
+        };
+
+        // --- YAZI OKUMA (ARTICLE READER) KONTROLLERİ ---
+        window.closeArticleReader = function() {
+            document.getElementById("articleReaderScreen").style.display = 'none';
+            document.body.style.overflow = "auto"; // Arkadaki scroll'u aç
+            // Yüklü videoyu/audioyu kesmek için içeriği temizle
+            document.getElementById("readerContent").innerHTML = "";
+
+            // Arkada çalan videoyu yok et
+            const existingBgVideo = document.getElementById("readerBgVideo");
+            if (existingBgVideo) existingBgVideo.remove();
+            const existingBgOverlay = document.getElementById("readerBgOverlay");
+            if (existingBgOverlay) existingBgOverlay.remove();
+        };
+
+        window.openArticleReader = async function(docId) {
+            const readerScreen = document.getElementById("articleReaderScreen");
+            const titleEl = document.getElementById("readerTitle");
+            const coverEl = document.getElementById("readerCoverImage");
+            const authorAliasEl = document.getElementById("readerAuthorAlias");
+            const authorAvatarEl = document.getElementById("readerAuthorAvatar");
+            const dateEl = document.getElementById("readerDate");
+            const timeEl = document.getElementById("readerTime");
+            const contentEl = document.getElementById("readerContent");
+            const authorBtn = document.getElementById("readerAuthorBtn");
+
+            // UI'ı hazırla ve göster
+            readerScreen.style.display = 'block';
+            document.body.style.overflow = "hidden"; // Arkadaki scroll'u kitle
+            
+            titleEl.innerHTML = "Parşömen Çözümleniyor...";
+            contentEl.innerHTML = `<p style="text-align: center; color: #888; font-family: 'Orbitron'; margin-top: 50px;"><i class="fas fa-spinner fa-spin fa-2x"></i></p>`;
+            coverEl.src = "";
+
+            try {
+                const docRef = doc(db, "editorials", docId);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    
+                    // --- TEMA (AMBİYANS) VE ÖZEL ARKA PLAN MOTORU ---
+                    const theme = data.ambiance || "default";
+                    const customBgColor = data.customBgColor || null;
+                    const customBgImage = data.customBgImage || null;
+                    const customBgType = data.customBgType || 'image';
+
+                    // Varsa önceki yazıdan kalan video arka planını temizle
+                    const existingBgVideo = document.getElementById("readerBgVideo");
+                    if (existingBgVideo) existingBgVideo.remove();
+                    const existingBgOverlay = document.getElementById("readerBgOverlay");
+                    if (existingBgOverlay) existingBgOverlay.remove();
+
+                    // Standart (Sıfırlanmış) Ayarlar
+                    readerScreen.style.background = "var(--void-bg)";
+                    titleEl.style.color = "#fff";
+                    titleEl.style.textShadow = "0 5px 15px rgba(0,0,0,0.8)";
+                    contentEl.style.color = "#eee";
+
+                    // 1. Eski ambiyans temaları
+                    if (theme === "blood-moon") {
+                        readerScreen.style.background = "linear-gradient(to bottom, #1a0000, #000)";
+                        titleEl.style.color = "var(--blood-red)";
+                        titleEl.style.textShadow = "0 0 20px var(--blood-red)";
+                    } else if (theme === "toxic") {
+                        readerScreen.style.background = "linear-gradient(to bottom, #001a05, #000)";
+                        titleEl.style.color = "var(--mint-green)";
+                        titleEl.style.textShadow = "0 0 20px var(--mint-green)";
+                    } else if (theme === "void") {
+                        readerScreen.style.background = "#050505";
+                        contentEl.style.color = "#999";
+                    }
+
+                    // 2. Özel renk varsa (standartı ezer)
+                    if (customBgColor && customBgColor !== "#0d0118") {
+                        readerScreen.style.background = customBgColor;
+                    }
+
+                    // 3. Özel arka plan (Görsel, GIF veya Video) hepsini ezer
+                    if (customBgImage) {
+                        if (customBgType === 'video') {
+                            // Video için arkaya sabit element atıyoruz. (Z-index: -2 arka plan, -1 ise yazıyı okutacak koyu katman)
+                            readerScreen.style.background = "transparent";
+                            const videoHtml = `
+                                <video id="readerBgVideo" src="${customBgImage}" autoplay loop muted playsinline 
+                                       style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; z-index: -2; opacity: 0.5;"></video>
+                                <div id="readerBgOverlay" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.85); z-index: -1;"></div>
+                            `;
+                            readerScreen.insertAdjacentHTML('afterbegin', videoHtml);
+                        } else {
+                            // Görsel veya GIF için klasik CSS yöntemi
+                            readerScreen.style.background = `linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.95)), url('${customBgImage}') center/cover no-repeat fixed`;
+                        }
+                    }
+                    // -----------------------------
+                    
+                    titleEl.innerText = data.title;
+                    coverEl.src = data.coverImage || "https://via.placeholder.com/1200x600/0d0118/ff85ea?text=HOTDRAGONS";
+                    contentEl.innerHTML = data.content; // Zengin metin
+
+                    authorAliasEl.innerText = `@${data.authorAlias}`;
+                    
+                    if (data.authorAvatar && data.authorAvatar !== "default") {
+                        authorAvatarEl.src = data.authorAvatar;
+                    } else {
+                        authorAvatarEl.src = "https://via.placeholder.com/45/0d0118/00f3ff?text=N";
+                    }
+
+                    if (data.timestamp) {
+                        const date = data.timestamp.toDate();
+                        dateEl.innerText = date.toLocaleDateString('tr-TR');
+                    } else {
+                        dateEl.innerText = "Bilinmeyen Tarih";
+                    }
+
+                    timeEl.innerHTML = `<i class="fas fa-clock"></i> ${data.readTime || 3} dk`;
+
+                    // Yazar Profiline Yönlendirme
+                    authorBtn.onclick = function() {
+                        window.closeArticleReader();
+                        window.location.hash = "#publicProfile";
+                        if(window.renderPublicProfile) {
+                            window.renderPublicProfile(data.authorAlias);
+                        }
+                    };
+
+                } else {
+                    titleEl.innerText = "Kayıp Parşömen";
+                    contentEl.innerHTML = "<p>Bu yazı silinmiş veya bulunamıyor.</p>";
+                }
+            } catch (e) {
+                console.error("Yazı okuma hatası:", e);
+                titleEl.innerText = "Ağ Hatası";
+                contentEl.innerHTML = "<p>Veri çekilirken siber ağda bir kopma yaşandı.</p>";
+            }
+        };
+
         window.onload = async function () {
             const savedAlias = localStorage.getItem("hotdragons_alias");
             const docId = localStorage.getItem("hotdragons_doc_id");
@@ -5534,6 +6387,9 @@
 
             // Sistem Loglarını Çek (Herkes Görebilir)
             fetchUpdateLogs();
+
+            // Sitenin tepesindeki köşe yazılarını yükle
+            window.fetchEditorials();
 
             handleRouting(); // Yönlendirmeyi Başlat
         };
