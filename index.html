@@ -2348,6 +2348,32 @@
                 justify-content: center;
                 border-radius: 50%;
             }
+
+            /* --- MOBİL UI OPTİMİZASYONLARI (Touch Targets & Layouts) --- */
+            .mobile-flex-column {
+                flex-direction: column !important;
+            }
+            .mobile-flex-column > * {
+                width: 100% !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+            .cyber-button {
+                min-height: 48px;
+                padding: 15px 20px;
+            }
+            .cyber-button.small {
+                min-height: 44px;
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+            }
+            .nsfw-modal-content {
+                padding: 30px 20px !important;
+                width: 90vw !important;
+                max-width: 100% !important;
+                box-sizing: border-box;
+            }
         }
 
         /* --- YENİ EKLENEN ÖZELLİK STİLLERİ --- */
@@ -2850,6 +2876,7 @@
                 opacity: 0;
             }
         }
+
         /* --- DASHBOARD CONTROL PANEL --- */
         .dashboard-panel {
             background: rgba(13, 1, 24, 0.7);
@@ -2970,8 +2997,13 @@
         }
 
         @keyframes powerBarGlow {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
         }
 
         .resource-flash {
@@ -2990,16 +3022,34 @@
         }
 
         @keyframes flashUp {
-            0% { opacity: 0; transform: translate(-50%, -30%); }
-            20% { opacity: 1; transform: translate(-50%, -50%); }
-            80% { opacity: 1; transform: translate(-50%, -60%); }
-            100% { opacity: 0; transform: translate(-50%, -80%); }
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -30%);
+            }
+
+            20% {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+
+            80% {
+                opacity: 1;
+                transform: translate(-50%, -60%);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -80%);
+            }
         }
 
         /* Synaptic Rank Level Up Overlay */
         .level-up-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.9);
             z-index: 1000000;
             display: flex;
@@ -3019,7 +3069,10 @@
         .level-up-overlay::before {
             content: '';
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(180deg, transparent 0%, rgba(0, 243, 255, 0.1) 50%, transparent 100%);
             background-size: 100% 10px;
             animation: scanline 2s linear infinite;
@@ -3062,6 +3115,7 @@
             margin-bottom: 10px;
             width: 100%;
         }
+
         .rank-badge {
             background: rgba(0, 243, 255, 0.1);
             border: 1px solid var(--cyber-cyan);
@@ -3078,6 +3132,7 @@
             box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
             transition: all 0.3s ease;
         }
+
         .rank-progress-mini {
             flex: 1;
             height: 14px;
@@ -3085,10 +3140,11 @@
             border-radius: 10px;
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5);
             display: flex;
             align-items: center;
         }
+
         .rank-progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--neon-pink), var(--cyber-cyan));
@@ -3096,6 +3152,7 @@
             transition: width 1s ease-out;
             border-radius: 10px;
         }
+
         .rank-progress-text {
             position: absolute;
             width: 100%;
@@ -3330,7 +3387,7 @@
                                 <div class="dashboard-header">
                                     <i class="fas fa-tachometer-alt"></i> SİSTEM KONTROL PANELİ
                                 </div>
-                                
+
                                 <div class="dashboard-stats-grid">
                                     <div class="dashboard-stat-card">
                                         <i class="fas fa-bolt"></i>
@@ -3341,7 +3398,9 @@
                                         <i class="fas fa-coins"></i>
                                         <div class="stat-value" id="myTokenDisplay">0</div>
                                         <div class="stat-label">Sanal Jeton</div>
-                                        <div id="energyWarningDisplay" style="display:none; color:var(--blood-red); font-size:0.65rem; margin-top:5px; font-weight:bold; animation: pulseAlert 1s infinite;">🔋 Enerji Kritik!</div>
+                                        <div id="energyWarningDisplay"
+                                            style="display:none; color:var(--blood-red); font-size:0.65rem; margin-top:5px; font-weight:bold; animation: pulseAlert 1s infinite;">
+                                            🔋 Enerji Kritik!</div>
                                     </div>
                                     <div class="dashboard-stat-card">
                                         <i class="fas fa-scroll"></i>
@@ -3352,22 +3411,29 @@
                                         <i class="fas fa-medal"></i>
                                         <div class="stat-value" id="dashboardBadges">0</div>
                                         <div class="stat-label">Rozetler</div>
-                                        <div id="passiveSkillDisplay" style="color:var(--mint-green); font-size:0.65rem; margin-top:5px; font-family:'Orbitron';">Pasif: Yok</div>
+                                        <div id="passiveSkillDisplay"
+                                            style="color:var(--mint-green); font-size:0.65rem; margin-top:5px; font-family:'Orbitron';">
+                                            Pasif: Yok</div>
                                     </div>
                                 </div>
 
                                 <!-- Synaptic Rank / DSP Barı -->
                                 <div class="power-bar-container">
                                     <div class="power-bar-header">
-                                        <span><i class="fas fa-microchip" style="color:var(--cyber-cyan);"></i> VERİ AKIŞI (DSP)</span>
+                                        <span><i class="fas fa-microchip" style="color:var(--cyber-cyan);"></i> VERİ
+                                            AKIŞI (DSP)</span>
                                         <span id="dashboardDspText">0 / 500 DSP</span>
                                     </div>
                                     <div class="power-bar-track">
-                                        <div class="power-bar-fill" id="dashboardDspFill" style="width: 0%; background: linear-gradient(90deg, var(--cyber-cyan), var(--hot-pink)); box-shadow: 0 0 15px var(--hot-pink);"></div>
+                                        <div class="power-bar-fill" id="dashboardDspFill"
+                                            style="width: 0%; background: linear-gradient(90deg, var(--cyber-cyan), var(--hot-pink)); box-shadow: 0 0 15px var(--hot-pink);">
+                                        </div>
                                     </div>
                                 </div>
-                                
-                                <button id="blackMarketBtn" class="cyber-button outline" style="margin-top: 20px; width: 100%; border-color: #ffaa00; color: #ffaa00; opacity: 0.5; cursor: not-allowed; font-size: 0.9rem;" onclick="handleMarketClick()">
+
+                                <button id="blackMarketBtn" class="cyber-button outline"
+                                    style="margin-top: 20px; width: 100%; border-color: #ffaa00; color: #ffaa00; opacity: 0.5; cursor: not-allowed; font-size: 0.9rem;"
+                                    onclick="handleMarketClick()">
                                     <i class="fas fa-lock" id="marketLockIcon"></i> SİBER KARABORSA (RANK > 5)
                                 </button>
                             </div>
@@ -3496,7 +3562,7 @@
                 <div id="editorPanelScreen" style="display: none; text-align: left; padding-top: 20px;">
                     <div
                         style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                        <h2
+                        <h2 id="editorPanelTitle"
                             style="font-family: 'Orbitron'; color: var(--mint-green); margin: 0; text-shadow: 0 0 10px var(--mint-green);">
                             <i class="fas fa-scroll"></i> YENİ PARŞÖMEN
                         </h2>
@@ -3588,9 +3654,10 @@
                             <h2 class="profile-alias" id="publicAliasDisplay"
                                 style="color: var(--cyber-cyan); text-shadow: 0 0 15px var(--cyber-cyan);">
                                 SORGULANIYOR...</h2>
-                                
+
                             <!-- Synaptic Rank Level Display -->
-                            <div class="profile-rank-header" id="publicRankHeader" style="display:none; justify-content: center; margin-bottom: 20px;">
+                            <div class="profile-rank-header" id="publicRankHeader"
+                                style="display:none; justify-content: center; margin-bottom: 20px;">
                                 <div class="rank-badge" id="publicRankBadge">
                                     <i class="fas fa-user-ninja" id="publicRankIcon"></i>
                                     <span id="publicRankBadgeText">RANK 1</span>
@@ -3798,7 +3865,7 @@
     <!-- NSFW UYARI MODALI -->
     <div id="nsfwWarningModal"
         style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.95); z-index: 3000; justify-content: center; align-items: center; backdrop-filter: blur(20px);">
-        <div
+        <div class="nsfw-modal-content"
             style="background: rgba(20, 0, 5, 0.9); border: 2px solid var(--blood-red); padding: 50px; border-radius: 10px; max-width: 500px; text-align: center; box-shadow: 0 0 50px rgba(255, 0, 60, 0.6); position: relative;">
             <i class="fas fa-exclamation-triangle"
                 style="font-size: 4rem; color: var(--blood-red); margin-bottom: 20px; animation: blink 1s infinite;"></i>
@@ -3808,7 +3875,7 @@
             <p style="font-family: 'Rajdhani'; color: #ccc; font-size: 1.2rem; margin-bottom: 30px; line-height: 1.5;">
                 Bu alan yalnızca yetişkinlere yönelik (+18) içerikler barındırır. Eğer 18 yaşından küçükseniz veya bu
                 tür içeriklerden rahatsız oluyorsanız, lütfen geri dönün.</p>
-            <div style="display: flex; gap: 15px; justify-content: center;">
+            <div class="mobile-flex-column" style="display: flex; gap: 15px; justify-content: center;">
                 <button id="declineNsfwBtn" class="cyber-button outline"
                     style="flex: 1; border-color: var(--cyber-cyan); color: var(--cyber-cyan);">HAYIR, GERİ DÖN</button>
                 <button id="acceptNsfwBtn" class="cyber-button"
@@ -4929,10 +4996,59 @@
             };
         };
 
+        function resetEditorialForm() {
+            const editIdEl = document.getElementById("editingEditorialId");
+            if (editIdEl) editIdEl.value = "";
+            const titleEl = document.getElementById("editorialTitle");
+            if (titleEl) titleEl.value = "";
+            const coverUrlEl = document.getElementById("editorialCoverUrl");
+            if (coverUrlEl) coverUrlEl.value = "";
+            const bgUrlEl = document.getElementById("editorialBgUrl");
+            if (bgUrlEl) bgUrlEl.value = "";
+
+            const ambianceEl = document.getElementById("editorialAmbiance");
+            if (ambianceEl) ambianceEl.value = "default";
+            const bgColorEl = document.getElementById("editorialBgColor");
+            if (bgColorEl) bgColorEl.value = "#0d0118";
+            const bgTypeEl = document.getElementById("editorialBgType");
+            if (bgTypeEl) bgTypeEl.value = "image";
+
+            const coverLabel = document.getElementById('editorialCoverLabel');
+            if (coverLabel) {
+                coverLabel.innerHTML = '<i class="fas fa-camera"></i> KAPAK GÖRSELİ (Max 5MB)';
+                coverLabel.style.color = "#fff";
+                coverLabel.style.background = "transparent";
+            }
+
+            const bgLabel = document.getElementById('editorialBgLabel');
+            if (bgLabel) {
+                bgLabel.innerHTML = '<i class="fas fa-image"></i> ÖZEL ARKA PLAN (Max 5MB)';
+                bgLabel.style.color = "#fff";
+                bgLabel.style.background = "transparent";
+            }
+
+            const publishBtn = document.getElementById("publishEditorialBtn");
+            if (publishBtn) publishBtn.innerHTML = '<i class="fas fa-paper-plane"></i> AĞA YAYINLA';
+
+            const panelTitle = document.getElementById("editorPanelTitle");
+            if (panelTitle) panelTitle.innerHTML = '<i class="fas fa-scroll"></i> YENİ PARŞÖMEN';
+
+            if (typeof quill !== 'undefined' && quill) {
+                quill.root.innerHTML = '';
+            } else {
+                const editorLayer = document.querySelector('.ql-editor');
+                if (editorLayer) editorLayer.innerHTML = '';
+            }
+        }
+
         if (openEditorPanelBtn) {
             openEditorPanelBtn.addEventListener('click', () => {
+                history.pushState({ page: 'editor' }, null, window.location.hash || '#');
                 profileDashboardDiv.style.display = 'none';
                 editorPanelScreen.style.display = 'block';
+
+                // Formu tamamen sıfırla (Düzenle modundan kalma veriler varsa temizlensin)
+                resetEditorialForm();
 
                 // Quill Editörü sadece bir kez başlatılsın
                 if (!quill) {
@@ -4965,10 +5081,11 @@
                 editorPanelScreen.style.display = 'none';
                 profileDashboardDiv.style.display = 'block';
                 // --- EKLENEN KISIM ---
-                const editIdEl = document.getElementById("editingEditorialId");
-                if (editIdEl) editIdEl.value = "";
-                const publishBtn = document.getElementById("publishEditorialBtn");
-                if (publishBtn) publishBtn.innerHTML = '<i class="fas fa-paper-plane"></i> AĞA YAYINLA';
+                resetEditorialForm();
+
+                if (history.state && history.state.page === 'editor') {
+                    history.back();
+                }
             });
         }
 
@@ -5203,6 +5320,44 @@
         }
 
         window.addEventListener('hashchange', handleRouting);
+
+        // --- TARAYICI GERİ TUŞU YÖNETİMİ (POPSTATE GUARD) ---
+        window.addEventListener('popstate', function (event) {
+            console.log("PopState Tetiklendi. State:", event.state);
+
+            // 1. Auth Guard (Oturum Kontrolü)
+            const currentAlias = localStorage.getItem("hotdragons_alias");
+            if (!currentAlias) {
+                // Oturum yok, her şeyi kapat ve giriş formunu göster
+                const formContainer = document.getElementById("formContainer");
+                const profileDashboard = document.getElementById("profileDashboard");
+                const editor = document.getElementById("editorPanelScreen");
+                const reader = document.getElementById("articleReaderScreen");
+
+                if (formContainer) formContainer.style.display = "block";
+                if (profileDashboard) profileDashboard.style.display = "none";
+                if (editor) editor.style.display = "none";
+                if (reader) reader.style.display = "none";
+                return;
+            }
+
+            // 2. Modalların Kapatılma Kontrolü (Editor / Reader)
+            const editor = document.getElementById("editorPanelScreen");
+            const reader = document.getElementById("articleReaderScreen");
+
+            // Eğer history state'de modal açık bilgisi yoksa (kullanıcı geri tuşuna basıp modal öncesi state'e döndüyse)
+            if (!event.state || (event.state.page !== 'editor' && event.state.page !== 'reader')) {
+                if (editor && editor.style.display === 'block') {
+                    editor.style.display = 'none';
+                    document.getElementById("profileDashboard").style.display = "block";
+                }
+                if (reader && reader.style.display === 'block') {
+                    if (typeof window.closeArticleReader === 'function') {
+                        window.closeArticleReader(true); // true = popstate'den geldi
+                    }
+                }
+            }
+        });
 
         // FOTOĞRAF YÜKLEME VE BASE64 ÇEVİRİCİ
         // YÜKSEK KALİTE FOTOGRAF YÜKLEME (FIREBASE STORAGE)
@@ -5526,7 +5681,7 @@
                     let badgesCount = (data.customBadges && Array.isArray(data.customBadges)) ? data.customBadges.length : 0;
                     let DSP = data.dsp || (tokens * 20 + badgesCount * 1000);
                     let currentRank = Math.floor(Math.pow(DSP / 500, 0.5)) + 1;
-                    
+
                     let currentRankDsp = Math.pow(currentRank - 1, 2) * 500;
                     let nextRankDsp = Math.pow(currentRank, 2) * 500;
                     let dspNeeded = nextRankDsp - currentRankDsp;
@@ -5538,7 +5693,7 @@
                     if (pRankHeader) {
                         pRankHeader.style.display = "flex";
                         document.getElementById("publicRankBadgeText").innerText = `RANK ${currentRank}`;
-                        
+
                         if (currentRank <= 5) {
                             pRankIcon.className = "fas fa-user-ninja";
                         } else if (currentRank <= 15) {
@@ -5772,7 +5927,7 @@
                     // --- KONTROL PANELİ (DASHBOARD) GÜNCELLEMELERİ ---
                     let tokens = userData.tokens || 0;
                     document.getElementById("myTokenDisplay").innerText = tokens;
-                    
+
                     // Enerji Kritik Bildirimi
                     const warningDisplay = document.getElementById("energyWarningDisplay");
                     if (warningDisplay) warningDisplay.style.display = (tokens < 10) ? "block" : "none";
@@ -5796,10 +5951,10 @@
                     // --- SYNAPTIC RANK & DSP (DATA STREAM POINTS) HESAPLAMA ---
                     // Geçici DSP Formülü: Jeton * 20 + Rozet * 1000. İleride DB'de DSP tutulacak.
                     let DSP = userData.dsp || (tokens * 20 + badgesCount * 1000);
-                    
+
                     // Logaritmik/Kök tabanlı Rank eğrisi. Formül: Rank = floor((DSP / 500)^0.5) + 1
                     let currentRank = Math.floor(Math.pow(DSP / 500, 0.5)) + 1;
-                    
+
                     let currentRankDsp = Math.pow(currentRank - 1, 2) * 500;
                     let nextRankDsp = Math.pow(currentRank, 2) * 500;
                     let dspNeeded = nextRankDsp - currentRankDsp;
@@ -5824,7 +5979,7 @@
                     if (rankHeader) {
                         rankHeader.style.display = "flex";
                         document.getElementById("profileRankBadgeText").innerText = `RANK ${currentRank}`;
-                        
+
                         // İkon Seçimi (Seviyeye Göre)
                         if (currentRank <= 5) {
                             rankIcon.className = "fas fa-user-ninja";
@@ -7064,7 +7219,7 @@
         };
 
         // --- YAZI OKUMA (ARTICLE READER) KONTROLLERİ ---
-        window.closeArticleReader = function () {
+        window.closeArticleReader = function (isFromPopState = false) {
             document.getElementById("articleReaderScreen").style.display = 'none';
             document.body.style.overflow = "auto"; // Arkadaki scroll'u aç
             // Yüklü videoyu/audioyu kesmek için içeriği temizle
@@ -7075,9 +7230,14 @@
             if (existingBgVideo) existingBgVideo.remove();
             const existingBgOverlay = document.getElementById("readerBgOverlay");
             if (existingBgOverlay) existingBgOverlay.remove();
+
+            if (isFromPopState !== true && history.state && history.state.page === 'reader') {
+                history.back();
+            }
         };
 
         window.openArticleReader = async function (docId) {
+            history.pushState({ page: 'reader', id: docId }, null, window.location.hash || '#');
             const readerScreen = document.getElementById("articleReaderScreen");
             const titleEl = document.getElementById("readerTitle");
             const coverEl = document.getElementById("readerCoverImage");
@@ -7197,7 +7357,7 @@
 
                     // Yazar Profiline Yönlendirme
                     authorBtn.onclick = function () {
-                        window.closeArticleReader();
+                        window.closeArticleReader(true);
                         window.location.hash = "#publicProfile";
                         if (window.renderPublicProfile) {
                             window.renderPublicProfile(data.authorAlias);
@@ -7217,7 +7377,8 @@
 
         // --- MAĞARA GÜNLÜĞÜ DÜZENLEME BAŞLATICISI ---
         window.startEditEditorial = async function (docId) {
-            window.closeArticleReader(); // Okuma ekranını kapat
+            window.closeArticleReader(true); // Okuma ekranını kapat (popstate'i tetiklemeden)
+            history.replaceState({ page: 'editor' }, null, window.location.hash || '#');
 
             // Editörün bulunduğu ortamı hazırla (Diğer sayfaları kapat)
             if (document.getElementById("formContainer")) document.getElementById("formContainer").style.display = 'none';
@@ -7285,6 +7446,10 @@
                     // Gönder butonunun metnini güncelle
                     const publishBtn = document.getElementById("publishEditorialBtn");
                     if (publishBtn) publishBtn.innerHTML = '<i class="fas fa-save"></i> DEĞİŞİKLİKLERİ KAYDET';
+
+                    // Editör başlığını güncelle
+                    const panelTitle = document.getElementById("editorPanelTitle");
+                    if (panelTitle) panelTitle.innerHTML = '<i class="fas fa-edit"></i> PARŞÖMENİ DÜZENLE';
 
                     // KRİTİK NOKTA: Editör ekranda belirdikten biraz SONRA yazıyı içine basıyoruz.
                     setTimeout(() => {
@@ -9771,7 +9936,7 @@
             setTimeout(() => ripple.remove(), 600);
         });
 
-        window.showResourceFlash = function(text, colorStr = "var(--mint-green)") {
+        window.showResourceFlash = function (text, colorStr = "var(--mint-green)") {
             const flash = document.createElement('div');
             flash.className = 'resource-flash';
             flash.innerText = text;
@@ -9781,7 +9946,7 @@
             setTimeout(() => flash.remove(), 1500);
         };
 
-        window.handleMarketClick = function() {
+        window.handleMarketClick = function () {
             if (!window.currentSynapticRank || window.currentSynapticRank <= 5) {
                 window.showResourceFlash("Erişim Reddedildi! Synaptic Rank yetersiz.", "var(--blood-red)");
                 const btn = document.getElementById("blackMarketBtn");
@@ -9797,7 +9962,7 @@
             }
         };
 
-        window.triggerLevelUp = function(newRank) {
+        window.triggerLevelUp = function (newRank) {
             // Glitchy Beep Ses Efekti (Web Audio API)
             try {
                 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -9813,7 +9978,7 @@
                 gainNode.connect(audioCtx.destination);
                 oscillator.start();
                 oscillator.stop(audioCtx.currentTime + 0.4);
-            } catch(e) {}
+            } catch (e) { }
 
             const overlay = document.createElement('div');
             overlay.className = 'level-up-overlay active';
